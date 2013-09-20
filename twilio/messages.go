@@ -1,7 +1,6 @@
 package twilio
 
 import (
-	//"fmt"
 	"github.com/golang/glog"
 	"net/url"
 )
