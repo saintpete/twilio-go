@@ -43,6 +43,21 @@ func getFullUri(pathPart string, accountSid string) string {
 	return strings.Join([]string{BaseUrl, Version, "Accounts", accountSid, pathPart + ".json"}, "/")
 }
 
+// Convenience wrapper around MakeRequest
+func (c *Client) GetResource(pathPart string, sid string, v interface{}) error {
+	sidPart := strings.Join([]string{pathPart, sid}, "/")
+	return c.MakeRequest("GET", sidPart, nil, v)
+}
+
+func (c *Client) CreateResource(pathPart string, data url.Values, v interface{}) error {
+	return c.MakeRequest("POST", pathPart, data, v)
+}
+
+func (c *Client) UpdateResource(pathPart string, sid string, data url.Values, v interface{}) error {
+	sidPart := strings.Join([]string{pathPart, sid}, "/")
+	return c.MakeRequest("POST", sidPart, nil, v)
+}
+
 // Make a request to the Twilio API.
 func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v interface{}) error {
 	req, err := c.CreateRequest(method, pathPart, data)
@@ -64,6 +79,7 @@ func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v 
 	return nil
 }
 
+// Initializes the http request.
 func (c *Client) CreateRequest(method string, pathPart string, data url.Values) (*http.Request, error) {
 	var rb strings.Reader
 	if data != nil && (method == "POST" || method == "PUT") {
