@@ -11,20 +11,34 @@ import (
 )
 
 // See https://www.twilio.com/docs/security#validating-requests for more information
-func (c *Client) ValidateIncomingRequest(req *http.Request) (err error) {
+func (c *Client) ValidateIncomingRequest(host string, req *http.Request) (err error) {
 	err = req.ParseForm()
 	if err != nil {
 		return
 	}
+	err = c.validateIncomingRequest(host, req.URL.String(), req.Form, req.Header.Get("X-Twilio-Signature"))
+	if err != nil {
+		return
+	}
 
-	return c.validateIncomingRequest(req.URL.String(), req.Form, req.Header.Get("X-Twilio-Signature"))
+	return
 }
 
-func (c *Client) validateIncomingRequest(URL string, postForm url.Values, xTwilioSignature string) (err error) {
+func (c *Client) validateIncomingRequest(host string, URL string, postForm url.Values, xTwilioSignature string) (err error) {
+	expectedTwilioSignature := c.GetExpectedTwilioSignature(host, URL, postForm)
+	if xTwilioSignature != expectedTwilioSignature {
+		err = errors.New("Bad X-Twilio-Signature")
+		return
+	}
+
+	return
+}
+
+func (c *Client) GetExpectedTwilioSignature(host string, URL string, postForm url.Values) (expectedTwilioSignature string) {
 	// Take the full URL of the request URL you specify for your
 	// phone number or app, from the protocol (https...) through
 	// the end of the query string (everything after the ?).
-	str := URL
+	str := host + URL
 
 	// If the request is a POST, sort all of the POST parameters
 	// alphabetically (using Unix-style case-sensitive sorting order).
@@ -48,13 +62,9 @@ func (c *Client) validateIncomingRequest(URL string, postForm url.Values, xTwili
 	expectedMac := mac.Sum(nil)
 
 	// Base64 encode the resulting hash value.
-	expectedSignature := base64.StdEncoding.EncodeToString(expectedMac)
+	expectedTwilioSignature = base64.StdEncoding.EncodeToString(expectedMac)
 
 	// Compare your hash to ours, submitted in the X-Twilio-Signature header.
 	// If they match, then you're good to go.
-	if xTwilioSignature != expectedSignature {
-		return errors.New("Bad X-Twilio-Signature")
-	}
-
-	return nil
+	return expectedTwilioSignature
 }
