@@ -36,6 +36,7 @@ func (c *Capability) AllowClientIncoming(clientName string) {
 
 // Allows this client to call your application with id `appSid` (See https://www.twilio.com/user/account/apps).
 // When the call connects, Twilio will call your voiceUrl REST endpoint.
+// The `appParams` argument will get passed through to your voiceUrl REST endpoint as GET or POST parameters.
 func (c *Capability) AllowClientOutgoing(appSid string, appParams map[string]string) {
 	c.shouldBuildOutgoingScope = true
 	c.appSid = appSid
@@ -75,7 +76,7 @@ func (c *Capability) doBuildOutgoingScope() {
 		}
 
 		if c.outgoingParams != nil {
-			values["appParams"] = url.QueryEscape(generateParamString(c.outgoingParams))
+			values["appParams"] = generateParamString(c.outgoingParams)
 		}
 
 		c.addCapability("client", "outgoing", values)
