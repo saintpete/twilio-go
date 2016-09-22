@@ -35,7 +35,7 @@ type MessageIterator struct {
 
 func (m *MessageService) Create(data url.Values) (Message, error) {
 	msg := new(Message)
-	_, err := m.client.MakeRequest("POST", pathPart, data, msg)
+	err := m.client.MakeRequest("POST", pathPart, data, msg)
 	if err != nil {
 		log.Print("Error creating request", err)
 		return *msg, err
@@ -77,7 +77,7 @@ func (m *MessageIterator) Next() (*Message, error) {
 			m.data.Set("next_page_uri", m.nextPageUri)
 		}
 		var page MessagePage
-		_, err := m.client.ListResource(pathPart, m.data, &page)
+		err := m.client.ListResource(pathPart, m.data, &page)
 		if err != nil {
 			log.Print("Error creating request", err)
 			return nil, err
