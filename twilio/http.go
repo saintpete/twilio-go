@@ -24,15 +24,15 @@ type Client struct {
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
 
-func CreateClient(accountSid string, authToken string, httpClient *http.Client) *Client {
-
+// NewClient creates a Client for interacting with the Twilio API.
+func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
 	}
-	client := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", BaseURL, APIVersion))
-	client.Client = httpClient
+	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", BaseURL, APIVersion))
+	restClient.Client = httpClient
 
-	c := &Client{Client: client, AccountSid: accountSid, AuthToken: authToken}
+	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Messages = &MessageService{client: c}
 	return c
 }

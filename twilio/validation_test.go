@@ -9,7 +9,7 @@ import (
 func TestClientValidateIncomingRequest(t *testing.T) {
 	// Based on example at https://www.twilio.com/docs/security#validating-requests
 	authToken := "12345"
-	twilioClient := CreateClient("", authToken, nil)
+	twilioClient := NewClient("", authToken, nil)
 	host := "https://mycompany.com"
 	URL := "/myapp.php?foo=1&bar=2"
 	xTwilioSignature := "RSOYDt4T1cUTdK1PDd93/VVr8B8="
