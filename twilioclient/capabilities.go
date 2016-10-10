@@ -1,10 +1,11 @@
-package twilio
+package twilioclient
 
 import (
-	jwt "github.com/marcuswestin/jwt-go"
 	"net/url"
 	"strings"
 	"time"
+
+	jwt "github.com/marcuswestin/jwt-go"
 )
 
 type Capability struct {
@@ -20,11 +21,11 @@ type Capability struct {
 	appSid                   string
 }
 
-func (c *Client) NewCapability() *Capability {
-	capability := new(Capability)
-	capability.accountSid = c.AccountSid
-	capability.authToken = c.AuthToken
-	return capability
+func NewCapability(sid, token string) *Capability {
+	return &Capability{
+		accountSid: sid,
+		authToken:  token,
+	}
 }
 
 // Registers this client to accept incoming calls by the given `clientName`.
