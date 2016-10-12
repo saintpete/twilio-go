@@ -10,13 +10,18 @@ import (
 	"sort"
 )
 
+// ValidateIncomingRequest returns an error if the incoming req could not be
+// validated as coming from Twilio.
+//
+// This process is frequently error prone, especially if you are running behind
+// a proxy, or Twilio is making requests with a port in the URL.
 // See https://www.twilio.com/docs/security#validating-requests for more information
-func (c *Client) ValidateIncomingRequest(host string, req *http.Request) (err error) {
+func ValidateIncomingRequest(host string, authToken string, req *http.Request) (err error) {
 	err = req.ParseForm()
 	if err != nil {
 		return
 	}
-	err = c.validateIncomingRequest(host, req.URL.String(), req.Form, req.Header.Get("X-Twilio-Signature"))
+	err = validateIncomingRequest(host, authToken, req.URL.String(), req.Form, req.Header.Get("X-Twilio-Signature"))
 	if err != nil {
 		return
 	}
@@ -24,8 +29,8 @@ func (c *Client) ValidateIncomingRequest(host string, req *http.Request) (err er
 	return
 }
 
-func (c *Client) validateIncomingRequest(host string, URL string, postForm url.Values, xTwilioSignature string) (err error) {
-	expectedTwilioSignature := c.GetExpectedTwilioSignature(host, URL, postForm)
+func validateIncomingRequest(host string, authToken string, URL string, postForm url.Values, xTwilioSignature string) (err error) {
+	expectedTwilioSignature := GetExpectedTwilioSignature(host, authToken, URL, postForm)
 	if xTwilioSignature != expectedTwilioSignature {
 		err = errors.New("Bad X-Twilio-Signature")
 		return
@@ -34,7 +39,7 @@ func (c *Client) validateIncomingRequest(host string, URL string, postForm url.V
 	return
 }
 
-func (c *Client) GetExpectedTwilioSignature(host string, URL string, postForm url.Values) (expectedTwilioSignature string) {
+func GetExpectedTwilioSignature(host string, authToken string, URL string, postForm url.Values) (expectedTwilioSignature string) {
 	// Take the full URL of the request URL you specify for your
 	// phone number or app, from the protocol (https...) through
 	// the end of the query string (everything after the ?).
@@ -57,7 +62,7 @@ func (c *Client) GetExpectedTwilioSignature(host string, URL string, postForm ur
 
 	// Sign the resulting string with HMAC-SHA1 using your AuthToken
 	// as the key (remember, your AuthToken's case matters!).
-	mac := hmac.New(sha1.New, []byte(c.AuthToken))
+	mac := hmac.New(sha1.New, []byte(authToken))
 	mac.Write([]byte(str))
 	expectedMac := mac.Sum(nil)
 
