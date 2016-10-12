@@ -71,4 +71,7 @@ func TestDecode(t *testing.T) {
 	if msg.Body != "Welcome to ZomboCom." {
 		t.Errorf("wrong body")
 	}
+	if msg.From != PhoneNumber("+19253920364") {
+		t.Errorf("wrong from")
+	}
 }

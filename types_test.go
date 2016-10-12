@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+var pnTestCases = []struct {
+	in       PhoneNumber
+	expected string
+}{
+	{PhoneNumber("+41446681800"), "+41 44 668 18 00"},
+	{PhoneNumber("+14105554092"), "+1 410-555-4092"},
+	{PhoneNumber("blah"), "blah"},
+}
+
+func TestPhoneNumberFriendly(t *testing.T) {
+	for _, tt := range pnTestCases {
+		if f := tt.in.Friendly(); f != tt.expected {
+			t.Errorf("Friendly(%v): got %s, want %s", tt.in, f, tt.expected)
+		}
+	}
+}
+
 func TestUnmarshalTime(t *testing.T) {
 	in := []byte(`"Tue, 20 Sep 2016 22:59:57 +0000"`)
 	var tt TwilioTime

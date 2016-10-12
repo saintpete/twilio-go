@@ -46,8 +46,8 @@ const StatusDelivered = Status("delivered")
 type Message struct {
 	Sid                 string           `json:"sid"`
 	Body                string           `json:"body"`
-	From                string           `json:"from"`
-	To                  string           `json:"to"`
+	From                PhoneNumber      `json:"from"`
+	To                  PhoneNumber      `json:"to"`
 	Price               string           `json:"price"`
 	Status              Status           `json:"status"`
 	AccountSid          string           `json:"account_sid"`
