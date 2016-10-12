@@ -20,3 +20,5 @@ params := url.Values{
 }
 msg, err := client.Messages.Create(params)
 ```
+
+The API is experimental and subject to change at any point.

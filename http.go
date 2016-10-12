@@ -10,7 +10,8 @@ import (
 	"github.com/kevinburke/rest"
 )
 
-const BaseURL = "https://api.twilio.com"
+var BaseURL = "https://api.twilio.com"
+
 const APIVersion = "2010-04-01"
 
 type Client struct {
@@ -37,16 +38,18 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	return c
 }
 
-func getFullUri(pathPart string, accountSid string) string {
-	return strings.Join([]string{BaseURL, APIVersion, "Accounts", accountSid, pathPart + ".json"}, "/")
+func getFullPath(pathPart string, accountSid string) string {
+	return "/" + strings.Join([]string{"Accounts", accountSid, pathPart + ".json"}, "/")
 }
 
-// Convenience wrapper around MakeRequest
+// GetResource retrieves an instance resource with the given path part (e.g.
+// "/Messages") and sid (e.g. "SM123").
 func (c *Client) GetResource(pathPart string, sid string, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
 	return c.MakeRequest("GET", sidPart, nil, v)
 }
 
+// CreateResource makes a POST request to the given resource.
 func (c *Client) CreateResource(pathPart string, data url.Values, v interface{}) error {
 	return c.MakeRequest("POST", pathPart, data, v)
 }
@@ -66,11 +69,13 @@ func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v 
 	if data != nil && (method == "POST" || method == "PUT") {
 		rb = strings.NewReader(data.Encode())
 	}
-	uri := getFullUri(pathPart, c.AccountSid)
-	if method == "GET" && data != nil {
-		uri = uri + "?" + data.Encode()
+	if !strings.HasPrefix(pathPart, c.Client.Base) {
+		pathPart = getFullPath(pathPart, c.AccountSid)
 	}
-	req, err := c.NewRequest(method, uri, rb)
+	if method == "GET" && data != nil {
+		pathPart = pathPart + "?" + data.Encode()
+	}
+	req, err := c.NewRequest(method, pathPart, rb)
 	if err != nil {
 		return err
 	}
