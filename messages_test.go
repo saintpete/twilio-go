@@ -75,3 +75,9 @@ func TestDecode(t *testing.T) {
 		t.Errorf("wrong from")
 	}
 }
+
+func TestStatusFriendly(t *testing.T) {
+	if StatusQueued.Friendly() != "Queued" {
+		t.Errorf("expected StatusQueued.Friendly to equal Queued, got %s", StatusQueued.Friendly())
+	}
+}

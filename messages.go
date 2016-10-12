@@ -43,7 +43,7 @@ const DirectionOutboundAPI = Direction("outbound-api")
 type Status string
 
 func (s Status) Friendly() string {
-	return strings.ToUpper(string(s))
+	return strings.Title(string(s))
 }
 
 const StatusAccepted = Status("accepted")
