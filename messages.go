@@ -143,14 +143,13 @@ func (m *MessagePageIterator) Next() (*MessagePage, error) {
 	var err error
 	if m.count == 0 {
 		err = m.client.ListResource(pathPart, m.data, mp)
+	} else if m.nextPageURI.Valid == false {
+		return nil, NoMoreResults
 	} else {
 		err = m.client.GetNextPage(m.nextPageURI.String, mp)
 	}
 	if err != nil {
 		return nil, err
-	}
-	if mp.NextPageURI.Valid == false {
-		return nil, NoMoreResults
 	}
 	m.count++
 	m.nextPageURI = mp.NextPageURI
