@@ -112,6 +112,12 @@ type MessagePageIterator struct {
 	count       uint
 }
 
+func (m *MessageService) Get(sid string) (*Message, error) {
+	msg := new(Message)
+	err := m.client.GetResource(pathPart, sid, msg)
+	return msg, err
+}
+
 // GetPage returns a single page of resources. To retrieve multiple pages, use
 // GetPageIterator.
 func (m *MessageService) GetPage(data url.Values) (*MessagePage, error) {

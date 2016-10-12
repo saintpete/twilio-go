@@ -9,6 +9,21 @@ import (
 	"time"
 )
 
+func TestGet(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	sid := "SM26b3b00f8def53be77c5697183bfe95e"
+	msg, err := c.Messages.Get(sid)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if msg.Sid != sid {
+		t.Errorf("expected Sid to equal %s, got %s", sid, msg.Sid)
+	}
+}
+
 func TestGetPage(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
