@@ -49,14 +49,6 @@ type MessagePage struct {
 	Messages []*Message `json:"messages"`
 }
 
-type MessageIterator struct {
-	pos         int
-	messages    []*Message
-	nextPageURI string
-	data        url.Values
-	service     *MessageService
-}
-
 // Create a message with the given values.
 func (m *MessageService) Create(data url.Values) (*Message, error) {
 	msg := new(Message)
@@ -104,6 +96,8 @@ func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
 	}
 }
 
+// Next returns the next page of resources. If there are no more resources,
+// NoMoreResults is returned.
 func (m *MessagePageIterator) Next() (*MessagePage, error) {
 	mp := new(MessagePage)
 	var err error

@@ -21,11 +21,14 @@ func (t *Segments) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// TwilioTime can parse a timestamp returned in the Twilio API and turn it into
+// a valid Go Time struct.
 type TwilioTime struct {
 	Time  time.Time
 	Valid bool
 }
 
+// The reference time, as it appears in the Twilio API.
 const TimeLayout = "Mon, 2 Jan 2006 15:04:05 -0700"
 
 func (t *TwilioTime) UnmarshalJSON(b []byte) error {

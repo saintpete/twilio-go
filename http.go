@@ -38,6 +38,8 @@ type Page struct {
 	PageSize     uint             `json:"page_size"`
 }
 
+// NoMoreResults is returned if you reach the end of the result set while
+// paging through resources.
 var NoMoreResults = errors.New("twilio: No more results")
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
