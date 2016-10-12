@@ -2,6 +2,7 @@ package twilio
 
 import (
 	"net/url"
+	"strings"
 
 	types "github.com/kevinburke/go-types"
 )
@@ -37,11 +38,23 @@ const DirectionInbound = Direction("inbound")
 const DirectionOutboundCall = Direction("outbound-call")
 const DirectionOutboundAPI = Direction("outbound-api")
 
+// The status of the message (accepted, queued, etc).
+// For more information , see https://www.twilio.com/docs/api/rest/message
 type Status string
 
-const StatusSent = Status("sent")
-const StatusReceived = Status("received")
+func (s Status) Friendly() string {
+	return strings.ToUpper(string(s))
+}
+
+const StatusAccepted = Status("accepted")
 const StatusDelivered = Status("delivered")
+const StatusFailed = Status("failed")
+const StatusQueued = Status("queued")
+const StatusReceiving = Status("receiving")
+const StatusReceived = Status("received")
+const StatusSending = Status("sending")
+const StatusSent = Status("sent")
+const StatusUndelivered = Status("undelivered")
 
 type Message struct {
 	Sid                 string           `json:"sid"`
