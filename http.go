@@ -12,7 +12,7 @@ import (
 	"github.com/kevinburke/rest"
 )
 
-const Version = "0.2"
+const Version = "0.3"
 const userAgent = "twilio-go/" + Version
 
 var BaseURL = "https://api.twilio.com"
