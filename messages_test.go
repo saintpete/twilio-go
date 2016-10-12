@@ -14,7 +14,7 @@ func TestGetPage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	page, err := c.Messages.GetPageIterator(url.Values{"PageSize": []string{"5"}}).Next()
+	page, err := c.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
 	if err != nil {
 		t.Fatal(err)
 	}

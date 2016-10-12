@@ -12,6 +12,9 @@ import (
 	"github.com/kevinburke/rest"
 )
 
+const Version = "0.1"
+const userAgent = "twilio-go/" + Version
+
 var BaseURL = "https://api.twilio.com"
 
 const APIVersion = "2010-04-01"
@@ -98,6 +101,11 @@ func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v 
 	req, err := c.NewRequest(method, pathPart, rb)
 	if err != nil {
 		return err
+	}
+	if ua := req.Header.Get("User-Agent"); ua == "" {
+		req.Header.Set("User-Agent", userAgent)
+	} else {
+		req.Header.Set("User-Agent", userAgent+" "+ua)
 	}
 	return c.Do(req, &v)
 }
