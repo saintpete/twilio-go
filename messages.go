@@ -3,7 +3,7 @@ package twilio
 import (
 	"net/url"
 
-	types "github.com/Shyp/go-types"
+	types "github.com/kevinburke/go-types"
 )
 
 const pathPart = "Messages"
@@ -45,14 +45,8 @@ type Message struct {
 }
 
 type MessagePage struct {
-	FirstPageURI string     `json:"first_page_uri"`
-	Start        uint       `json:"start"`
-	End          uint       `json:"end"`
-	NumPages     uint       `json:"num_pages"`
-	Total        uint       `json:"total"`
-	NextPageURI  string     `json:"next_page_uri"`
-	PageSize     uint       `json:"page_size"`
-	Messages     []*Message `json:"messages"`
+	Page
+	Messages []*Message `json:"messages"`
 }
 
 type MessageIterator struct {
@@ -60,7 +54,7 @@ type MessageIterator struct {
 	messages    []*Message
 	nextPageURI string
 	data        url.Values
-	client      *Client
+	service     *MessageService
 }
 
 // Create a message with the given values.
@@ -85,38 +79,38 @@ func (m *MessageService) SendMessage(from string, to string, body string, mediaU
 	return m.Create(v)
 }
 
-// List returns a MessageIteratar with the given values.
-func (m *MessageService) List(data url.Values) *MessageIterator {
-	return &MessageIterator{
-		pos:    0,
-		data:   data,
-		client: m.client,
+type MessagePageIterator struct {
+	client      *Client
+	nextPageURI types.NullString
+	data        url.Values
+	count       uint
+}
+
+// GetPage returns an iterator which can be used to retrieve pages.
+func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
+	return &MessagePageIterator{
+		client:      m.client,
+		nextPageURI: types.NullString{},
+		data:        data,
+		count:       0,
 	}
 }
 
-// Next gets the next message. Returns nil, io.EOF when there are no more
-// messages to read.
-func (m *MessageIterator) Next() (*Message, error) {
-	if m.pos >= len(m.messages) {
-		if m.nextPageURI != "" {
-			m.data.Set("next_page_uri", m.nextPageURI)
-		}
-		page := new(MessagePage)
-		err := m.client.ListResource(pathPart, m.data, &page)
-		if err != nil {
-			return nil, err
-		}
-		m.nextPageURI = page.NextPageURI
-		m.messages = page.Messages
-		m.pos = 0
+func (m *MessagePageIterator) Next() (*MessagePage, error) {
+	mp := new(MessagePage)
+	var err error
+	if m.count == 0 {
+		err = m.client.ListResource(pathPart, m.data, mp)
+	} else {
+		err = m.client.GetNextPage(m.nextPageURI.String, mp)
 	}
-	m.pos += 1
-	return m.messages[m.pos-1], nil
-}
-
-// GetPage returns a single page of messages.
-func (m *MessageService) GetPage(data url.Values) (*MessagePage, error) {
-	page := new(MessagePage)
-	err := m.client.ListResource(pathPart, data, page)
-	return page, err
+	if err != nil {
+		return nil, err
+	}
+	if mp.NextPageURI.Valid == false {
+		return nil, NoMoreResults
+	}
+	m.count++
+	m.nextPageURI = mp.NextPageURI
+	return mp, nil
 }

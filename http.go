@@ -1,12 +1,14 @@
 package twilio
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
+	types "github.com/kevinburke/go-types"
 	"github.com/kevinburke/rest"
 )
 
@@ -22,6 +24,18 @@ type Client struct {
 
 	Messages *MessageService
 }
+
+type Page struct {
+	FirstPageURI string           `json:"first_page_uri"`
+	Start        uint             `json:"start"`
+	End          uint             `json:"end"`
+	NumPages     uint             `json:"num_pages"`
+	Total        uint             `json:"total"`
+	NextPageURI  types.NullString `json:"next_page_uri"`
+	PageSize     uint             `json:"page_size"`
+}
+
+var NoMoreResults = errors.New("twilio: No more results")
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
 
@@ -63,14 +77,20 @@ func (c *Client) ListResource(pathPart string, data url.Values, v interface{}) e
 	return c.MakeRequest("GET", pathPart, data, v)
 }
 
+func (c *Client) GetNextPage(fullUri string, v interface{}) error {
+	return c.MakeRequest("GET", fullUri, nil, v)
+}
+
 // Make a request to the Twilio API.
 func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v interface{}) error {
+	if strings.HasPrefix(pathPart, "/"+APIVersion) {
+		pathPart = pathPart[len("/"+APIVersion):]
+	} else {
+		pathPart = getFullPath(pathPart, c.AccountSid)
+	}
 	rb := new(strings.Reader)
 	if data != nil && (method == "POST" || method == "PUT") {
 		rb = strings.NewReader(data.Encode())
-	}
-	if !strings.HasPrefix(pathPart, c.Client.Base) {
-		pathPart = getFullPath(pathPart, c.AccountSid)
 	}
 	if method == "GET" && data != nil {
 		pathPart = pathPart + "?" + data.Encode()

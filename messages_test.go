@@ -2,6 +2,7 @@ package twilio
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"os"
 	"testing"
@@ -13,12 +14,37 @@ func TestGetPage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	page, err := c.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
+	page, err := c.Messages.GetPageIterator(url.Values{"PageSize": []string{"5"}}).Next()
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(page.Messages) != 5 {
 		t.Fatalf("expected len(messages) to be 5, got %d", len(page.Messages))
+	}
+}
+
+func TestIterateAll(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	iter := c.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
+	count := 0
+	for {
+		_, err := iter.Next()
+		if err == NoMoreResults {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+			break
+		}
+		count++
+		if count > 15 {
+			fmt.Println("count > 15")
+			t.Fail()
+			break
+		}
 	}
 }
 
