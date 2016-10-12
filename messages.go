@@ -12,9 +12,30 @@ type MessageService struct {
 	client *Client
 }
 
+// The direction of the message.
 type Direction string
 
+// Friendly prints out a friendly version of the Direction, following the
+// example shown in the Twilio Dashboard.
+func (d Direction) Friendly() string {
+	switch {
+	case d == DirectionOutboundReply:
+		return "Reply"
+	case d == DirectionOutboundCall:
+		return "Outgoing (from call)"
+	case d == DirectionOutboundAPI:
+		return "Outgoing (from API)"
+	case d == DirectionInbound:
+		return "Incoming"
+	default:
+		return string(d)
+	}
+}
+
 const DirectionOutboundReply = Direction("outbound-reply")
+const DirectionInbound = Direction("inbound")
+const DirectionOutboundCall = Direction("outbound-call")
+const DirectionOutboundAPI = Direction("outbound-api")
 
 type Status string
 
