@@ -58,8 +58,7 @@ func (m *MediaService) Get(messageSid string, sid string) (*Media, error) {
 	return me, err
 }
 
-// GetURL returns a URL that can be retrieved to download the given image. The
-// URL expires after a short amount of time.
+// GetURL returns a URL that can be retrieved to download the given image.
 func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 	uriEnd := strings.Join([]string{mediaPathPart(messageSid), sid}, "/")
 	path := m.client.FullPath(uriEnd)
