@@ -1,0 +1,29 @@
+package twilio
+
+import (
+	"errors"
+	"os"
+	"strings"
+	"testing"
+)
+
+func TestGetURL(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	sid := os.Getenv("TWILIO_ACCOUNT_SID")
+	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	// These are tied to Kevin's account, sorry I don't have a better way to do
+	// this.
+	u, err := c.Media.GetURL("MM89a8c4a6891c53054e9cd604922bfb61", "ME4f366233682e811f63f73220bc07fc34")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if u == nil {
+		t.Fatal(errors.New("got nil url"))
+	}
+	str := u.String()
+	if !strings.HasPrefix(str, "https://s3-external-1.amazonaws.com/media.twiliocdn.com/"+sid) {
+		t.Errorf("wrong url: %s", str)
+	}
+}

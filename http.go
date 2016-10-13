@@ -25,6 +25,7 @@ type Client struct {
 	AccountSid string
 	AuthToken  string
 
+	Media    *MediaService
 	Messages *MessageService
 }
 
@@ -54,11 +55,12 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Messages = &MessageService{client: c}
+	c.Media = &MediaService{client: c}
 	return c
 }
 
-func getFullPath(pathPart string, accountSid string) string {
-	return "/" + strings.Join([]string{"Accounts", accountSid, pathPart + ".json"}, "/")
+func (c *Client) FullPath(pathPart string) string {
+	return "/" + strings.Join([]string{"Accounts", c.AccountSid, pathPart + ".json"}, "/")
 }
 
 // GetResource retrieves an instance resource with the given path part (e.g.
@@ -91,7 +93,7 @@ func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v 
 	if strings.HasPrefix(pathPart, "/"+APIVersion) {
 		pathPart = pathPart[len("/"+APIVersion):]
 	} else {
-		pathPart = getFullPath(pathPart, c.AccountSid)
+		pathPart = c.FullPath(pathPart)
 	}
 	rb := new(strings.Reader)
 	if data != nil && (method == "POST" || method == "PUT") {
