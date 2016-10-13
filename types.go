@@ -3,6 +3,7 @@ package twilio
 import (
 	"encoding/json"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/ttacon/libphonenumber"
@@ -85,4 +86,38 @@ func (tt *TwilioTime) MarshalJSON() ([]byte, error) {
 		return []byte{}, err
 	}
 	return b, nil
+}
+
+var symbols = map[string]string{
+	"USD": "$",
+	"GBP": "£",
+	"JPY": "¥",
+	"MXN": "$",
+	"CHF": "CHF",
+	"CAD": "$",
+	"CNY": "¥",
+	"SGD": "$",
+	"EUR": "€",
+}
+
+// Price flips the sign of the amount and prints it with a currency symbol for
+// the given unit.
+func price(unit string, amount string) string {
+	if len(amount) == 0 {
+		return amount
+	}
+	if amount[0] == '-' {
+		amount = amount[1:]
+	} else {
+		amount = "-" + amount
+	}
+	unit = strings.ToUpper(unit)
+	if sym, ok := symbols[unit]; ok {
+		return sym + amount
+	} else {
+		if unit == "" {
+			return amount
+		}
+		return unit + " " + amount
+	}
 }

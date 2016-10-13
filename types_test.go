@@ -35,3 +35,24 @@ func TestUnmarshalTime(t *testing.T) {
 		t.Errorf("expected Year to equal 2016, got %d", tt.Time.Year())
 	}
 }
+
+var priceTests = []struct {
+	unit     string
+	amount   string
+	expected string
+}{
+	{"USD", "-0.0075", "$0.0075"},
+	{"usd", "-0.0075", "$0.0075"},
+	{"EUR", "0.0075", "€-0.0075"},
+	{"UNK", "2.45", "UNK -2.45"},
+	{"", "2.45", "-2.45"},
+}
+
+func TestPrice(t *testing.T) {
+	for _, tt := range priceTests {
+		out := price(tt.unit, tt.amount)
+		if out != tt.expected {
+			t.Errorf("price(%v, %v): got %v, want %v", tt.unit, tt.amount, out, tt.expected)
+		}
+	}
+}

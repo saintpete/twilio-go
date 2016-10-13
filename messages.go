@@ -78,6 +78,14 @@ type Message struct {
 	APIVersion      string            `json:"api_version"`
 }
 
+// FriendlyPrice flips the sign of the Price (which is usually reported from
+// the API as a negative number) and adds an appropriate currency symbol in
+// front of it. For example, a PriceUnit of "USD" and a Price of "-1.25" is
+// reported as "$1.25".
+func (m *Message) FriendlyPrice() string {
+	return price(m.PriceUnit, m.Price)
+}
+
 type MessagePage struct {
 	Page
 	Messages []*Message `json:"messages"`

@@ -89,6 +89,9 @@ func TestDecode(t *testing.T) {
 	if msg.From != PhoneNumber("+19253920364") {
 		t.Errorf("wrong from")
 	}
+	if msg.FriendlyPrice() != "$0.00750" {
+		t.Errorf("wrong friendly price %v, want %v", msg.FriendlyPrice(), "$0.00750")
+	}
 }
 
 func TestStatusFriendly(t *testing.T) {
