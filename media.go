@@ -114,11 +114,17 @@ func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 	}
 }
 
-// GetImage downloads a Media object and returns an image.Image.
+// GetImage downloads a Media object and returns an image.Image. The
+// documentation isn't great on what happens - as of October 2016, we make a
+// request to the Twilio API, then to media.twiliocdn.com, then to a S3 URL. We
+// then download that image and decode it based on the provided content-type.
 func (m *MediaService) GetImage(messageSid string, sid string) (image.Image, error) {
 	u, err := m.GetURL(messageSid, sid)
 	if err != nil {
 		return nil, err
+	}
+	if u.Scheme == "http" {
+		return nil, fmt.Errorf("Attempted to download image over insecure URL: %s", u.String())
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
