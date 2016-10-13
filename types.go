@@ -111,6 +111,12 @@ func price(unit string, amount string) string {
 	} else {
 		amount = "-" + amount
 	}
+	for strings.Contains(amount, ".") && strings.HasSuffix(amount, "0") {
+		amount = amount[:len(amount)-1]
+	}
+	if strings.HasSuffix(amount, ".") {
+		amount = amount[:len(amount)-1]
+	}
 	unit = strings.ToUpper(unit)
 	if sym, ok := symbols[unit]; ok {
 		return sym + amount
