@@ -2,7 +2,13 @@ package twilio
 
 import (
 	"errors"
+	"fmt"
 	"image"
+	"image/gif"
+	"image/jpeg"
+	"image/png"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -74,6 +80,8 @@ func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 		if err != nil {
 			return nil, err
 		}
+		io.Copy(ioutil.Discard, resp.Body)
+		resp.Body.Close()
 		// This is brittle because we need to detect/rewrite the S3 URL.
 		// I don't want to hard code a S3 URL but we have to do some
 		// substitution.
@@ -107,6 +115,32 @@ func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 }
 
 // GetImage downloads a Media object and returns an image.Image.
-func (m *MediaService) GetImage(messageSid string, sid string) (*image.Image, error) {
-	return nil, nil
+func (m *MediaService) GetImage(messageSid string, sid string) (image.Image, error) {
+	u, err := m.GetURL(messageSid, sid)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", userAgent)
+	resp, err := MediaClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	// https://www.twilio.com/docs/api/rest/accepted-mime-types#supported
+	ctype := resp.Header.Get("Content-Type")
+	switch ctype {
+	case "image/jpeg":
+		return jpeg.Decode(resp.Body)
+	case "image/gif":
+		return gif.Decode(resp.Body)
+	case "image/png":
+		return png.Decode(resp.Body)
+	default:
+		io.Copy(ioutil.Discard, resp.Body)
+		return nil, fmt.Errorf("twilio: Unknown content-type %s", ctype)
+	}
 }
