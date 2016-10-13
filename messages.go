@@ -3,6 +3,7 @@ package twilio
 import (
 	"net/url"
 	"strings"
+	"sync"
 
 	types "github.com/kevinburke/go-types"
 )
@@ -86,12 +87,15 @@ func (m *Message) FriendlyPrice() string {
 	return price(m.PriceUnit, m.Price)
 }
 
+// A MessagePage contains a Page of messages.
 type MessagePage struct {
 	Page
 	Messages []*Message `json:"messages"`
 }
 
-// Create a message with the given values.
+// Create a message with the given url.Values. For more information on valid
+// values, see https://www.twilio.com/docs/api/rest/sending-messages or use the
+// SendMessage helper.
 func (m *MessageService) Create(data url.Values) (*Message, error) {
 	msg := new(Message)
 	err := m.client.CreateResource(pathPart, data, msg)
@@ -99,7 +103,7 @@ func (m *MessageService) Create(data url.Values) (*Message, error) {
 }
 
 // SendMessage is a convenience wrapper around Create.
-func (m *MessageService) SendMessage(from string, to string, body string, mediaURLs []url.URL) (*Message, error) {
+func (m *MessageService) SendMessage(from string, to string, body string, mediaURLs []*url.URL) (*Message, error) {
 	v := url.Values{
 		"Body": []string{body},
 		"From": []string{from},
@@ -118,6 +122,26 @@ type MessagePageIterator struct {
 	nextPageURI types.NullString
 	data        url.Values
 	count       uint
+}
+
+// Next returns the next page of resources. If there are no more resources,
+// NoMoreResults is returned.
+func (m *MessagePageIterator) Next() (*MessagePage, error) {
+	mp := new(MessagePage)
+	var err error
+	if m.count == 0 {
+		err = m.client.ListResource(pathPart, m.data, mp)
+	} else if m.nextPageURI.Valid == false {
+		return nil, NoMoreResults
+	} else {
+		err = m.client.GetNextPage(m.nextPageURI.String, mp)
+	}
+	if err != nil {
+		return nil, err
+	}
+	m.count++
+	m.nextPageURI = mp.NextPageURI
+	return mp, nil
 }
 
 func (m *MessageService) Get(sid string) (*Message, error) {
@@ -144,22 +168,43 @@ func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
 	}
 }
 
-// Next returns the next page of resources. If there are no more resources,
-// NoMoreResults is returned.
-func (m *MessagePageIterator) Next() (*MessagePage, error) {
-	mp := new(MessagePage)
-	var err error
-	if m.count == 0 {
-		err = m.client.ListResource(pathPart, m.data, mp)
-	} else if m.nextPageURI.Valid == false {
-		return nil, NoMoreResults
-	} else {
-		err = m.client.GetNextPage(m.nextPageURI.String, mp)
-	}
+// GetMediaURLs gets the URLs of any media for this message. This uses threads
+// to retrieve all URLs simultaneously; if retrieving any URL fails, we return
+// an error for the entire request.
+//
+// The data can be used to filter the list of returned Media as described here:
+// https://www.twilio.com/docs/api/rest/media#list-get-filters
+//
+// As of October 2016, only 10 MediaURLs are permitted per message. No attempt
+// is made to page through media resources; omit the PageSize parameter in
+// data, or set it to a value greater than 10, to retrieve all resources.
+func (m *MessageService) GetMediaURLs(sid string, data url.Values) ([]*url.URL, error) {
+	page, err := m.client.Media.GetPage(sid, data)
 	if err != nil {
 		return nil, err
 	}
-	m.count++
-	m.nextPageURI = mp.NextPageURI
-	return mp, nil
+	if len(page.MediaList) == 0 {
+		urls := make([]*url.URL, 0, 0)
+		return urls, nil
+	}
+	urls := make([]*url.URL, len(page.MediaList))
+	errs := make([]error, len(page.MediaList))
+	var wg sync.WaitGroup
+	wg.Add(len(page.MediaList))
+	for i, media := range page.MediaList {
+		go func(i int, media *Media) {
+			url, err := m.client.Media.GetURL(sid, media.Sid)
+			urls[i] = url
+			errs[i] = err
+			wg.Done()
+		}(i, media)
+	}
+	wg.Wait()
+	// todo - we could probably return more quickly in the result of a failure.
+	for _, err := range errs {
+		if err != nil {
+			return nil, err
+		}
+	}
+	return urls, nil
 }

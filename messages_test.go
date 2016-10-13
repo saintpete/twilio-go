@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -60,6 +61,24 @@ func TestIterateAll(t *testing.T) {
 			t.Fail()
 			break
 		}
+	}
+}
+
+func TestGetMediaURLs(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	sid := os.Getenv("TWILIO_ACCOUNT_SID")
+	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	urls, err := c.Messages.GetMediaURLs("MM89a8c4a6891c53054e9cd604922bfb61", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(urls) != 1 {
+		t.Errorf("Wrong number of URLs returned: %d", len(urls))
+	}
+	if !strings.HasPrefix(urls[0].String(), "https://s3-external-1.amazonaws.com/media.twiliocdn.com/"+sid) {
+		t.Errorf("wrong url: %s", urls[0].String())
 	}
 }
 
