@@ -2,6 +2,8 @@ package twilio
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"testing"
 )
 
@@ -18,6 +20,38 @@ func TestPhoneNumberFriendly(t *testing.T) {
 	for _, tt := range pnTestCases {
 		if f := tt.in.Friendly(); f != tt.expected {
 			t.Errorf("Friendly(%v): got %s, want %s", tt.in, f, tt.expected)
+		}
+	}
+}
+
+var pnParseTestCases = []struct {
+	in  string
+	out PhoneNumber
+	err error
+}{
+	{"+14105551234", PhoneNumber("+14105551234"), nil},
+	{"410 555 1234", PhoneNumber("+14105551234"), nil},
+	{"(410) 555-1234", PhoneNumber("+14105551234"), nil},
+	{"+41 44 6681800", PhoneNumber("+41446681800"), nil},
+	{"foobarbang", PhoneNumber(""), errors.New("twilio: Invalid phone number: foobarbang")},
+	{"22", PhoneNumber("+122"), nil},
+	{"", PhoneNumber(""), ErrEmptyNumber},
+}
+
+func TestNewPhoneNumber(t *testing.T) {
+	for _, tt := range pnParseTestCases {
+		pn, err := NewPhoneNumber(tt.in)
+		name := fmt.Sprintf("ParsePhoneNumber(%v)", tt.in)
+		if tt.err != nil {
+			if err == nil {
+				t.Errorf("%s: expected %v, got nil", name, tt.err)
+				continue
+			}
+			if err.Error() != tt.err.Error() {
+				t.Errorf("%s: expected error %v, got %v", name, tt.err, err)
+			}
+		} else if pn != tt.out {
+			t.Errorf("%s: expected %v, got %v", name, tt.out, pn)
 		}
 	}
 }

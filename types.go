@@ -2,6 +2,8 @@ package twilio
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +12,29 @@ import (
 )
 
 type PhoneNumber string
+
+var ErrEmptyNumber = errors.New("twilio: The provided phone number was empty")
+
+// NewPhoneNumber parses the given value as a phone number or returns an error
+// if it cannot be parsed as one. If a phone number does not begin with a plus
+// sign, we assume it's a US national number. Numbers are stored in E.164
+// format.
+func NewPhoneNumber(pn string) (PhoneNumber, error) {
+	if len(pn) == 0 {
+		return "", ErrEmptyNumber
+	}
+	num, err := libphonenumber.Parse(pn, "US")
+	// Add some better error messages - the ones in libphonenumber are generic
+	switch {
+	case err == libphonenumber.ErrNotANumber:
+		return "", fmt.Errorf("twilio: Invalid phone number: %s", pn)
+	case err == libphonenumber.ErrInvalidCountryCode:
+		return "", fmt.Errorf("twilio: Invalid country code for number: %s", pn)
+	case err != nil:
+		return "", err
+	}
+	return PhoneNumber(libphonenumber.Format(num, libphonenumber.E164)), nil
+}
 
 // Friendly returns a friendly international representation of the phone
 // number, for example, "+14105554092" is returned as "+1 410-555-4092". If the
