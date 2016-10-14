@@ -37,14 +37,6 @@ type Media struct {
 	URI         string     `json:"uri"`
 }
 
-// MediaClient is used for fetching images and does not follow redirects.
-var MediaClient = http.Client{
-	Timeout: defaultTimeout,
-	CheckRedirect: func(req *http.Request, via []*http.Request) error {
-		return http.ErrUseLastResponse
-	},
-}
-
 func (m *MediaService) GetPage(messageSid string, data url.Values) (*MediaPage, error) {
 	mp := new(MediaPage)
 	err := m.client.ListResource(mediaPathPart(messageSid), data, mp)
