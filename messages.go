@@ -58,25 +58,24 @@ const StatusSent = Status("sent")
 const StatusUndelivered = Status("undelivered")
 
 type Message struct {
-	Sid                 string           `json:"sid"`
-	Body                string           `json:"body"`
-	From                PhoneNumber      `json:"from"`
-	To                  PhoneNumber      `json:"to"`
-	Price               string           `json:"price"`
-	Status              Status           `json:"status"`
-	AccountSid          string           `json:"account_sid"`
-	MessagingServiceSid types.NullString `json:"messaging_service_sid"`
-	DateCreated         TwilioTime       `json:"date_created"`
-	DateUpdated         TwilioTime       `json:"date_updated"`
-	DateSent            TwilioTime       `json:"date_sent"`
-	NumSegments         Segments         `json:"num_segments"`
-	// TODO fix type here... UintStr or something ?
-	NumMedia        Segments          `json:"num_media"`
-	PriceUnit       string            `json:"price_unit"`
-	Direction       Direction         `json:"direction"`
-	SubresourceURIs map[string]string `json:"subresource_uris"`
-	URI             string            `json:"uri"`
-	APIVersion      string            `json:"api_version"`
+	Sid                 string            `json:"sid"`
+	Body                string            `json:"body"`
+	From                PhoneNumber       `json:"from"`
+	To                  PhoneNumber       `json:"to"`
+	Price               string            `json:"price"`
+	Status              Status            `json:"status"`
+	AccountSid          string            `json:"account_sid"`
+	MessagingServiceSid types.NullString  `json:"messaging_service_sid"`
+	DateCreated         TwilioTime        `json:"date_created"`
+	DateUpdated         TwilioTime        `json:"date_updated"`
+	DateSent            TwilioTime        `json:"date_sent"`
+	NumSegments         Segments          `json:"num_segments"`
+	NumMedia            NumMedia          `json:"num_media"`
+	PriceUnit           string            `json:"price_unit"`
+	Direction           Direction         `json:"direction"`
+	SubresourceURIs     map[string]string `json:"subresource_uris"`
+	URI                 string            `json:"uri"`
+	APIVersion          string            `json:"api_version"`
 }
 
 // FriendlyPrice flips the sign of the Price (which is usually reported from

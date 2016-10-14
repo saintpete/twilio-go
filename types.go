@@ -60,9 +60,13 @@ func (pn PhoneNumber) Local() string {
 	return libphonenumber.Format(num, libphonenumber.NATIONAL)
 }
 
-type Segments uint
+// A uintStr is sent back from Twilio as a str, but should be parsed as a uint.
+type uintStr uint
 
-func (seg *Segments) UnmarshalJSON(b []byte) error {
+type Segments uintStr
+type NumMedia uintStr
+
+func (seg *uintStr) UnmarshalJSON(b []byte) error {
 	s := new(string)
 	if err := json.Unmarshal(b, s); err != nil {
 		return err
@@ -71,8 +75,26 @@ func (seg *Segments) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	*seg = Segments(u)
+	*seg = uintStr(u)
 	return nil
+}
+
+func (seg *Segments) UnmarshalJSON(b []byte) (err error) {
+	u := new(uintStr)
+	if err = json.Unmarshal(b, u); err != nil {
+		return
+	}
+	*seg = Segments(*u)
+	return
+}
+
+func (n *NumMedia) UnmarshalJSON(b []byte) (err error) {
+	u := new(uintStr)
+	if err = json.Unmarshal(b, u); err != nil {
+		return
+	}
+	*n = NumMedia(*u)
+	return
 }
 
 // TwilioTime can parse a timestamp returned in the Twilio API and turn it into
