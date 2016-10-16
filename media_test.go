@@ -11,6 +11,7 @@ func TestGetURL(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	// These are tied to Kevin's account, sorry I don't have a better way to do
@@ -32,6 +33,7 @@ func TestGetImage(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	// These are tied to Kevin's account, sorry I don't have a better way to do

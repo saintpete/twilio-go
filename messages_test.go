@@ -14,6 +14,7 @@ func TestGet(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	sid := "SM26b3b00f8def53be77c5697183bfe95e"
 	msg, err := c.Messages.Get(sid)
@@ -29,6 +30,7 @@ func TestGetPage(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	page, err := c.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
 	if err != nil {
@@ -43,6 +45,7 @@ func TestIterateAll(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	iter := c.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
 	count := 0
@@ -68,6 +71,7 @@ func TestGetMediaURLs(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
+	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	urls, err := c.Messages.GetMediaURLs("MM89a8c4a6891c53054e9cd604922bfb61", nil)
@@ -83,6 +87,7 @@ func TestGetMediaURLs(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
+	t.Parallel()
 	str := `{"sid": "SM26b3b00f8def53be77c5697183bfe95e", "date_created": "Tue, 20 Sep 2016 22:59:57 +0000", "date_updated": "Tue, 20 Sep 2016 22:59:57 +0000", "date_sent": "Tue, 20 Sep 2016 22:59:57 +0000", "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279", "to": "+13365584092", "from": "+19253920364", "messaging_service_sid": null, "body": "Welcome to ZomboCom.", "status": "delivered", "num_segments": "1", "num_media": "0", "direction": "outbound-reply", "api_version": "2010-04-01", "price": "-0.00750", "price_unit": "USD", "error_code": null, "error_message": null, "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e.json", "subresource_uris": {"media": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e/Media.json"}}`
 	msg := new(Message)
 	if err := json.Unmarshal([]byte(str), &msg); err != nil {
@@ -114,6 +119,7 @@ func TestDecode(t *testing.T) {
 }
 
 func TestStatusFriendly(t *testing.T) {
+	t.Parallel()
 	if StatusQueued.Friendly() != "Queued" {
 		t.Errorf("expected StatusQueued.Friendly to equal Queued, got %s", StatusQueued.Friendly())
 	}

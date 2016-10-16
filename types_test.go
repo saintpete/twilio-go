@@ -17,6 +17,7 @@ var pnTestCases = []struct {
 }
 
 func TestPhoneNumberFriendly(t *testing.T) {
+	t.Parallel()
 	for _, tt := range pnTestCases {
 		if f := tt.in.Friendly(); f != tt.expected {
 			t.Errorf("Friendly(%v): got %s, want %s", tt.in, f, tt.expected)
@@ -39,6 +40,7 @@ var pnParseTestCases = []struct {
 }
 
 func TestNewPhoneNumber(t *testing.T) {
+	t.Parallel()
 	for _, tt := range pnParseTestCases {
 		pn, err := NewPhoneNumber(tt.in)
 		name := fmt.Sprintf("ParsePhoneNumber(%v)", tt.in)
@@ -57,6 +59,7 @@ func TestNewPhoneNumber(t *testing.T) {
 }
 
 func TestUnmarshalTime(t *testing.T) {
+	t.Parallel()
 	in := []byte(`"Tue, 20 Sep 2016 22:59:57 +0000"`)
 	var tt TwilioTime
 	if err := json.Unmarshal(in, &tt); err != nil {
@@ -88,6 +91,7 @@ var priceTests = []struct {
 }
 
 func TestPrice(t *testing.T) {
+	t.Parallel()
 	for _, tt := range priceTests {
 		out := price(tt.unit, tt.amount)
 		if out != tt.expected {

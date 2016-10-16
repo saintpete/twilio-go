@@ -1,12 +1,12 @@
 package twilio
 
 import (
-	"fmt"
 	"net/url"
 	"testing"
 )
 
 func TestClientValidateIncomingRequest(t *testing.T) {
+	t.Parallel()
 	// Based on example at https://www.twilio.com/docs/security#validating-requests
 	authToken := "12345"
 	host := "https://mycompany.com"
@@ -22,14 +22,12 @@ func TestClientValidateIncomingRequest(t *testing.T) {
 
 	err := validateIncomingRequest(host, authToken, URL, postForm, xTwilioSignature)
 	if err != nil {
-		fmt.Println("Unexpected error:", err)
-		t.Fail()
+		t.Fatal("Unexpected error:", err)
 	}
 
 	URL += "&cat=3"
 	err = validateIncomingRequest(host, authToken, URL, postForm, xTwilioSignature)
 	if err == nil {
-		fmt.Println("Expected an error but got none")
-		t.Fail()
+		t.Fatal("Expected an error but got none")
 	}
 }
