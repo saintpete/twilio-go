@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 )
 
 var pnTestCases = []struct {
@@ -70,6 +71,25 @@ func TestUnmarshalTime(t *testing.T) {
 	}
 	if tt.Time.Year() != 2016 {
 		t.Errorf("expected Year to equal 2016, got %d", tt.Time.Year())
+	}
+}
+
+func TestNewTwilioTime(t *testing.T) {
+	v := NewTwilioTime("foo")
+	if v.Valid == true {
+		t.Errorf("expected time to be invalid, got true")
+	}
+	in := "Tue, 20 Sep 2016 22:59:57 +0000"
+	v = NewTwilioTime(in)
+	if v.Valid == false {
+		t.Errorf("expected %s to be valid time, got false", in)
+	}
+	if v.Time.Minute() != 59 {
+		t.Errorf("wrong minute")
+	}
+	expected := "2016-09-20T22:59:57Z"
+	if f := v.Time.Format(time.RFC3339); f != expected {
+		t.Errorf("wrong format: got %v, want %v", f, expected)
 	}
 }
 

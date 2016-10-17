@@ -104,6 +104,17 @@ type TwilioTime struct {
 	Valid bool
 }
 
+// NewTwilioTime returns a TwilioTime instance. val should be formatted using
+// the TimeLayout.
+func NewTwilioTime(val string) *TwilioTime {
+	t, err := time.Parse(TimeLayout, val)
+	if err == nil {
+		return &TwilioTime{Time: t, Valid: true}
+	} else {
+		return &TwilioTime{}
+	}
+}
+
 // The reference time, as it appears in the Twilio API.
 const TimeLayout = "Mon, 2 Jan 2006 15:04:05 -0700"
 
