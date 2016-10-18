@@ -10,14 +10,15 @@ import (
 	"time"
 )
 
+var envClient = NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+
 func TestGet(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 	sid := "SM26b3b00f8def53be77c5697183bfe95e"
-	msg, err := c.Messages.Get(sid)
+	msg, err := envClient.Messages.Get(sid)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,8 +32,7 @@ func TestGetPage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	page, err := c.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
+	page, err := envClient.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -49,8 +49,7 @@ func TestSendMessage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	msg, err := c.Messages.SendMessage(from, to, "twilio-go testing!", nil)
+	msg, err := envClient.Messages.SendMessage(from, to, "twilio-go testing!", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -59,13 +58,29 @@ func TestSendMessage(t *testing.T) {
 	}
 }
 
+func TestGetMessage(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	t.Parallel()
+	msg, err := envClient.Messages.Get("SM5a52bc49b2354703bfdea7e92b44b385")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if msg.ErrorCode != CodeUnknownDestination {
+		t.Errorf("expected Code to be %d, got %d", CodeUnknownDestination, msg.ErrorCode)
+	}
+	if msg.ErrorMessage == "" {
+		t.Errorf(`expected ErrorMessage to be non-empty, got ""`)
+	}
+}
+
 func TestIterateAll(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	iter := c.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
+	iter := envClient.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
 	count := 0
 	for {
 		_, err := iter.Next()
@@ -91,8 +106,7 @@ func TestGetMediaURLs(t *testing.T) {
 	}
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
-	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	urls, err := c.Messages.GetMediaURLs("MM89a8c4a6891c53054e9cd604922bfb61", nil)
+	urls, err := envClient.Messages.GetMediaURLs("MM89a8c4a6891c53054e9cd604922bfb61", nil)
 	if err != nil {
 		t.Fatal(err)
 	}

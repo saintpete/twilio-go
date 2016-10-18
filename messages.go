@@ -76,6 +76,8 @@ type Message struct {
 	SubresourceURIs     map[string]string `json:"subresource_uris"`
 	URI                 string            `json:"uri"`
 	APIVersion          string            `json:"api_version"`
+	ErrorCode           Code              `json:"error_code"`
+	ErrorMessage        string            `json:"error_message"`
 }
 
 // FriendlyPrice flips the sign of the Price (which is usually reported from
