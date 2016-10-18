@@ -1,14 +1,12 @@
 package twilio
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
-	types "github.com/kevinburke/go-types"
 	"github.com/kevinburke/rest"
 )
 
@@ -25,23 +23,10 @@ type Client struct {
 	AccountSid string
 	AuthToken  string
 
+	Calls    *CallService
 	Media    *MediaService
 	Messages *MessageService
 }
-
-type Page struct {
-	FirstPageURI string           `json:"first_page_uri"`
-	Start        uint             `json:"start"`
-	End          uint             `json:"end"`
-	NumPages     uint             `json:"num_pages"`
-	Total        uint             `json:"total"`
-	NextPageURI  types.NullString `json:"next_page_uri"`
-	PageSize     uint             `json:"page_size"`
-}
-
-// NoMoreResults is returned if you reach the end of the result set while
-// paging through resources.
-var NoMoreResults = errors.New("twilio: No more results")
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
 
@@ -55,8 +40,9 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	restClient.UploadType = rest.FormURLEncoded
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
-	c.Messages = &MessageService{client: c}
+	c.Calls = &CallService{client: c}
 	c.Media = &MediaService{client: c}
+	c.Messages = &MessageService{client: c}
 	return c
 }
 

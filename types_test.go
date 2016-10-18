@@ -82,6 +82,7 @@ func TestUnmarshalTime(t *testing.T) {
 }
 
 func TestNewTwilioTime(t *testing.T) {
+	t.Parallel()
 	v := NewTwilioTime("foo")
 	if v.Valid == true {
 		t.Errorf("expected time to be invalid, got true")
@@ -124,5 +125,17 @@ func TestPrice(t *testing.T) {
 		if out != tt.expected {
 			t.Errorf("price(%v, %v): got %v, want %v", tt.unit, tt.amount, out, tt.expected)
 		}
+	}
+}
+
+func TestTwilioDuration(t *testing.T) {
+	t.Parallel()
+	in := []byte(`"88"`)
+	var td TwilioDuration
+	if err := json.Unmarshal(in, &td); err != nil {
+		t.Fatal(err)
+	}
+	if td != TwilioDuration(88*time.Second) {
+		t.Errorf("got wrong duration: %v, wanted 88 seconds", td)
 	}
 }

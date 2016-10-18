@@ -185,3 +185,28 @@ func price(unit string, amount string) string {
 		return unit + " " + amount
 	}
 }
+
+type TwilioDuration time.Duration
+
+func (td *TwilioDuration) UnmarshalJSON(b []byte) error {
+	s := new(string)
+	if err := json.Unmarshal(b, s); err != nil {
+		return err
+	}
+	i, err := strconv.ParseInt(*s, 10, 64)
+	if err != nil {
+		return err
+	}
+	*td = TwilioDuration(i) * TwilioDuration(time.Second)
+	return nil
+}
+
+type AnsweredBy string
+
+const AnsweredByHuman = AnsweredBy("human")
+const AnsweredByMachine = AnsweredBy("machine")
+
+type NullAnsweredBy struct {
+	Valid      bool
+	AnsweredBy AnsweredBy
+}

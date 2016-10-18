@@ -8,7 +8,7 @@ import (
 	types "github.com/kevinburke/go-types"
 )
 
-const pathPart = "Messages"
+const messagesPathPart = "Messages"
 
 type MessageService struct {
 	client *Client
@@ -57,6 +57,9 @@ const StatusSending = Status("sending")
 const StatusSent = Status("sent")
 const StatusUndelivered = Status("undelivered")
 
+// Call statuses
+const StatusCompleted = Status("completed")
+
 type Message struct {
 	Sid                 string            `json:"sid"`
 	Body                string            `json:"body"`
@@ -99,7 +102,7 @@ type MessagePage struct {
 // SendMessage helper.
 func (m *MessageService) Create(data url.Values) (*Message, error) {
 	msg := new(Message)
-	err := m.client.CreateResource(pathPart, data, msg)
+	err := m.client.CreateResource(messagesPathPart, data, msg)
 	return msg, err
 }
 
@@ -119,35 +122,32 @@ func (m *MessageService) SendMessage(from string, to string, body string, mediaU
 }
 
 type MessagePageIterator struct {
-	client      *Client
-	nextPageURI types.NullString
-	data        url.Values
-	count       uint
+	p *PageIterator
 }
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
 func (m *MessagePageIterator) Next() (*MessagePage, error) {
 	mp := new(MessagePage)
-	var err error
-	if m.count == 0 {
-		err = m.client.ListResource(pathPart, m.data, mp)
-	} else if m.nextPageURI.Valid == false {
-		return nil, NoMoreResults
-	} else {
-		err = m.client.GetNextPage(m.nextPageURI.String, mp)
-	}
+	err := m.p.Next(mp)
 	if err != nil {
 		return nil, err
 	}
-	m.count++
-	m.nextPageURI = mp.NextPageURI
+	m.p.SetNextPageURI(mp.NextPageURI)
 	return mp, nil
+}
+
+// GetPageIterator returns an iterator which can be used to retrieve pages.
+func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
+	iter := NewPageIterator(m.client, data)
+	return &MessagePageIterator{
+		p: iter,
+	}
 }
 
 func (m *MessageService) Get(sid string) (*Message, error) {
 	msg := new(Message)
-	err := m.client.GetResource(pathPart, sid, msg)
+	err := m.client.GetResource(messagesPathPart, sid, msg)
 	return msg, err
 }
 
@@ -155,18 +155,8 @@ func (m *MessageService) Get(sid string) (*Message, error) {
 // GetPageIterator.
 func (m *MessageService) GetPage(data url.Values) (*MessagePage, error) {
 	mp := new(MessagePage)
-	err := m.client.ListResource(pathPart, data, mp)
+	err := m.client.ListResource(messagesPathPart, data, mp)
 	return mp, err
-}
-
-// GetPageIterator returns an iterator which can be used to retrieve pages.
-func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
-	return &MessagePageIterator{
-		client:      m.client,
-		nextPageURI: types.NullString{},
-		data:        data,
-		count:       0,
-	}
 }
 
 // GetMediaURLs gets the URLs of any media for this message. This uses threads
