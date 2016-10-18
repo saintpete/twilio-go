@@ -72,6 +72,13 @@ func TestUnmarshalTime(t *testing.T) {
 	if tt.Time.Year() != 2016 {
 		t.Errorf("expected Year to equal 2016, got %d", tt.Time.Year())
 	}
+	in = []byte(`null`)
+	if err := json.Unmarshal(in, &tt); err != nil {
+		t.Fatal(err)
+	}
+	if tt.Valid != false {
+		t.Errorf("expected time.Valid to be false, got true")
+	}
 }
 
 func TestNewTwilioTime(t *testing.T) {

@@ -52,6 +52,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	}
 	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", BaseURL, APIVersion))
 	restClient.Client = httpClient
+	restClient.UploadType = rest.FormURLEncoded
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Messages = &MessageService{client: c}

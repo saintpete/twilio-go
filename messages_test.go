@@ -41,6 +41,24 @@ func TestGetPage(t *testing.T) {
 	}
 }
 
+const from = "+19253920364"
+const to = "+19253920364"
+
+func TestSendMessage(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	t.Parallel()
+	c := NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	msg, err := c.Messages.SendMessage(from, to, "twilio-go testing!", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if msg.From != from {
+		t.Errorf("expected From to be from, got error")
+	}
+}
+
 func TestIterateAll(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")

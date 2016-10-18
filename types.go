@@ -123,7 +123,7 @@ func (t *TwilioTime) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, s); err != nil {
 		return err
 	}
-	if *s == "null" {
+	if s == nil || *s == "null" || *s == "" {
 		t.Valid = false
 		return nil
 	}
