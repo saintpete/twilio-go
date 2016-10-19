@@ -210,3 +210,38 @@ type NullAnsweredBy struct {
 	Valid      bool
 	AnsweredBy AnsweredBy
 }
+
+// The status of the message (accepted, queued, etc).
+// For more information , see https://www.twilio.com/docs/api/rest/message
+type Status string
+
+func (s Status) Friendly() string {
+	switch s {
+	case StatusInProgress:
+		return "In Progress"
+	case StatusNoAnswer:
+		return "No Answer"
+	default:
+		return strings.Title(string(s))
+	}
+}
+
+const StatusAccepted = Status("accepted")
+const StatusDelivered = Status("delivered")
+const StatusReceiving = Status("receiving")
+const StatusReceived = Status("received")
+const StatusSending = Status("sending")
+const StatusSent = Status("sent")
+const StatusUndelivered = Status("undelivered")
+
+// Call statuses
+const StatusBusy = Status("busy")
+const StatusCanceled = Status("canceled")
+const StatusCompleted = Status("completed")
+const StatusInProgress = Status("in-progress")
+const StatusNoAnswer = Status("no-answer")
+const StatusRinging = Status("ringing")
+
+// Shared
+const StatusFailed = Status("failed")
+const StatusQueued = Status("queued")

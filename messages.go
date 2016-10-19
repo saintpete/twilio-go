@@ -2,7 +2,6 @@ package twilio
 
 import (
 	"net/url"
-	"strings"
 	"sync"
 
 	types "github.com/kevinburke/go-types"
@@ -20,15 +19,21 @@ type Direction string
 // Friendly prints out a friendly version of the Direction, following the
 // example shown in the Twilio Dashboard.
 func (d Direction) Friendly() string {
-	switch {
-	case d == DirectionOutboundReply:
+	switch d {
+	case DirectionOutboundReply:
 		return "Reply"
-	case d == DirectionOutboundCall:
+	case DirectionOutboundCall:
 		return "Outgoing (from call)"
-	case d == DirectionOutboundAPI:
+	case DirectionOutboundAPI:
 		return "Outgoing (from API)"
-	case d == DirectionInbound:
+	case DirectionInbound:
 		return "Incoming"
+	case DirectionOutboundDial:
+		return "Outgoing (via Dial)"
+	case DirectionTrunkingTerminating:
+		return "Trunking (terminating)"
+	case DirectionTrunkingOriginating:
+		return "Trunking (originating)"
 	default:
 		return string(d)
 	}
@@ -38,27 +43,9 @@ const DirectionOutboundReply = Direction("outbound-reply")
 const DirectionInbound = Direction("inbound")
 const DirectionOutboundCall = Direction("outbound-call")
 const DirectionOutboundAPI = Direction("outbound-api")
-
-// The status of the message (accepted, queued, etc).
-// For more information , see https://www.twilio.com/docs/api/rest/message
-type Status string
-
-func (s Status) Friendly() string {
-	return strings.Title(string(s))
-}
-
-const StatusAccepted = Status("accepted")
-const StatusDelivered = Status("delivered")
-const StatusFailed = Status("failed")
-const StatusQueued = Status("queued")
-const StatusReceiving = Status("receiving")
-const StatusReceived = Status("received")
-const StatusSending = Status("sending")
-const StatusSent = Status("sent")
-const StatusUndelivered = Status("undelivered")
-
-// Call statuses
-const StatusCompleted = Status("completed")
+const DirectionOutboundDial = Direction("outbound-dial")
+const DirectionTrunkingTerminating = Direction("trunking-terminating")
+const DirectionTrunkingOriginating = Direction("trunking-originating")
 
 type Message struct {
 	Sid                 string            `json:"sid"`

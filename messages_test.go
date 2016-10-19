@@ -155,4 +155,8 @@ func TestStatusFriendly(t *testing.T) {
 	if StatusQueued.Friendly() != "Queued" {
 		t.Errorf("expected StatusQueued.Friendly to equal Queued, got %s", StatusQueued.Friendly())
 	}
+	s := Status("in-progress")
+	if f := s.Friendly(); f != "In Progress" {
+		t.Errorf("expected In Progress.Friendly to equal In Progress, got %s", f)
+	}
 }
