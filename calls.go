@@ -90,3 +90,27 @@ func (c *CallPageIterator) Next() (*CallPage, error) {
 	c.p.SetNextPageURI(cp.NextPageURI)
 	return cp, nil
 }
+
+// GetRecordings returns an array of recordings for this Call. Note there may
+// be more than one Page of results.
+func (c *CallService) GetRecordings(callSid string, data url.Values) (*RecordingPage, error) {
+	if data == nil {
+		data = url.Values{}
+	}
+	// Cheat - hit the Recordings list view with a filter instead of
+	// GET /calls/CA123/Recordings. The former is probably more reliable
+	data.Set("CallSid", callSid)
+	return c.client.Recordings.GetPage(data)
+}
+
+// GetRecordings returns an iterator of recording pages for this Call.
+// Note there may be more than one Page of results.
+func (c *CallService) GetRecordingsIterator(callSid string, data url.Values) *RecordingPageIterator {
+	if data == nil {
+		data = url.Values{}
+	}
+	// Cheat - hit the Recordings list view with a filter instead of
+	// GET /calls/CA123/Recordings. The former is probably more reliable
+	data.Set("CallSid", callSid)
+	return c.client.Recordings.GetPageIterator(data)
+}

@@ -23,9 +23,10 @@ type Client struct {
 	AccountSid string
 	AuthToken  string
 
-	Calls    *CallService
-	Media    *MediaService
-	Messages *MessageService
+	Calls      *CallService
+	Media      *MediaService
+	Messages   *MessageService
+	Recordings *RecordingService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -43,6 +44,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.Calls = &CallService{client: c}
 	c.Media = &MediaService{client: c}
 	c.Messages = &MessageService{client: c}
+	c.Recordings = &RecordingService{client: c}
 	return c
 }
 
