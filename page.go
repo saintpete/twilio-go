@@ -50,11 +50,12 @@ func (p *PageIterator) Next(v interface{}) error {
 	return nil
 }
 
-func NewPageIterator(client *Client, data url.Values) *PageIterator {
+func NewPageIterator(client *Client, data url.Values, pathPart string) *PageIterator {
 	return &PageIterator{
 		data:        data,
 		client:      client,
 		count:       0,
 		nextPageURI: types.NullString{},
+		pathPart:    pathPart,
 	}
 }

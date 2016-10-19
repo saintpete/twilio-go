@@ -82,10 +82,17 @@ func TestIterateAll(t *testing.T) {
 	t.Parallel()
 	iter := envClient.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
 	count := 0
+	start := uint(0)
 	for {
-		_, err := iter.Next()
+		page, err := iter.Next()
 		if err == NoMoreResults {
 			break
+		}
+		if count > 0 && (page.Start <= start || page.Start-start > 500) {
+			t.Fatalf("expected page.Start to be greater than previous, got %d, previous %d", page.Start, start)
+			return
+		} else {
+			start = page.Start
 		}
 		if err != nil {
 			t.Fatal(err)
@@ -97,6 +104,9 @@ func TestIterateAll(t *testing.T) {
 			t.Fail()
 			break
 		}
+	}
+	if count < 10 {
+		t.Errorf("Too small of a count - expected at least 10, got %d", count)
 	}
 }
 

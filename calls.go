@@ -62,7 +62,7 @@ type CallPageIterator struct {
 
 // GetPageIterator returns an iterator which can be used to retrieve pages.
 func (c *CallService) GetPageIterator(data url.Values) *CallPageIterator {
-	iter := NewPageIterator(c.client, data)
+	iter := NewPageIterator(c.client, data, callsPathPart)
 	return &CallPageIterator{
 		p: iter,
 	}

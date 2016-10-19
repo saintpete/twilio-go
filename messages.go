@@ -126,7 +126,7 @@ func (m *MessagePageIterator) Next() (*MessagePage, error) {
 
 // GetPageIterator returns an iterator which can be used to retrieve pages.
 func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
-	iter := NewPageIterator(m.client, data)
+	iter := NewPageIterator(m.client, data, messagesPathPart)
 	return &MessagePageIterator{
 		p: iter,
 	}
