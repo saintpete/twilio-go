@@ -36,6 +36,17 @@ func (r *Recording) URL(extension string) string {
 	return strings.Join([]string{BaseURL, r.APIVersion, "Accounts", r.AccountSid, recordingsPathPart, r.Sid + extension}, "/")
 }
 
+// FriendlyPrice flips the sign of the Price (which is usually reported from
+// the API as a negative number) and adds an appropriate currency symbol in
+// front of it. For example, a PriceUnit of "USD" and a Price of "-1.25" is
+// reported as "$1.25".
+func (r *Recording) FriendlyPrice() string {
+	if r == nil {
+		return ""
+	}
+	return price(r.PriceUnit, r.Price)
+}
+
 type RecordingPage struct {
 	Page
 	Recordings []*Recording
