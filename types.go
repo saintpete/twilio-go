@@ -201,6 +201,10 @@ func (td *TwilioDuration) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+func (td TwilioDuration) String() string {
+	return time.Duration(td).String()
+}
+
 type AnsweredBy string
 
 const AnsweredByHuman = AnsweredBy("human")
