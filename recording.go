@@ -1,6 +1,9 @@
 package twilio
 
-import "net/url"
+import (
+	"net/url"
+	"strings"
+)
 
 type RecordingService struct {
 	client *Client
@@ -21,6 +24,16 @@ type Recording struct {
 	Channels    uint           `json:"channels"`
 	DateUpdated TwilioTime     `json:"date_updated"`
 	URI         string         `json:"uri"`
+}
+
+// URL returns the URL that can be used to play this recording, based on the
+// extension. No error is returned if you provide an invalid extension. As of
+// October 2016, the valid values are ".wav" and ".mp3".
+func (r *Recording) URL(extension string) string {
+	if !strings.HasPrefix(extension, ".") {
+		extension = "." + extension
+	}
+	return strings.Join([]string{BaseURL, r.APIVersion, "Accounts", r.AccountSid, recordingsPathPart, r.Sid + extension}, "/")
 }
 
 type RecordingPage struct {
