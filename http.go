@@ -1,9 +1,12 @@
 package twilio
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -31,6 +34,39 @@ type Client struct {
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
 
+// An error returned by the Twilio API. We don't want to expose this - let's
+// try to standardize on the fields in the HTTP problem spec instead.
+type twilioError struct {
+	Code     int    `json:"code"`
+	Message  string `json:"message"`
+	MoreInfo string `json:"more_info"`
+	// This will be ignored in favor of the actual HTTP status code
+	Status int `json:"status"`
+}
+
+func parseTwilioError(resp *http.Response) error {
+	defer resp.Body.Close()
+	resBody, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return err
+	}
+	rerr := new(twilioError)
+	err = json.Unmarshal(resBody, rerr)
+	if err != nil {
+		return fmt.Errorf("invalid response body: %s", string(resBody))
+	}
+	if rerr.Message == "" {
+		return fmt.Errorf("invalid response body: %s", string(resBody))
+	}
+	restError := new(rest.Error)
+	restError.Title = rerr.Message
+	restError.Type = rerr.MoreInfo
+	restError.ID = strconv.FormatInt(int64(rerr.Code), 10)
+	restError.StatusCode = resp.StatusCode
+	return restError
+}
+
 // NewClient creates a Client for interacting with the Twilio API.
 func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
@@ -39,6 +75,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", BaseURL, APIVersion))
 	restClient.Client = httpClient
 	restClient.UploadType = rest.FormURLEncoded
+	restClient.ErrorParser = parseTwilioError
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Calls = &CallService{client: c}
