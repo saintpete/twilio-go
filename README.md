@@ -10,6 +10,9 @@ A client for accessing the Twilio API with several nice features:
 
 - Wall-clock HTTP timeouts, vs. socket timeouts
 
+- Easy debugging network traffic by setting DEBUG_HTTP_TRAFFIC=true in your
+  environment.
+
 Here are some example use cases:
 
 ```go
