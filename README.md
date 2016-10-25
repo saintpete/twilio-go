@@ -16,7 +16,7 @@ Here are some example use cases:
 const sid = "AC123"
 const token = "456bef"
 
-client := twilio.CreateClient(sid, token, nil)
+client := twilio.NewClient(sid, token, nil)
 
 // Send a message
 msg, err := client.Messages.SendMessage("+14105551234", "+14105556789", "Sent via go :) ✓", nil)
