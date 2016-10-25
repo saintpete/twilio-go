@@ -8,13 +8,14 @@ import (
 )
 
 type Page struct {
-	FirstPageURI string           `json:"first_page_uri"`
-	Start        uint             `json:"start"`
-	End          uint             `json:"end"`
-	NumPages     uint             `json:"num_pages"`
-	Total        uint             `json:"total"`
-	NextPageURI  types.NullString `json:"next_page_uri"`
-	PageSize     uint             `json:"page_size"`
+	FirstPageURI    string           `json:"first_page_uri"`
+	Start           uint             `json:"start"`
+	End             uint             `json:"end"`
+	NumPages        uint             `json:"num_pages"`
+	Total           uint             `json:"total"`
+	NextPageURI     types.NullString `json:"next_page_uri"`
+	PreviousPageURI types.NullString `json:"previous_page_uri"`
+	PageSize        uint             `json:"page_size"`
 }
 
 // NoMoreResults is returned if you reach the end of the result set while
