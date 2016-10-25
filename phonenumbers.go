@@ -28,7 +28,7 @@ type NumberCapability struct {
 
 type IncomingPhoneNumber struct {
 	Sid                  string            `json:"sid"`
-	PhoneNumber          string            `json:"phone_number"`
+	PhoneNumber          PhoneNumber       `json:"phone_number"`
 	FriendlyName         string            `json:"friendly_name"`
 	DateCreated          TwilioTime        `json:"date_created"`
 	AccountSid           string            `json:"account_sid"`

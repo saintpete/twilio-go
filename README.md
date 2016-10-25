@@ -1,28 +1,56 @@
 # twilio-go
 
-Usage
+A client for accessing the Twilio API with several nice features:
+
+- Can fetch all Media for a Message concurrently
+
+- Easy-to-use helpers for purchasing phone numbers and sending MMS messages
+
+- E.164 support and other smart types.
+
+- Wall-clock HTTP timeouts, vs. socket timeouts
+
+Here are some example use cases:
 
 ```go
 const sid = "AC123"
 const token = "456bef"
 
 client := twilio.CreateClient(sid, token, nil)
-msg, err := client.Messages.SendMessage("+19177460767", "+19253240627", "Sent via go :) ✓", nil)
-```
 
-Or pass the values yourself:
+// Send a message
+msg, err := client.Messages.SendMessage("+14105551234", "+14105556789", "Sent via go :) ✓", nil)
 
-```go
-params := url.Values{
-    "From": {"+19177460767"},
-    "To":   {"+19253240627"},
-    "Body": {"Sent via go :) ✓"},
+// Buy a number
+number, err := client.IncomingNumbers.BuyNumber("+14105551234")
+
+// Get all calls from a number
+data := new(url.Values)
+data.Set("From", "+14105551234")
+callPage, err := client.Calls.GetPage(data)
+
+// Iterate over calls
+iterator := client.Calls.GetPageIterator(url.Values{})
+for {
+    page, err := iterator.Next()
+    if err == twilio.NoMoreResults {
+        break
+    }
+    fmt.Println("start", page.Start)
 }
-msg, err := client.Messages.Create(params)
 ```
 
-The API is experimental, doesn't cover all resources, and subject to change
-until 1.0.
+A [complete documentation reference can be found at
+godoc.org](https://godoc.org/github.com/kevinburke/twilio-go).
+
+The API is experimental, but unlikely to change, and currently only covers
+these resources:
+
+- Calls
+- Messages
+- Incoming Phone Numbers
+- Recordings
+- Media
 
 ### Error Parsing
 
