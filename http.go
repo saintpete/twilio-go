@@ -13,7 +13,7 @@ import (
 	"github.com/kevinburke/rest"
 )
 
-const Version = "0.29"
+const Version = "0.30"
 const userAgent = "twilio-go/" + Version
 
 // The base URL serving the API. Override this for testing.
