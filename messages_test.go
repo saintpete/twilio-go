@@ -39,20 +39,25 @@ func TestGetPage(t *testing.T) {
 	}
 }
 
-const from = "+19253920364"
-const to = "+19253920364"
-
 func TestSendMessage(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping HTTP request in short mode")
-	}
 	t.Parallel()
-	msg, err := envClient.Messages.SendMessage(from, to, "twilio-go testing!", nil)
+	client, s := getServer(sendMessageResponse)
+	defer s.Close()
+	msg, err := client.Messages.SendMessage(from, to, "twilio-go testing!", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if msg.From != from {
 		t.Errorf("expected From to be from, got error")
+	}
+	if msg.Body != "twilio-go testing!" {
+		t.Errorf("expected Body to be twilio-go testing, got %s", msg.Body)
+	}
+	if msg.NumSegments != 1 {
+		t.Errorf("expected NumSegments to be 1, got %d", msg.NumSegments)
+	}
+	if msg.Status != StatusQueued {
+		t.Errorf("expected Status to be StatusQueued, got %s", msg.Status)
 	}
 }
 
