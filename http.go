@@ -16,8 +16,11 @@ import (
 const Version = "0.29"
 const userAgent = "twilio-go/" + Version
 
+// The base URL serving the API. Override this for testing.
 var BaseURL = "https://api.twilio.com"
 
+// The APIVersion to use. Your mileage may vary using other values for the
+// APIVersion; the resource representations may not match.
 const APIVersion = "2010-04-01"
 
 type Client struct {
@@ -27,6 +30,7 @@ type Client struct {
 	AuthToken  string
 
 	Calls           *CallService
+	Conferences     *ConferenceService
 	IncomingNumbers *IncomingNumberService
 	Media           *MediaService
 	Messages        *MessageService
@@ -80,6 +84,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Calls = &CallService{client: c}
+	c.Conferences = &ConferenceService{client: c}
 	c.IncomingNumbers = &IncomingNumberService{
 		NumberPurchasingService: &NumberPurchasingService{
 			client:   c,

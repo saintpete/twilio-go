@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-var envClient = NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-
 func TestGet(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
