@@ -71,7 +71,7 @@ func (n *NumberPurchasingService) Create(ctx context.Context, data url.Values) (
 	if n.pathPart != "" {
 		pathPart += "/" + n.pathPart
 	}
-	err := n.client.CreateResource(context.TODO(), pathPart, data, number)
+	err := n.client.CreateResource(ctx, pathPart, data, number)
 	return number, err
 }
 
