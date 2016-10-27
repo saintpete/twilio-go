@@ -62,6 +62,36 @@ func (c *CallService) Get(ctx context.Context, sid string) (*Call, error) {
 	return call, err
 }
 
+// Update the call with the given data. Valid parameters may be found here:
+// https://www.twilio.com/docs/api/rest/change-call-state#post-parameters
+func (c *CallService) Update(ctx context.Context, sid string, data url.Values) (*Call, error) {
+	call := new(Call)
+	err := c.client.UpdateResource(ctx, callsPathPart, sid, data, call)
+	return call, err
+}
+
+// Cancel an in-progress Call with the given sid. Cancel will not affect
+// in-progress Calls, only those in queued or ringing.
+func (c *CallService) Cancel(sid string) (*Call, error) {
+	data := url.Values{}
+	data.Set("Status", string(StatusCanceled))
+	return c.Update(context.Background(), sid, data)
+}
+
+// Hang up an in-progress call.
+func (c *CallService) Hangup(sid string) (*Call, error) {
+	data := url.Values{}
+	data.Set("Status", string(StatusCompleted))
+	return c.Update(context.Background(), sid, data)
+}
+
+// Redirect the given call to the given URL.
+func (c *CallService) Redirect(sid string, u *url.URL) (*Call, error) {
+	data := url.Values{}
+	data.Set("Url", u.String())
+	return c.Update(context.Background(), sid, data)
+}
+
 // Initiate a new Call.
 func (c *CallService) Create(ctx context.Context, data url.Values) (*Call, error) {
 	call := new(Call)

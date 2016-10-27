@@ -29,6 +29,14 @@
 //     number, err := client.IncomingNumbers.Get(context.TODO(), "PN123")
 //     fmt.Println(number.PhoneNumber)
 //
+// Updating an Instance Resource
+//
+// Call Update() with a particular sid and a url.Values.
+//
+//     data := url.Values{}
+//     data.Set("Status", string(twilio.StatusCompleted))
+//     call, err := client.Calls.Update("CA123", data)
+//
 // Getting a List Resource
 //
 // There are two flavors of interaction. First, if all you want is a single
@@ -51,4 +59,32 @@
 //         }
 //         fmt.Println("start", page.Start)
 //     }
+//
+// Custom Types
+//
+// There are several custom types and helper functions designed to make your
+// job easier. Where possible, we try to parse values from the Twilio API into
+// a datatype that makes more sense. For example, we try to parse timestamps
+// into Time values, durations into time.Duration, integer values into uints,
+// even if the API returns them as strings, e.g. "3".
+//
+// All phone numbers have type PhoneNumber. By default these are
+// E.164, but can be printed in Friendly()/Local() variations as well.
+//
+//     num, _ := twilio.NewPhoneNumber("+1 (415) 555-1234")
+//     fmt.Println(num.Friendly()) // "+1 415 555 1234"
+//
+// Any times returned from the Twilio API are of type TwilioTime, which has
+// two properties - Valid (a bool), and Time (a time.Time). Check Valid before
+// using the related Time.
+//
+//     if msg.DateSent.Valid {
+//         fmt.Println(msg.DateSent.Time.Format(time.Kitchen)
+//     }
+//
+// There are constants for every Status in the API, for example StatusQueued,
+// which has the value "queued". You can call Friendly() on any Status to get
+// an uppercase version of the status, e.g.
+//
+//     twilio.StatusInProgress.Friendly() // "In Progress"
 package twilio

@@ -14,6 +14,7 @@ import (
 	"golang.org/x/net/context"
 )
 
+// The twilio-go version. Run "make release" to bump this number.
 const Version = "0.30"
 const userAgent = "twilio-go/" + Version
 
