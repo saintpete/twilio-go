@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	types "github.com/kevinburke/go-types"
+	"golang.org/x/net/context"
 )
 
 const callsPathPart = "Calls"
@@ -55,16 +56,16 @@ type CallPage struct {
 	Calls []*Call `json:"calls"`
 }
 
-func (c *CallService) Get(sid string) (*Call, error) {
+func (c *CallService) Get(ctx context.Context, sid string) (*Call, error) {
 	call := new(Call)
-	err := c.client.GetResource(callsPathPart, sid, call)
+	err := c.client.GetResource(ctx, callsPathPart, sid, call)
 	return call, err
 }
 
 // Initiate a new Call.
-func (c *CallService) Create(data url.Values) (*Call, error) {
+func (c *CallService) Create(ctx context.Context, data url.Values) (*Call, error) {
 	call := new(Call)
-	err := c.client.CreateResource(callsPathPart, data, call)
+	err := c.client.CreateResource(ctx, callsPathPart, data, call)
 	return call, err
 }
 
@@ -76,12 +77,12 @@ func (c *CallService) MakeCall(from string, to string, u *url.URL) (*Call, error
 	data.Set("From", from)
 	data.Set("To", to)
 	data.Set("Url", u.String())
-	return c.Create(data)
+	return c.Create(context.Background(), data)
 }
 
-func (c *CallService) GetPage(data url.Values) (*CallPage, error) {
+func (c *CallService) GetPage(ctx context.Context, data url.Values) (*CallPage, error) {
 	cp := new(CallPage)
-	err := c.client.ListResource(callsPathPart, data, cp)
+	err := c.client.ListResource(ctx, callsPathPart, data, cp)
 	return cp, err
 }
 
@@ -99,9 +100,9 @@ func (c *CallService) GetPageIterator(data url.Values) *CallPageIterator {
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
-func (c *CallPageIterator) Next() (*CallPage, error) {
+func (c *CallPageIterator) Next(ctx context.Context) (*CallPage, error) {
 	cp := new(CallPage)
-	err := c.p.Next(cp)
+	err := c.p.Next(ctx, cp)
 	if err != nil {
 		return nil, err
 	}
@@ -111,14 +112,14 @@ func (c *CallPageIterator) Next() (*CallPage, error) {
 
 // GetRecordings returns an array of recordings for this Call. Note there may
 // be more than one Page of results.
-func (c *CallService) GetRecordings(callSid string, data url.Values) (*RecordingPage, error) {
+func (c *CallService) GetRecordings(ctx context.Context, callSid string, data url.Values) (*RecordingPage, error) {
 	if data == nil {
 		data = url.Values{}
 	}
 	// Cheat - hit the Recordings list view with a filter instead of
 	// GET /calls/CA123/Recordings. The former is probably more reliable
 	data.Set("CallSid", callSid)
-	return c.client.Recordings.GetPage(data)
+	return c.client.Recordings.GetPage(ctx, data)
 }
 
 // GetRecordings returns an iterator of recording pages for this Call.

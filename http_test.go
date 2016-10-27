@@ -5,8 +5,10 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/kevinburke/rest"
+	"golang.org/x/net/context"
 )
 
 // invalid status here on purpose to check we use a different one.
@@ -19,10 +21,13 @@ var errorServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter
 }))
 
 func Test404Error(t *testing.T) {
+	t.Parallel()
 	client := NewClient("", "", nil)
 	client.Base = errorServer.URL
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Millisecond)
+	defer cancel()
 	sid := "unknown"
-	_, err := client.Calls.Get(sid)
+	_, err := client.Calls.Get(ctx, sid)
 	if err == nil {
 		t.Fatal("expected non-nil error, got nil")
 	}
@@ -41,5 +46,42 @@ func Test404Error(t *testing.T) {
 	}
 	if rerr.StatusCode != 404 {
 		t.Errorf("expected StatusCode to be 404, got %d", rerr.StatusCode)
+	}
+}
+
+func TestContext(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	t.Parallel()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+	defer cancel()
+	_, err := envClient.Calls.Get(ctx, "unknown")
+	if err == nil {
+		t.Fatal("expected Err to be non-nil, got nil")
+	}
+	// I wish it had context.DeadlineExceeded, doesn't seem to be the case.
+	if !strings.Contains(err.Error(), "canceled") {
+		t.Errorf("bad error message: %v", err)
+	}
+}
+
+func TestCancelStopsRequest(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	t.Parallel()
+	ctx, cancel := context.WithCancel(context.Background())
+	sid := "CAa98f7bbc9bc4980a44b128ca4884ca73"
+	go func() {
+		time.Sleep(30 * time.Millisecond)
+		cancel()
+	}()
+	_, err := envClient.Calls.Get(ctx, sid)
+	if err == nil {
+		t.Fatal("expected Err to be non-nil, got nil")
+	}
+	if !strings.Contains(err.Error(), "canceled") {
+		t.Errorf("bad error message: %#v", err)
 	}
 }

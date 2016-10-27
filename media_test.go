@@ -5,6 +5,9 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
+
+	"golang.org/x/net/context"
 )
 
 func TestGetURL(t *testing.T) {
@@ -14,9 +17,11 @@ func TestGetURL(t *testing.T) {
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	// These are tied to Kevin's account, sorry I don't have a better way to do
 	// this.
-	u, err := c.Media.GetURL("MM89a8c4a6891c53054e9cd604922bfb61", "ME4f366233682e811f63f73220bc07fc34")
+	u, err := c.Media.GetURL(ctx, "MM89a8c4a6891c53054e9cd604922bfb61", "ME4f366233682e811f63f73220bc07fc34")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,9 +41,11 @@ func TestGetImage(t *testing.T) {
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	// These are tied to Kevin's account, sorry I don't have a better way to do
 	// this.
-	i, err := c.Media.GetImage("MM89a8c4a6891c53054e9cd604922bfb61", "ME4f366233682e811f63f73220bc07fc34")
+	i, err := c.Media.GetImage(ctx, "MM89a8c4a6891c53054e9cd604922bfb61", "ME4f366233682e811f63f73220bc07fc34")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -3,6 +3,8 @@ package twilio
 import (
 	"net/url"
 	"strings"
+
+	"golang.org/x/net/context"
 )
 
 type RecordingService struct {
@@ -52,15 +54,15 @@ type RecordingPage struct {
 	Recordings []*Recording
 }
 
-func (r *RecordingService) Get(sid string) (*Recording, error) {
+func (r *RecordingService) Get(ctx context.Context, sid string) (*Recording, error) {
 	recording := new(Recording)
-	err := r.client.GetResource(recordingsPathPart, sid, recording)
+	err := r.client.GetResource(ctx, recordingsPathPart, sid, recording)
 	return recording, err
 }
 
-func (r *RecordingService) GetPage(data url.Values) (*RecordingPage, error) {
+func (r *RecordingService) GetPage(ctx context.Context, data url.Values) (*RecordingPage, error) {
 	rp := new(RecordingPage)
-	err := r.client.ListResource(recordingsPathPart, data, rp)
+	err := r.client.ListResource(ctx, recordingsPathPart, data, rp)
 	return rp, err
 }
 
@@ -74,4 +76,16 @@ func (r *RecordingService) GetPageIterator(data url.Values) *RecordingPageIterat
 	return &RecordingPageIterator{
 		p: iter,
 	}
+}
+
+// Next returns the next page of resources. If there are no more resources,
+// NoMoreResults is returned.
+func (r *RecordingPageIterator) Next(ctx context.Context) (*RecordingPage, error) {
+	rp := new(RecordingPage)
+	err := r.p.Next(ctx, rp)
+	if err != nil {
+		return nil, err
+	}
+	r.p.SetNextPageURI(rp.NextPageURI)
+	return rp, nil
 }

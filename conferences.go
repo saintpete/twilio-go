@@ -1,6 +1,10 @@
 package twilio
 
-import "net/url"
+import (
+	"net/url"
+
+	"golang.org/x/net/context"
+)
 
 const conferencePathPart = "Conferences"
 
@@ -27,15 +31,15 @@ type ConferencePage struct {
 	Conferences []*Conference
 }
 
-func (c *ConferenceService) Get(sid string) (*Conference, error) {
+func (c *ConferenceService) Get(ctx context.Context, sid string) (*Conference, error) {
 	conference := new(Conference)
-	err := c.client.GetResource(conferencePathPart, sid, conference)
+	err := c.client.GetResource(ctx, conferencePathPart, sid, conference)
 	return conference, err
 }
 
-func (c *ConferenceService) GetPage(data url.Values) (*ConferencePage, error) {
+func (c *ConferenceService) GetPage(ctx context.Context, data url.Values) (*ConferencePage, error) {
 	cp := new(ConferencePage)
-	err := c.client.ListResource(conferencePathPart, data, cp)
+	err := c.client.ListResource(ctx, conferencePathPart, data, cp)
 	return cp, err
 }
 
@@ -52,9 +56,9 @@ func (c *ConferenceService) GetPageIterator(data url.Values) *ConferencePageIter
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
-func (c *ConferencePageIterator) Next() (*ConferencePage, error) {
+func (c *ConferencePageIterator) Next(ctx context.Context) (*ConferencePage, error) {
 	cp := new(ConferencePage)
-	err := c.p.Next(cp)
+	err := c.p.Next(ctx, cp)
 	if err != nil {
 		return nil, err
 	}

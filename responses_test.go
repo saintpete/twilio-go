@@ -162,5 +162,32 @@ var sendMessageResponse = []byte(`
 }
 `)
 
+var getMessageResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "api_version": "2010-04-01",
+    "body": "Welcome to ZomboCom.",
+    "date_created": "Tue, 20 Sep 2016 22:59:57 +0000",
+    "date_sent": "Tue, 20 Sep 2016 22:59:57 +0000",
+    "date_updated": "Tue, 20 Sep 2016 22:59:57 +0000",
+    "direction": "outbound-reply",
+    "error_code": null,
+    "error_message": null,
+    "from": "+19253920364",
+    "messaging_service_sid": null,
+    "num_media": "0",
+    "num_segments": "1",
+    "price": "-0.00750",
+    "price_unit": "USD",
+    "sid": "SM26b3b00f8def53be77c5697183bfe95e",
+    "status": "delivered",
+    "subresource_uris": {
+        "media": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e/Media.json"
+    },
+    "to": "+13365584092",
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e.json"
+}
+`)
+
 const from = "+19253920364"
 const to = "+19253920364"

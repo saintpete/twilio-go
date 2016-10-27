@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	types "github.com/kevinburke/go-types"
+	"golang.org/x/net/context"
 )
 
 const messagesPathPart = "Messages"
@@ -87,9 +88,9 @@ type MessagePage struct {
 // Create a message with the given url.Values. For more information on valid
 // values, see https://www.twilio.com/docs/api/rest/sending-messages or use the
 // SendMessage helper.
-func (m *MessageService) Create(data url.Values) (*Message, error) {
+func (m *MessageService) Create(ctx context.Context, data url.Values) (*Message, error) {
 	msg := new(Message)
-	err := m.client.CreateResource(messagesPathPart, data, msg)
+	err := m.client.CreateResource(ctx, messagesPathPart, data, msg)
 	return msg, err
 }
 
@@ -105,7 +106,7 @@ func (m *MessageService) SendMessage(from string, to string, body string, mediaU
 			v.Add("MediaUrl", mediaURL.String())
 		}
 	}
-	return m.Create(v)
+	return m.Create(context.Background(), v)
 }
 
 type MessagePageIterator struct {
@@ -114,9 +115,9 @@ type MessagePageIterator struct {
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
-func (m *MessagePageIterator) Next() (*MessagePage, error) {
+func (m *MessagePageIterator) Next(ctx context.Context) (*MessagePage, error) {
 	mp := new(MessagePage)
-	err := m.p.Next(mp)
+	err := m.p.Next(ctx, mp)
 	if err != nil {
 		return nil, err
 	}
@@ -132,17 +133,17 @@ func (m *MessageService) GetPageIterator(data url.Values) *MessagePageIterator {
 	}
 }
 
-func (m *MessageService) Get(sid string) (*Message, error) {
+func (m *MessageService) Get(ctx context.Context, sid string) (*Message, error) {
 	msg := new(Message)
-	err := m.client.GetResource(messagesPathPart, sid, msg)
+	err := m.client.GetResource(ctx, messagesPathPart, sid, msg)
 	return msg, err
 }
 
 // GetPage returns a single page of resources. To retrieve multiple pages, use
 // GetPageIterator.
-func (m *MessageService) GetPage(data url.Values) (*MessagePage, error) {
+func (m *MessageService) GetPage(ctx context.Context, data url.Values) (*MessagePage, error) {
 	mp := new(MessagePage)
-	err := m.client.ListResource(messagesPathPart, data, mp)
+	err := m.client.ListResource(ctx, messagesPathPart, data, mp)
 	return mp, err
 }
 
@@ -156,8 +157,8 @@ func (m *MessageService) GetPage(data url.Values) (*MessagePage, error) {
 // As of October 2016, only 10 MediaURLs are permitted per message. No attempt
 // is made to page through media resources; omit the PageSize parameter in
 // data, or set it to a value greater than 10, to retrieve all resources.
-func (m *MessageService) GetMediaURLs(sid string, data url.Values) ([]*url.URL, error) {
-	page, err := m.client.Media.GetPage(sid, data)
+func (m *MessageService) GetMediaURLs(ctx context.Context, sid string, data url.Values) ([]*url.URL, error) {
+	page, err := m.client.Media.GetPage(ctx, sid, data)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +172,7 @@ func (m *MessageService) GetMediaURLs(sid string, data url.Values) ([]*url.URL, 
 	wg.Add(len(page.MediaList))
 	for i, media := range page.MediaList {
 		go func(i int, media *Media) {
-			url, err := m.client.Media.GetURL(sid, media.Sid)
+			url, err := m.client.Media.GetURL(ctx, sid, media.Sid)
 			urls[i] = url
 			errs[i] = err
 			wg.Done()

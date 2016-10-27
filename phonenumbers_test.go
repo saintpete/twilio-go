@@ -3,8 +3,10 @@ package twilio
 import (
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/kevinburke/rest"
+	"golang.org/x/net/context"
 )
 
 func TestGetNumberPage(t *testing.T) {
@@ -13,7 +15,9 @@ func TestGetNumberPage(t *testing.T) {
 	}
 	t.Parallel()
 	data := url.Values{"PageSize": []string{"1000"}}
-	numbers, err := envClient.IncomingNumbers.GetPage(data)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	numbers, err := envClient.IncomingNumbers.GetPage(ctx, data)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -3,6 +3,9 @@ package twilio
 import (
 	"net/url"
 	"testing"
+	"time"
+
+	"golang.org/x/net/context"
 )
 
 func TestGetConferencePage(t *testing.T) {
@@ -10,7 +13,9 @@ func TestGetConferencePage(t *testing.T) {
 	client, s := getServer(conferencePage)
 	defer s.Close()
 	data := url.Values{"PageSize": []string{"3"}}
-	conferences, err := client.Conferences.GetPage(data)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+	conferences, err := client.Conferences.GetPage(ctx, data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,7 +28,9 @@ func TestGetConference(t *testing.T) {
 	t.Parallel()
 	client, s := getServer(conferenceInstance)
 	defer s.Close()
-	conference, err := client.Conferences.Get(conferenceInstanceSid)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+	conference, err := client.Conferences.Get(ctx, conferenceInstanceSid)
 	if err != nil {
 		t.Fatal(err)
 	}

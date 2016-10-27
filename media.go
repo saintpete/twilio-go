@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"golang.org/x/net/context"
 )
 
 type MediaService struct {
@@ -37,21 +39,21 @@ type Media struct {
 	URI         string     `json:"uri"`
 }
 
-func (m *MediaService) GetPage(messageSid string, data url.Values) (*MediaPage, error) {
+func (m *MediaService) GetPage(ctx context.Context, messageSid string, data url.Values) (*MediaPage, error) {
 	mp := new(MediaPage)
-	err := m.client.ListResource(mediaPathPart(messageSid), data, mp)
+	err := m.client.ListResource(ctx, mediaPathPart(messageSid), data, mp)
 	return mp, err
 }
 
 // Get returns a Media struct representing a Media instance, or an error.
-func (m *MediaService) Get(messageSid string, sid string) (*Media, error) {
+func (m *MediaService) Get(ctx context.Context, messageSid string, sid string) (*Media, error) {
 	me := new(Media)
-	err := m.client.GetResource(mediaPathPart(messageSid), sid, me)
+	err := m.client.GetResource(ctx, mediaPathPart(messageSid), sid, me)
 	return me, err
 }
 
 // GetURL returns a URL that can be retrieved to download the given image.
-func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
+func (m *MediaService) GetURL(ctx context.Context, messageSid string, sid string) (*url.URL, error) {
 	uriEnd := strings.Join([]string{mediaPathPart(messageSid), sid}, "/")
 	path := m.client.FullPath(uriEnd)
 	// We want the media, not the .json representation
@@ -65,6 +67,7 @@ func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 		if err != nil {
 			return nil, err
 		}
+		req = withContext(req, ctx)
 		req.SetBasicAuth(m.client.AccountSid, m.client.AuthToken)
 		req.Header.Set("User-Agent", userAgent)
 		resp, err := MediaClient.Do(req)
@@ -109,8 +112,8 @@ func (m *MediaService) GetURL(messageSid string, sid string) (*url.URL, error) {
 // documentation isn't great on what happens - as of October 2016, we make a
 // request to the Twilio API, then to media.twiliocdn.com, then to a S3 URL. We
 // then download that image and decode it based on the provided content-type.
-func (m *MediaService) GetImage(messageSid string, sid string) (image.Image, error) {
-	u, err := m.GetURL(messageSid, sid)
+func (m *MediaService) GetImage(ctx context.Context, messageSid string, sid string) (image.Image, error) {
+	u, err := m.GetURL(ctx, messageSid, sid)
 	if err != nil {
 		return nil, err
 	}
@@ -121,6 +124,7 @@ func (m *MediaService) GetImage(messageSid string, sid string) (image.Image, err
 	if err != nil {
 		return nil, err
 	}
+	req = withContext(req, ctx)
 	req.Header.Set("User-Agent", userAgent)
 	resp, err := MediaClient.Do(req)
 	if err != nil {

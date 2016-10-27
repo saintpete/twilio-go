@@ -4,6 +4,7 @@ import (
 	"net/url"
 
 	types "github.com/kevinburke/go-types"
+	"golang.org/x/net/context"
 )
 
 const numbersPathPart = "IncomingPhoneNumbers"
@@ -64,13 +65,13 @@ type IncomingPhoneNumberPage struct {
 // Create a phone number (buy a number) with the given values.
 //
 // https://www.twilio.com/docs/api/rest/incoming-phone-numbers#toll-free-incomingphonenumber-factory-resource
-func (n *NumberPurchasingService) Create(data url.Values) (*IncomingPhoneNumber, error) {
+func (n *NumberPurchasingService) Create(ctx context.Context, data url.Values) (*IncomingPhoneNumber, error) {
 	number := new(IncomingPhoneNumber)
 	pathPart := numbersPathPart
 	if n.pathPart != "" {
 		pathPart += "/" + n.pathPart
 	}
-	err := n.client.CreateResource(pathPart, data, number)
+	err := n.client.CreateResource(context.TODO(), pathPart, data, number)
 	return number, err
 }
 
@@ -78,18 +79,18 @@ func (n *NumberPurchasingService) Create(data url.Values) (*IncomingPhoneNumber,
 // successful.
 func (ipn *IncomingNumberService) BuyNumber(phoneNumber string) (*IncomingPhoneNumber, error) {
 	data := url.Values{"PhoneNumber": []string{phoneNumber}}
-	return ipn.NumberPurchasingService.Create(data)
+	return ipn.NumberPurchasingService.Create(context.Background(), data)
 }
 
-func (ipn *IncomingNumberService) Get(sid string) (*IncomingPhoneNumber, error) {
+func (ipn *IncomingNumberService) Get(ctx context.Context, sid string) (*IncomingPhoneNumber, error) {
 	number := new(IncomingPhoneNumber)
-	err := ipn.client.GetResource(numbersPathPart, sid, number)
+	err := ipn.client.GetResource(ctx, numbersPathPart, sid, number)
 	return number, err
 }
 
-func (ins *IncomingNumberService) GetPage(data url.Values) (*IncomingPhoneNumberPage, error) {
+func (ins *IncomingNumberService) GetPage(ctx context.Context, data url.Values) (*IncomingPhoneNumberPage, error) {
 	inp := new(IncomingPhoneNumberPage)
-	err := ins.client.ListResource(numbersPathPart, data, inp)
+	err := ins.client.ListResource(ctx, numbersPathPart, data, inp)
 	return inp, err
 }
 
@@ -107,9 +108,9 @@ func (c *IncomingNumberService) GetPageIterator(data url.Values) *IncomingPhoneN
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
-func (c *IncomingPhoneNumberPageIterator) Next() (*IncomingPhoneNumberPage, error) {
+func (c *IncomingPhoneNumberPageIterator) Next(ctx context.Context) (*IncomingPhoneNumberPage, error) {
 	cp := new(IncomingPhoneNumberPage)
-	err := c.p.Next(cp)
+	err := c.p.Next(ctx, cp)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	types "github.com/kevinburke/go-types"
+	"golang.org/x/net/context"
 )
 
 type Page struct {
@@ -35,14 +36,14 @@ func (p *PageIterator) SetNextPageURI(npuri types.NullString) {
 }
 
 // Next asks for the next page of resources and decodes the results into v.
-func (p *PageIterator) Next(v interface{}) error {
+func (p *PageIterator) Next(ctx context.Context, v interface{}) error {
 	var err error
 	if p.count == 0 {
-		err = p.client.ListResource(p.pathPart, p.data, v)
+		err = p.client.ListResource(ctx, p.pathPart, p.data, v)
 	} else if p.nextPageURI.Valid == false {
 		return NoMoreResults
 	} else {
-		err = p.client.GetNextPage(p.nextPageURI.String, v)
+		err = p.client.GetNextPage(ctx, p.nextPageURI.String, v)
 	}
 	if err != nil {
 		return err

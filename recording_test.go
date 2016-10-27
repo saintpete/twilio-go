@@ -1,6 +1,11 @@
 package twilio
 
-import "testing"
+import (
+	"testing"
+	"time"
+
+	"golang.org/x/net/context"
+)
 
 func TestGetRecording(t *testing.T) {
 	if testing.Short() {
@@ -8,7 +13,9 @@ func TestGetRecording(t *testing.T) {
 	}
 	t.Parallel()
 	sid := "REd04242a0544234abba080942e0535505"
-	recording, err := envClient.Recordings.Get(sid)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	recording, err := envClient.Recordings.Get(ctx, sid)
 	if err != nil {
 		t.Fatal(err)
 	}

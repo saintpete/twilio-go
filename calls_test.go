@@ -3,6 +3,9 @@ package twilio
 import (
 	"net/url"
 	"testing"
+	"time"
+
+	"golang.org/x/net/context"
 )
 
 func TestGetCall(t *testing.T) {
@@ -11,7 +14,9 @@ func TestGetCall(t *testing.T) {
 	}
 	t.Parallel()
 	sid := "CAa98f7bbc9bc4980a44b128ca4884ca73"
-	call, err := envClient.Calls.Get(sid)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	call, err := envClient.Calls.Get(ctx, sid)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -26,7 +31,9 @@ func TestGetCallRecordings(t *testing.T) {
 	}
 	t.Parallel()
 	sid := "CA14365760c10f73392c5440bdfb70c212"
-	recordings, err := envClient.Calls.GetRecordings(sid, nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	recordings, err := envClient.Calls.GetRecordings(ctx, sid, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

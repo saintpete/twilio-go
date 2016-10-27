@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"golang.org/x/net/context"
 )
 
 func TestGet(t *testing.T) {
@@ -16,7 +18,9 @@ func TestGet(t *testing.T) {
 	}
 	t.Parallel()
 	sid := "SM26b3b00f8def53be77c5697183bfe95e"
-	msg, err := envClient.Messages.Get(sid)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	msg, err := envClient.Messages.Get(ctx, sid)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +34,9 @@ func TestGetPage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	page, err := envClient.Messages.GetPage(url.Values{"PageSize": []string{"5"}})
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	page, err := envClient.Messages.GetPage(ctx, url.Values{"PageSize": []string{"5"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +72,9 @@ func TestGetMessage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	msg, err := envClient.Messages.Get("SM5a52bc49b2354703bfdea7e92b44b385")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	msg, err := envClient.Messages.Get(ctx, "SM5a52bc49b2354703bfdea7e92b44b385")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,8 +94,10 @@ func TestIterateAll(t *testing.T) {
 	iter := envClient.Messages.GetPageIterator(url.Values{"PageSize": []string{"500"}})
 	count := 0
 	start := uint(0)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer cancel()
 	for {
-		page, err := iter.Next()
+		page, err := iter.Next(ctx)
 		if err == NoMoreResults {
 			break
 		}
@@ -119,7 +129,9 @@ func TestGetMediaURLs(t *testing.T) {
 	}
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
-	urls, err := envClient.Messages.GetMediaURLs("MM89a8c4a6891c53054e9cd604922bfb61", nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	urls, err := envClient.Messages.GetMediaURLs(ctx, "MM89a8c4a6891c53054e9cd604922bfb61", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,9 +145,8 @@ func TestGetMediaURLs(t *testing.T) {
 
 func TestDecode(t *testing.T) {
 	t.Parallel()
-	str := `{"sid": "SM26b3b00f8def53be77c5697183bfe95e", "date_created": "Tue, 20 Sep 2016 22:59:57 +0000", "date_updated": "Tue, 20 Sep 2016 22:59:57 +0000", "date_sent": "Tue, 20 Sep 2016 22:59:57 +0000", "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279", "to": "+13365584092", "from": "+19253920364", "messaging_service_sid": null, "body": "Welcome to ZomboCom.", "status": "delivered", "num_segments": "1", "num_media": "0", "direction": "outbound-reply", "api_version": "2010-04-01", "price": "-0.00750", "price_unit": "USD", "error_code": null, "error_message": null, "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e.json", "subresource_uris": {"media": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM26b3b00f8def53be77c5697183bfe95e/Media.json"}}`
 	msg := new(Message)
-	if err := json.Unmarshal([]byte(str), &msg); err != nil {
+	if err := json.Unmarshal(getMessageResponse, &msg); err != nil {
 		t.Fatal(err)
 	}
 	if msg.Sid != "SM26b3b00f8def53be77c5697183bfe95e" {

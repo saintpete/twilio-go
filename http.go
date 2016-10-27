@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/kevinburke/rest"
+	"golang.org/x/net/context"
 )
 
 const Version = "0.30"
@@ -50,10 +51,11 @@ type twilioError struct {
 }
 
 func parseTwilioError(resp *http.Response) error {
-	defer resp.Body.Close()
 	resBody, err := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
 	if err != nil {
+		return err
+	}
+	if err := resp.Body.Close(); err != nil {
 		return err
 	}
 	rerr := new(twilioError)
@@ -64,15 +66,17 @@ func parseTwilioError(resp *http.Response) error {
 	if rerr.Message == "" {
 		return fmt.Errorf("invalid response body: %s", string(resBody))
 	}
-	restError := new(rest.Error)
-	restError.Title = rerr.Message
-	restError.Type = rerr.MoreInfo
-	restError.ID = strconv.FormatInt(int64(rerr.Code), 10)
-	restError.StatusCode = resp.StatusCode
-	return restError
+	return &rest.Error{
+		Title:      rerr.Message,
+		Type:       rerr.MoreInfo,
+		ID:         strconv.FormatInt(int64(rerr.Code), 10),
+		StatusCode: resp.StatusCode,
+	}
 }
 
-// NewClient creates a Client for interacting with the Twilio API.
+// NewClient creates a Client for interacting with the Twilio API. This is the
+// main entrypoint for API interactions; view the methods on the subresources
+// for more information.
 func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
@@ -85,6 +89,10 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.Calls = &CallService{client: c}
 	c.Conferences = &ConferenceService{client: c}
+	c.Media = &MediaService{client: c}
+	c.Messages = &MessageService{client: c}
+	c.Recordings = &RecordingService{client: c}
+
 	c.IncomingNumbers = &IncomingNumberService{
 		NumberPurchasingService: &NumberPurchasingService{
 			client:   c,
@@ -100,9 +108,6 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 			pathPart: "TollFree",
 		},
 	}
-	c.Media = &MediaService{client: c}
-	c.Messages = &MessageService{client: c}
-	c.Recordings = &RecordingService{client: c}
 	return c
 }
 
@@ -112,31 +117,31 @@ func (c *Client) FullPath(pathPart string) string {
 
 // GetResource retrieves an instance resource with the given path part (e.g.
 // "/Messages") and sid (e.g. "SM123").
-func (c *Client) GetResource(pathPart string, sid string, v interface{}) error {
+func (c *Client) GetResource(ctx context.Context, pathPart string, sid string, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
-	return c.MakeRequest("GET", sidPart, nil, v)
+	return c.MakeRequest(ctx, "GET", sidPart, nil, v)
 }
 
 // CreateResource makes a POST request to the given resource.
-func (c *Client) CreateResource(pathPart string, data url.Values, v interface{}) error {
-	return c.MakeRequest("POST", pathPart, data, v)
+func (c *Client) CreateResource(ctx context.Context, pathPart string, data url.Values, v interface{}) error {
+	return c.MakeRequest(ctx, "POST", pathPart, data, v)
 }
 
-func (c *Client) UpdateResource(pathPart string, sid string, data url.Values, v interface{}) error {
+func (c *Client) UpdateResource(ctx context.Context, pathPart string, sid string, data url.Values, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
-	return c.MakeRequest("POST", sidPart, nil, v)
+	return c.MakeRequest(ctx, "POST", sidPart, nil, v)
 }
 
-func (c *Client) ListResource(pathPart string, data url.Values, v interface{}) error {
-	return c.MakeRequest("GET", pathPart, data, v)
+func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Values, v interface{}) error {
+	return c.MakeRequest(ctx, "GET", pathPart, data, v)
 }
 
-func (c *Client) GetNextPage(fullUri string, v interface{}) error {
-	return c.MakeRequest("GET", fullUri, nil, v)
+func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{}) error {
+	return c.MakeRequest(ctx, "GET", fullUri, nil, v)
 }
 
 // Make a request to the Twilio API.
-func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v interface{}) error {
+func (c *Client) MakeRequest(ctx context.Context, method string, pathPart string, data url.Values, v interface{}) error {
 	if strings.HasPrefix(pathPart, "/"+APIVersion) {
 		pathPart = pathPart[len("/"+APIVersion):]
 	} else {
@@ -153,6 +158,7 @@ func (c *Client) MakeRequest(method string, pathPart string, data url.Values, v 
 	if err != nil {
 		return err
 	}
+	req = withContext(req, ctx)
 	if ua := req.Header.Get("User-Agent"); ua == "" {
 		req.Header.Set("User-Agent", userAgent)
 	} else {
