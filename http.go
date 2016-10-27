@@ -137,6 +137,9 @@ func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Val
 	return c.MakeRequest(ctx, "GET", pathPart, data, v)
 }
 
+// GetNextPage fetches the Page at fullUri and decodes it into v. fullUri
+// should be a next_page_uri returned in the response to a paging request, and
+// should be the full path, eg "/2010-04-01/.../Messages?Page=1&PageToken=..."
 func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{}) error {
 	return c.MakeRequest(ctx, "GET", fullUri, nil, v)
 }
