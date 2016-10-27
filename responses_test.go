@@ -102,6 +102,39 @@ var conferencePage = []byte(`
 }
 `)
 
+var makeCallResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "annotation": null,
+    "answered_by": null,
+    "api_version": "2010-04-01",
+    "caller_name": null,
+    "date_created": null,
+    "date_updated": null,
+    "direction": "outbound-api",
+    "duration": null,
+    "end_time": null,
+    "forwarded_from": null,
+    "from": "+19253920364",
+    "from_formatted": "(925) 392-0364",
+    "group_sid": null,
+    "parent_call_sid": null,
+    "phone_number_sid": "PN5fb9ed903e184c8baa86c1fb7544ca0f",
+    "price": null,
+    "price_unit": "USD",
+    "sid": "CA47b862ce3b99a6d79939320a9aa54a02",
+    "start_time": null,
+    "status": "queued",
+    "subresource_uris": {
+        "notifications": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Calls/CA47b862ce3b99a6d79939320a9aa54a02/Notifications.json",
+        "recordings": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Calls/CA47b862ce3b99a6d79939320a9aa54a02/Recordings.json"
+    },
+    "to": "+19252717005",
+    "to_formatted": "(925) 271-7005",
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Calls/CA47b862ce3b99a6d79939320a9aa54a02.json"
+}
+`)
+
 var sendMessageResponse = []byte(`
 {
     "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",

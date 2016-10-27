@@ -8,7 +8,7 @@ A client for accessing the Twilio API with several nice features:
 
 - E.164 support and other smart types.
 
-- Wall-clock HTTP timeouts, vs. socket timeouts
+- Wall-clock HTTP timeouts, not socket timeouts
 
 - Easy debugging network traffic by setting DEBUG_HTTP_TRAFFIC=true in your
   environment.
@@ -23,6 +23,10 @@ client := twilio.NewClient(sid, token, nil)
 
 // Send a message
 msg, err := client.Messages.SendMessage("+14105551234", "+14105556789", "Sent via go :) ✓", nil)
+
+// Start a phone call
+call, err := client.Calls.MakeCall("+14105551234", "+14105556789",
+        "https://kev.inburke.com/zombo/zombocom.mp3", nil)
 
 // Buy a number
 number, err := client.IncomingNumbers.BuyNumber("+14105551234")
@@ -51,6 +55,7 @@ these resources:
 
 - Calls
 - Messages
+- Conferences
 - Incoming Phone Numbers
 - Recordings
 - Media

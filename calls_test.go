@@ -1,6 +1,9 @@
 package twilio
 
-import "testing"
+import (
+	"net/url"
+	"testing"
+)
 
 func TestGetCall(t *testing.T) {
 	if testing.Short() {
@@ -36,5 +39,22 @@ func TestGetCallRecordings(t *testing.T) {
 	}
 	if recordings.NextPageURI.Valid {
 		t.Errorf("expected next page uri to be invalid, got %v", recordings.NextPageURI)
+	}
+}
+
+func TestMakeCall(t *testing.T) {
+	t.Parallel()
+	client, server := getServer(makeCallResponse)
+	defer server.Close()
+	u, _ := url.Parse("https://kev.inburke.com/zombo/zombocom.mp3")
+	call, err := client.Calls.MakeCall("+19253920364", "+19252717005", u)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if call.To != "+19252717005" {
+		t.Errorf("Wrong To phone number: %s", call.To)
+	}
+	if call.Status != StatusQueued {
+		t.Errorf("Wrong status: %s", call.Status)
 	}
 }

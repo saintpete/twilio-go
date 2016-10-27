@@ -61,6 +61,24 @@ func (c *CallService) Get(sid string) (*Call, error) {
 	return call, err
 }
 
+// Initiate a new Call.
+func (c *CallService) Create(data url.Values) (*Call, error) {
+	call := new(Call)
+	err := c.client.CreateResource(callsPathPart, data, call)
+	return call, err
+}
+
+// MakeCall starts a new Call from the given phone number to the given phone
+// number, dialing the url when the call connects. MakeCall is a wrapper around
+// Create; if you need more configuration, call that function directly.
+func (c *CallService) MakeCall(from string, to string, u *url.URL) (*Call, error) {
+	data := url.Values{}
+	data.Set("From", from)
+	data.Set("To", to)
+	data.Set("Url", u.String())
+	return c.Create(data)
+}
+
 func (c *CallService) GetPage(data url.Values) (*CallPage, error) {
 	cp := new(CallPage)
 	err := c.client.ListResource(callsPathPart, data, cp)

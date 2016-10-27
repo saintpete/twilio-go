@@ -193,6 +193,10 @@ func (td *TwilioDuration) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, s); err != nil {
 		return err
 	}
+	if *s == "null" || *s == "" {
+		*td = 0
+		return nil
+	}
 	i, err := strconv.ParseInt(*s, 10, 64)
 	if err != nil {
 		return err
