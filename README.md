@@ -2,16 +2,21 @@
 
 A client for accessing the Twilio API with several nice features:
 
-- Can fetch all Media for a Message concurrently
-
 - Easy-to-use helpers for purchasing phone numbers and sending MMS messages
 
 - E.164 support and other smart types.
 
-- Wall-clock HTTP timeouts, not socket timeouts
+- Finer grained control over timeouts with a Context, and the library uses
+  wall-clock HTTP timeouts, not socket timeouts.
 
 - Easy debugging network traffic by setting DEBUG_HTTP_TRAFFIC=true in your
   environment.
+
+- Clarity; it's clear when the library will make a network request, there's no
+  unexpected giant latency spikes when paging through resources.
+
+- Uses threads to fetch resources concurrently; for example, has methods to
+fetch all Media for a Message concurrently.
 
 Here are some example use cases:
 
@@ -26,20 +31,20 @@ msg, err := client.Messages.SendMessage("+14105551234", "+14105556789", "Sent vi
 
 // Start a phone call
 call, err := client.Calls.MakeCall("+14105551234", "+14105556789",
-        "https://kev.inburke.com/zombo/zombocom.mp3", nil)
+        "https://kev.inburke.com/zombo/zombocom.mp3")
 
 // Buy a number
 number, err := client.IncomingNumbers.BuyNumber("+14105551234")
 
 // Get all calls from a number
-data := new(url.Values)
+data := url.Values{}
 data.Set("From", "+14105551234")
-callPage, err := client.Calls.GetPage(data)
+callPage, err := client.Calls.GetPage(context.TODO(), data)
 
 // Iterate over calls
 iterator := client.Calls.GetPageIterator(url.Values{})
 for {
-    page, err := iterator.Next()
+    page, err := iterator.Next(context.TODO())
     if err == twilio.NoMoreResults {
         break
     }
