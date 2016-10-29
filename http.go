@@ -48,6 +48,7 @@ type Client struct {
 	Media           *MediaService
 	Messages        *MessageService
 	Recordings      *RecordingService
+	Transcriptions  *TranscriptionService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -126,6 +127,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.Media = &MediaService{client: c}
 	c.Messages = &MessageService{client: c}
 	c.Recordings = &RecordingService{client: c}
+	c.Transcriptions = &TranscriptionService{client: c}
 
 	c.IncomingNumbers = &IncomingNumberService{
 		NumberPurchasingService: &NumberPurchasingService{
@@ -160,6 +162,19 @@ func (c *Client) CreateResource(ctx context.Context, pathPart string, data url.V
 func (c *Client) UpdateResource(ctx context.Context, pathPart string, sid string, data url.Values, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
 	return c.MakeRequest(ctx, "POST", sidPart, nil, v)
+}
+
+func (c *Client) DeleteResource(ctx context.Context, pathPart string, sid string) error {
+	sidPart := strings.Join([]string{pathPart, sid}, "/")
+	err := c.MakeRequest(ctx, "DELETE", sidPart, nil, nil)
+	if err == nil {
+		return nil
+	}
+	rerr, ok := err.(*rest.Error)
+	if ok && rerr.StatusCode == http.StatusNotFound {
+		return nil
+	}
+	return err
 }
 
 func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Values, v interface{}) error {

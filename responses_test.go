@@ -10,15 +10,28 @@ import (
 // environment. all non-short tests should use the envClient
 var envClient = NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
 
-// getServer returns a http server that returns the given bytes when requested,
-// and a Client configured to make requests to that server.
-func getServer(response []byte) (*Client, *httptest.Server) {
-	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+func newServer(response []byte, code int) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(code)
 		if _, err := w.Write(response); err != nil {
 			panic(err)
 		}
 	}))
+}
+
+// getServer returns a http server that returns the given bytes when requested,
+// and a Client configured to make requests to that server.
+func getServer(response []byte) (*Client, *httptest.Server) {
+	s := newServer(response, 200)
+	client := NewClient("AC123", "456", nil)
+	client.Base = s.URL
+	client.Monitor.Base = s.URL
+	return client, s
+}
+
+func getServerCode(response []byte, code int) (*Client, *httptest.Server) {
+	s := newServer(response, code)
 	client := NewClient("AC123", "456", nil)
 	client.Base = s.URL
 	client.Monitor.Base = s.URL
@@ -261,6 +274,15 @@ var alertListResponse = []byte(`
         "previous_page_url": null,
         "url": "https://monitor.twilio.com/v1/Alerts?PageSize=2&Page=0"
     }
+}
+`)
+
+var transcriptionDeletedTwice = []byte(`
+{
+    "code": 20404,
+    "message": "The requested resource /2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Transcriptions/TR4c7f9a71f19b7509cb1e8344af78fc82.json was not found",
+    "more_info": "https://www.twilio.com/docs/errors/20404",
+    "status": 404
 }
 `)
 
