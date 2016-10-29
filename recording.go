@@ -60,6 +60,13 @@ func (r *RecordingService) Get(ctx context.Context, sid string) (*Recording, err
 	return recording, err
 }
 
+// Delete the Recording with the given sid. If the Recording has already been
+// deleted, or does not exist, Delete returns nil. If another error or a
+// timeout occurs, the error is returned.
+func (r *RecordingService) Delete(ctx context.Context, sid string) error {
+	return r.client.DeleteResource(ctx, recordingsPathPart, sid)
+}
+
 func (r *RecordingService) GetPage(ctx context.Context, data url.Values) (*RecordingPage, error) {
 	rp := new(RecordingPage)
 	err := r.client.ListResource(ctx, recordingsPathPart, data, rp)
