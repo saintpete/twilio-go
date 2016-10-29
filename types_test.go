@@ -59,25 +59,30 @@ func TestNewPhoneNumber(t *testing.T) {
 	}
 }
 
+var timeTests = []struct {
+	in    string
+	valid bool
+	time  time.Time
+}{
+	{`"Tue, 20 Sep 2016 22:59:57 +0000"`, true, time.Date(2016, 9, 20, 22, 59, 57, 0, time.UTC)},
+	{`"2016-10-27T02:34:21Z"`, true, time.Date(2016, 10, 27, 2, 34, 21, 0, time.UTC)},
+	{`null`, false, time.Time{}},
+}
+
 func TestUnmarshalTime(t *testing.T) {
 	t.Parallel()
-	in := []byte(`"Tue, 20 Sep 2016 22:59:57 +0000"`)
-	var tt TwilioTime
-	if err := json.Unmarshal(in, &tt); err != nil {
-		t.Fatal(err)
-	}
-	if tt.Valid == false {
-		t.Errorf("expected time to be Valid, got false")
-	}
-	if tt.Time.Year() != 2016 {
-		t.Errorf("expected Year to equal 2016, got %d", tt.Time.Year())
-	}
-	in = []byte(`null`)
-	if err := json.Unmarshal(in, &tt); err != nil {
-		t.Fatal(err)
-	}
-	if tt.Valid != false {
-		t.Errorf("expected time.Valid to be false, got true")
+	for _, test := range timeTests {
+		in := []byte(test.in)
+		var tt TwilioTime
+		if err := json.Unmarshal(in, &tt); err != nil {
+			t.Errorf("json.Unmarshal(%v): got error %v", test.in, err)
+		}
+		if tt.Valid != test.valid {
+			t.Errorf("json.Unmarshal(%v): expected Valid=%t, got %t", test.in, test.valid, tt.Valid)
+		}
+		if !tt.Time.Equal(test.time) {
+			t.Errorf("json.Unmarshal(%v): expected time=%v, got %v", test.in, test.time, tt.Time)
+		}
 	}
 }
 
@@ -137,5 +142,26 @@ func TestTwilioDuration(t *testing.T) {
 	}
 	if td != TwilioDuration(88*time.Second) {
 		t.Errorf("got wrong duration: %v, wanted 88 seconds", td)
+	}
+}
+
+var hdr = `"Transfer-Encoding=chunked&Server=cloudflare-nginx&CF-RAY=2f82bf9cb8102204-EWR&Set-Cookie=__cfduid%3Dd46f1cfd57d664c3038ae66f1c1de9e751477535661%3B+expires%3DFri%2C+27-Oct-17+02%3A34%3A21+GMT%3B+path%3D%2F%3B+domain%3D.inburke.com%3B+HttpOnly&Date=Thu%2C+27+Oct+2016+02%3A34%3A21+GMT&Content-Type=text%2Fhtml&CF-RAY=two"`
+
+func TestUnmarshalHeader(t *testing.T) {
+	h := new(Header)
+	if err := json.Unmarshal([]byte(hdr), h); err != nil {
+		t.Fatal(err)
+	}
+	if h == nil {
+		t.Fatal("nil h")
+	}
+	if val := h.Get("Transfer-Encoding"); val != "chunked" {
+		t.Errorf("expected Transfer-Encoding: chunked header, got %s", val)
+	}
+	if vals := h.Header["Cf-Ray"]; len(vals) < 2 {
+		t.Errorf("expected to parse two CF-RAY headers, got less than 2")
+	}
+	if vals := h.Header["Cf-Ray"]; vals[1] != "two" {
+		t.Errorf("expected second header to be 'two', got %v", vals[1])
 	}
 }

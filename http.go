@@ -21,16 +21,27 @@ const userAgent = "twilio-go/" + Version
 // The base URL serving the API. Override this for testing.
 var BaseURL = "https://api.twilio.com"
 
+// The base URL for Twilio Monitor.
+var MonitorBaseURL = "https://monitor.twilio.com"
+
+// Version of the Twilio Monitor API.
+const MonitorVersion = "v1"
+
 // The APIVersion to use. Your mileage may vary using other values for the
 // APIVersion; the resource representations may not match.
 const APIVersion = "2010-04-01"
 
 type Client struct {
 	*rest.Client
+	Monitor *Client
+
+	FullPath   func(pathPart string) string
+	APIVersion string
 
 	AccountSid string
 	AuthToken  string
 
+	Alerts          *AlertService
 	Calls           *CallService
 	Conferences     *ConferenceService
 	IncomingNumbers *IncomingNumberService
@@ -75,10 +86,25 @@ func parseTwilioError(resp *http.Response) error {
 	}
 }
 
+func NewMonitorClient(accountSid string, authToken string, httpClient *http.Client) *Client {
+	if httpClient == nil {
+		httpClient = &http.Client{Timeout: defaultTimeout}
+	}
+	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", MonitorBaseURL, MonitorVersion))
+	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
+	c.FullPath = func(pathPart string) string {
+		return "/" + pathPart
+	}
+	c.APIVersion = MonitorVersion
+	c.Alerts = &AlertService{client: c}
+	return c
+}
+
 // NewClient creates a Client for interacting with the Twilio API. This is the
 // main entrypoint for API interactions; view the methods on the subresources
 // for more information.
 func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
+
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
 	}
@@ -88,6 +114,13 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	restClient.ErrorParser = parseTwilioError
 
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
+	c.APIVersion = APIVersion
+
+	c.FullPath = func(pathPart string) string {
+		return "/" + strings.Join([]string{"Accounts", c.AccountSid, pathPart + ".json"}, "/")
+	}
+	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
+
 	c.Calls = &CallService{client: c}
 	c.Conferences = &ConferenceService{client: c}
 	c.Media = &MediaService{client: c}
@@ -110,10 +143,6 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 		},
 	}
 	return c
-}
-
-func (c *Client) FullPath(pathPart string) string {
-	return "/" + strings.Join([]string{"Accounts", c.AccountSid, pathPart + ".json"}, "/")
 }
 
 // GetResource retrieves an instance resource with the given path part (e.g.

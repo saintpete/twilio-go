@@ -60,6 +60,13 @@
 //         fmt.Println("start", page.Start)
 //     }
 //
+// Twilio Monitor
+//
+// Twilio Monitor subresources are available on the Client under the Monitor
+// field, e.g.
+//
+//     alert, err := client.Monitor.Alerts.Get("NO123")
+//
 // Custom Types
 //
 // There are several custom types and helper functions designed to make your

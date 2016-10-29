@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -127,9 +129,12 @@ func (t *TwilioTime) UnmarshalJSON(b []byte) error {
 		t.Valid = false
 		return nil
 	}
-	tim, err := time.Parse(TimeLayout, *s)
+	tim, err := time.Parse(time.RFC3339, *s)
 	if err != nil {
-		return err
+		tim, err = time.Parse(TimeLayout, *s)
+		if err != nil {
+			return err
+		}
 	}
 	*t = TwilioTime{Time: tim, Valid: true}
 	return nil
@@ -234,6 +239,30 @@ func (s Status) Friendly() string {
 	}
 }
 
+// Header has the methods of http.Header, but can decode JSON from the
+// response_headers field of an Alert.
+type Header struct {
+	http.Header
+}
+
+func (h *Header) UnmarshalJSON(b []byte) error {
+	s := new(string)
+	if err := json.Unmarshal(b, s); err != nil {
+		return err
+	}
+	vals, err := url.ParseQuery(*s)
+	if err != nil {
+		return err
+	}
+	*h = Header{http.Header{}}
+	for k, arr := range vals {
+		for _, val := range arr {
+			h.Add(k, val)
+		}
+	}
+	return nil
+}
+
 const StatusAccepted = Status("accepted")
 const StatusDelivered = Status("delivered")
 const StatusReceiving = Status("receiving")
@@ -243,6 +272,7 @@ const StatusSent = Status("sent")
 const StatusUndelivered = Status("undelivered")
 
 // Call statuses
+
 const StatusBusy = Status("busy")
 const StatusCanceled = Status("canceled")
 const StatusCompleted = Status("completed")
@@ -253,3 +283,11 @@ const StatusRinging = Status("ringing")
 // Shared
 const StatusFailed = Status("failed")
 const StatusQueued = Status("queued")
+
+// A log level returned for an Alert.
+type LogLevel string
+
+const LogLevelError = LogLevel("error")
+const LogLevelWarning = LogLevel("warning")
+const LogLevelNotice = LogLevel("notice")
+const LogLevelDebug = LogLevel("debug")

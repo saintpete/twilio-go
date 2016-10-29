@@ -3,6 +3,7 @@ package twilio
 import (
 	"errors"
 	"net/url"
+	"strings"
 
 	types "github.com/kevinburke/go-types"
 	"golang.org/x/net/context"
@@ -19,6 +20,15 @@ type Page struct {
 	PageSize        uint             `json:"page_size"`
 }
 
+type Meta struct {
+	FirstPageURL    string           `json:"first_page_url"`
+	NextPageURL     types.NullString `json:"next_page_url"`
+	PreviousPageURL types.NullString `json:"previous_page_url"`
+	Key             string           `json:"key"`
+	Page            uint             `json:"page"`
+	PageSize        uint             `json:"page_size"`
+}
+
 // NoMoreResults is returned if you reach the end of the result set while
 // paging through resources.
 var NoMoreResults = errors.New("twilio: No more results")
@@ -32,6 +42,13 @@ type PageIterator struct {
 }
 
 func (p *PageIterator) SetNextPageURI(npuri types.NullString) {
+	if npuri.Valid == false {
+		p.nextPageURI = npuri
+		return
+	}
+	if strings.HasPrefix(npuri.String, p.client.Base) {
+		npuri.String = npuri.String[len(p.client.Base):]
+	}
 	p.nextPageURI = npuri
 }
 
