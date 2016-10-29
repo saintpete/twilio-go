@@ -65,7 +65,7 @@
 // Twilio Monitor subresources are available on the Client under the Monitor
 // field, e.g.
 //
-//     alert, err := client.Monitor.Alerts.Get("NO123")
+//     alert, err := client.Monitor.Alerts.Get(context.TODO(), "NO123")
 //
 // Custom Types
 //
