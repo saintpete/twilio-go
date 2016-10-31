@@ -60,8 +60,8 @@ type QueuePageIterator struct {
 	p *PageIterator
 }
 
-// GetPageIterator returns a QueuePageIterator with the given page
-// filters. Call iterator.Next() to get the first page of resources (and again to
+// GetPageIterator returns a QueuePageIterator with the given page filters.
+// Call iterator.Next() to get the first page of resources (and again to
 // retrieve subsequent pages).
 func (c *QueueService) GetPageIterator(data url.Values) *QueuePageIterator {
 	iter := NewPageIterator(c.client, data, queuePathPart)

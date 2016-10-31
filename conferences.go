@@ -43,10 +43,14 @@ func (c *ConferenceService) GetPage(ctx context.Context, data url.Values) (*Conf
 	return cp, err
 }
 
+// ConferencePageIterator lets you retrieve consecutive ConferencePages.
 type ConferencePageIterator struct {
 	p *PageIterator
 }
 
+// GetPageIterator returns a ConferencePageIterator with the given page
+// filters. Call iterator.Next() to get the first page of resources (and again
+// to retrieve subsequent pages).
 func (c *ConferenceService) GetPageIterator(data url.Values) *ConferencePageIterator {
 	iter := NewPageIterator(c.client, data, conferencePathPart)
 	return &ConferencePageIterator{

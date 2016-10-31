@@ -55,15 +55,18 @@ for {
 A [complete documentation reference can be found at
 godoc.org](https://godoc.org/github.com/kevinburke/twilio-go).
 
-The API is experimental, but unlikely to change, and currently only covers
+The API is open to, but unlikely to change, and currently only covers
 these resources:
 
+- Applications
 - Calls
-- Messages
 - Conferences
 - Incoming Phone Numbers
-- Recordings
+- Messages
 - Media
+- Queues
+- Recordings
+- Transcriptions
 
 ### Error Parsing
 
@@ -83,6 +86,6 @@ returning. Here's an example 404.
 }
 ```
 
-Not all errors will be a `rest.Error` however - HTTP timeouts and JSON parse
-errors (HTML error pages, bad gateway responses from proxies) can also be
-returned.
+Not all errors will be a `rest.Error` however - HTTP timeouts, canceled
+context.Contexts, and JSON parse errors (HTML error pages, bad gateway
+responses from proxies) may also be returned as plain Go errors.

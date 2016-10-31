@@ -41,7 +41,8 @@ type Client struct {
 	AccountSid string
 	AuthToken  string
 
-	Alerts          *AlertService
+	// The API Client uses these resources
+	Applications    *ApplicationService
 	Calls           *CallService
 	Conferences     *ConferenceService
 	IncomingNumbers *IncomingNumberService
@@ -50,6 +51,9 @@ type Client struct {
 	Queues          *QueueService
 	Recordings      *RecordingService
 	Transcriptions  *TranscriptionService
+
+	// NewMonitorClient initializes these services
+	Alerts *AlertService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -123,6 +127,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	}
 	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
 
+	c.Applications = &ApplicationService{client: c}
 	c.Calls = &CallService{client: c}
 	c.Conferences = &ConferenceService{client: c}
 	c.Media = &MediaService{client: c}
