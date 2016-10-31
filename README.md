@@ -67,6 +67,7 @@ these resources:
 - Queues
 - Recordings
 - Transcriptions
+- Access Tokens for IPMessaging, Video and Programmable Voice SDK
 
 ### Error Parsing
 
