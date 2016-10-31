@@ -33,6 +33,17 @@ type TranscriptionPage struct {
 	Transcriptions []*Transcription
 }
 
+// FriendlyPrice flips the sign of the Price (which is usually reported from
+// the API as a negative number) and adds an appropriate currency symbol in
+// front of it. For example, a PriceUnit of "USD" and a Price of "-1.25" is
+// reported as "$1.25".
+func (t *Transcription) FriendlyPrice() string {
+	if t == nil {
+		return ""
+	}
+	return price(t.PriceUnit, t.Price)
+}
+
 // Get returns a single Transcription or an error.
 func (c *TranscriptionService) Get(ctx context.Context, sid string) (*Transcription, error) {
 	transcription := new(Transcription)

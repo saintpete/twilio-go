@@ -39,6 +39,30 @@ type Call struct {
 	URI            string           `json:"uri"`
 }
 
+// Ended returns true if the Call has reached a terminal state, and false
+// otherwise, or if the state can't be determined.
+func (c *Call) Ended() bool {
+	// https://www.twilio.com/docs/api/rest/call#call-status-values
+	switch c.Status {
+	case StatusCompleted, StatusCanceled, StatusFailed, StatusBusy, StatusNoAnswer:
+		return true
+	default:
+		return false
+	}
+}
+
+// EndedUnsuccessfully returns true if the Call has reached a terminal state
+// and that state isn't "completed".
+func (c *Call) EndedUnsuccessfully() bool {
+	// https://www.twilio.com/docs/api/rest/call#call-status-values
+	switch c.Status {
+	case StatusCanceled, StatusFailed, StatusBusy, StatusNoAnswer:
+		return true
+	default:
+		return false
+	}
+}
+
 // FriendlyPrice flips the sign of the Price (which is usually reported from
 // the API as a negative number) and adds an appropriate currency symbol in
 // front of it. For example, a PriceUnit of "USD" and a Price of "-1.25" is
