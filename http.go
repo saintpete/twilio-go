@@ -42,16 +42,17 @@ type Client struct {
 	AuthToken  string
 
 	// The API Client uses these resources
-	Applications    *ApplicationService
-	Calls           *CallService
-	Conferences     *ConferenceService
-	IncomingNumbers *IncomingNumberService
-	Keys            *KeyService
-	Media           *MediaService
-	Messages        *MessageService
-	Queues          *QueueService
-	Recordings      *RecordingService
-	Transcriptions  *TranscriptionService
+	Applications      *ApplicationService
+	Calls             *CallService
+	Conferences       *ConferenceService
+	IncomingNumbers   *IncomingNumberService
+	Keys              *KeyService
+	Media             *MediaService
+	Messages          *MessageService
+	OutgoingCallerIDs *OutgoingCallerIDService
+	Queues            *QueueService
+	Recordings        *RecordingService
+	Transcriptions    *TranscriptionService
 
 	// NewMonitorClient initializes these services
 	Alerts *AlertService
@@ -134,6 +135,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.Keys = &KeyService{client: c}
 	c.Media = &MediaService{client: c}
 	c.Messages = &MessageService{client: c}
+	c.OutgoingCallerIDs = &OutgoingCallerIDService{client: c}
 	c.Queues = &QueueService{client: c}
 	c.Recordings = &RecordingService{client: c}
 	c.Transcriptions = &TranscriptionService{client: c}

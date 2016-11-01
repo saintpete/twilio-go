@@ -311,5 +311,27 @@ var applicationInstance = []byte(`
 }
 `)
 
+var callerIDInstance = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "date_created": "Sat, 01 Feb 2014 05:30:57 +0000",
+    "date_updated": "Sat, 01 Feb 2014 05:30:57 +0000",
+    "friendly_name": "foo",
+    "phone_number": "+19252717005",
+    "sid": "PNca86cf94c7d4f89e0bd45bfa7d9b9e7d",
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/OutgoingCallerIds/PNca86cf94c7d4f89e0bd45bfa7d9b9e7d.json"
+}
+`)
+
+var callerIDVerify = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "call_sid": "CA6662a69ccb58ef2e162098861f1892b5",
+    "friendly_name": "test friendly name",
+    "phone_number": "+14105551234",
+    "validation_code": "531628"
+}
+`)
+
 const from = "+19253920364"
 const to = "+19253920364"
