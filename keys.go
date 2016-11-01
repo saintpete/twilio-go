@@ -13,7 +13,7 @@ type KeyService struct {
 }
 
 // A Twilio Key. For more documentation, see
-// https://www.twilio.com/docs/kpi/rest/keys#instance
+// https://www.twilio.com/docs/api/rest/keys#instance
 type Key struct {
 	DateCreated  TwilioTime `json:"date_created"`
 	DateUpdated  TwilioTime `json:"date_updated"`
@@ -42,7 +42,7 @@ func (c *KeyService) GetPage(ctx context.Context, data url.Values) (*KeyPage, er
 // Create a new Key. Note the Secret is only returned in response to a Create,
 // you can't retrieve it later.
 //
-// https://www.twilio.com/docs/kpi/rest/keys#list-post
+// https://www.twilio.com/docs/api/rest/keys#list-post
 func (c *KeyService) Create(ctx context.Context, data url.Values) (*Key, error) {
 	key := new(Key)
 	err := c.client.CreateResource(ctx, keyPathPart, data, key)
@@ -50,7 +50,7 @@ func (c *KeyService) Create(ctx context.Context, data url.Values) (*Key, error) 
 }
 
 // Update the key with the given data. Valid parameters may be found here:
-// https://www.twilio.com/docs/kpi/rest/keys#instance-post
+// https://www.twilio.com/docs/api/rest/keys#instance-post
 func (a *KeyService) Update(ctx context.Context, sid string, data url.Values) (*Key, error) {
 	key := new(Key)
 	err := a.client.UpdateResource(ctx, keyPathPart, sid, data, key)
