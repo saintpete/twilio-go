@@ -62,6 +62,7 @@ these resources:
 - Calls
 - Conferences
 - Incoming Phone Numbers
+- Keys
 - Messages
 - Media
 - Queues
