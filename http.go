@@ -46,6 +46,7 @@ type Client struct {
 	Calls           *CallService
 	Conferences     *ConferenceService
 	IncomingNumbers *IncomingNumberService
+	Keys            *KeyService
 	Media           *MediaService
 	Messages        *MessageService
 	Queues          *QueueService
@@ -130,6 +131,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.Applications = &ApplicationService{client: c}
 	c.Calls = &CallService{client: c}
 	c.Conferences = &ConferenceService{client: c}
+	c.Keys = &KeyService{client: c}
 	c.Media = &MediaService{client: c}
 	c.Messages = &MessageService{client: c}
 	c.Queues = &QueueService{client: c}
