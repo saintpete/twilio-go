@@ -65,6 +65,7 @@ these resources:
 - Keys
 - Messages
 - Media
+- Outgoing Caller ID's
 - Queues
 - Recordings
 - Transcriptions
