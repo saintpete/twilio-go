@@ -61,7 +61,8 @@ func TestContext(t *testing.T) {
 		t.Fatal("expected Err to be non-nil, got nil")
 	}
 	// I wish it had context.DeadlineExceeded, doesn't seem to be the case.
-	if !strings.Contains(err.Error(), "canceled") {
+	ok := strings.Contains(err.Error(), "deadline exceeded") || strings.Contains(err.Error(), "canceled")
+	if !ok {
 		t.Errorf("bad error message: %v", err)
 	}
 }
