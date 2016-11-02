@@ -7,6 +7,8 @@ Support the Accounts resource.
 
 Add RequestOnBehalfOf function to make requests on behalf of a subaccount.
 
+Fixes short tests that were broken in 0.38
+
 ## 0.37
 
 Support Outgoing Caller ID's
