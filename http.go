@@ -158,6 +158,22 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	return c
 }
 
+// RequestOnBehalfOf will make requests using the same Account Sid and Auth
+// Token for Basic Auth, but will use the provided subaccountSid in the URL.
+// Use this to make requests on behalf of a subaccount, using the parent
+// account's credentials.
+//
+// RequestOnBehalfOf should only be used with an API Client, not (for example)
+// Twilio Monitor.
+//
+// To authenticate using a subaccount sid / auth token, create a new Client
+// using that account's credentials.
+func (c *Client) RequestOnBehalfOf(subaccountSid string) {
+	c.FullPath = func(pathPart string) string {
+		return "/" + strings.Join([]string{"Accounts", subaccountSid, pathPart + ".json"}, "/")
+	}
+}
+
 // GetResource retrieves an instance resource with the given path part (e.g.
 // "/Messages") and sid (e.g. "SM123").
 func (c *Client) GetResource(ctx context.Context, pathPart string, sid string, v interface{}) error {

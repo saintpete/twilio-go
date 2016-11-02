@@ -86,3 +86,25 @@ func TestCancelStopsRequest(t *testing.T) {
 		t.Errorf("bad error message: %#v", err)
 	}
 }
+
+func TestOnBehalfOf(t *testing.T) {
+	t.Parallel()
+	want := "/Accounts/AC345/Calls/CA123.json"
+	called := false
+	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != want {
+			t.Errorf("expected Path to be %s, got %s", want, r.URL.Path)
+		}
+		called = true
+		w.WriteHeader(200)
+		w.Write([]byte("{}"))
+	}))
+	defer s.Close()
+	c := NewClient("AC123", "456bef", nil)
+	c.Base = s.URL
+	c.RequestOnBehalfOf("AC345")
+	c.Calls.Get(context.Background(), "CA123")
+	if called != true {
+		t.Errorf("expected called to be true, got false")
+	}
+}

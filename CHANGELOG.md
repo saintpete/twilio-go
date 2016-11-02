@@ -1,3 +1,7 @@
+## 0.38
+
+Add RequestOnBehalfOf function to make requests on behalf of a subaccount.
+
 ## 0.37
 
 Support Outgoing Caller ID's
