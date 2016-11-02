@@ -10,6 +10,7 @@ import (
 )
 
 func TestTranscriptionDelete(t *testing.T) {
+	t.Parallel()
 	called := false
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		called = true
@@ -31,6 +32,7 @@ func TestTranscriptionDelete(t *testing.T) {
 }
 
 func TestTranscriptionDeleteTwice(t *testing.T) {
+	t.Parallel()
 	client, server := getServerCode(transcriptionDeletedTwice, 404)
 	defer server.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

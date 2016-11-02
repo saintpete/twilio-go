@@ -148,6 +148,7 @@ func TestTwilioDuration(t *testing.T) {
 var hdr = `"Transfer-Encoding=chunked&Server=cloudflare-nginx&CF-RAY=2f82bf9cb8102204-EWR&Set-Cookie=__cfduid%3Dd46f1cfd57d664c3038ae66f1c1de9e751477535661%3B+expires%3DFri%2C+27-Oct-17+02%3A34%3A21+GMT%3B+path%3D%2F%3B+domain%3D.inburke.com%3B+HttpOnly&Date=Thu%2C+27+Oct+2016+02%3A34%3A21+GMT&Content-Type=text%2Fhtml&CF-RAY=two"`
 
 func TestUnmarshalHeader(t *testing.T) {
+	t.Parallel()
 	h := new(Header)
 	if err := json.Unmarshal([]byte(hdr), h); err != nil {
 		t.Fatal(err)
