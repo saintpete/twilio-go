@@ -284,6 +284,10 @@ const StatusRinging = Status("ringing")
 const StatusFailed = Status("failed")
 const StatusQueued = Status("queued")
 
+const StatusActive = Status("active")
+const StatusSuspended = Status("suspended")
+const StatusClosed = Status("closed")
+
 // A log level returned for an Alert.
 type LogLevel string
 

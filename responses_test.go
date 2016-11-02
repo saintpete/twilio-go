@@ -333,5 +333,116 @@ var callerIDVerify = []byte(`
 }
 `)
 
+var accountInstance = []byte(`
+{
+    "auth_token": "[redacted]",
+    "date_created": "Fri, 18 Feb 2011 00:51:02 +0000",
+    "date_updated": "Mon, 12 Sep 2016 22:17:12 +0000",
+    "friendly_name": "kevin account woo",
+    "owner_account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "status": "active",
+    "subresource_uris": {
+        "applications": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Applications.json",
+        "authorized_connect_apps": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/AuthorizedConnectApps.json",
+        "available_phone_numbers": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/AvailablePhoneNumbers.json",
+        "calls": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Calls.json",
+        "conferences": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Conferences.json",
+        "connect_apps": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/ConnectApps.json",
+        "incoming_phone_numbers": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/IncomingPhoneNumbers.json",
+        "media": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Media.json",
+        "messages": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages.json",
+        "notifications": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Notifications.json",
+        "outgoing_caller_ids": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/OutgoingCallerIds.json",
+        "queues": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Queues.json",
+        "recordings": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Recordings.json",
+        "sandbox": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Sandbox.json",
+        "sip": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/SIP.json",
+        "sms_messages": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/SMS/Messages.json",
+        "transcriptions": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Transcriptions.json",
+        "usage": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Usage.json"
+    },
+    "type": "Full",
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279.json"
+}
+`)
+
+var accountList = []byte(`
+{
+    "accounts": [
+        {
+            "auth_token": "[redacted]",
+            "date_created": "Fri, 23 Aug 2013 21:46:14 +0000",
+            "date_updated": "Mon, 12 Sep 2016 22:18:33 +0000",
+            "friendly_name": "TestAccountUno",
+            "owner_account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+            "sid": "AC0cd9be8fd5e6e4fa0a04f50ac1caca4e",
+            "status": "active",
+            "subresource_uris": {
+                "applications": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Applications.json",
+                "authorized_connect_apps": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/AuthorizedConnectApps.json",
+                "available_phone_numbers": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/AvailablePhoneNumbers.json",
+                "calls": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Calls.json",
+                "conferences": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Conferences.json",
+                "connect_apps": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/ConnectApps.json",
+                "incoming_phone_numbers": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/IncomingPhoneNumbers.json",
+                "media": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Media.json",
+                "messages": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Messages.json",
+                "notifications": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Notifications.json",
+                "outgoing_caller_ids": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/OutgoingCallerIds.json",
+                "queues": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Queues.json",
+                "recordings": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Recordings.json",
+                "sandbox": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Sandbox.json",
+                "sip": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/SIP.json",
+                "sms_messages": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/SMS/Messages.json",
+                "transcriptions": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Transcriptions.json",
+                "usage": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e/Usage.json"
+            },
+            "type": "Full",
+            "uri": "/2010-04-01/Accounts/AC0cd9be8fd5e6e4fa0a04f50ac1caca4e.json"
+        },
+        {
+            "auth_token": "[redacted]",
+            "date_created": "Fri, 23 Aug 2013 21:47:12 +0000",
+            "date_updated": "Mon, 12 Sep 2016 22:18:33 +0000",
+            "friendly_name": "TestAccountUno",
+            "owner_account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+            "sid": "ACdd54a711c3d4031ac500c5236ab121d7",
+            "status": "active",
+            "subresource_uris": {
+                "applications": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Applications.json",
+                "authorized_connect_apps": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/AuthorizedConnectApps.json",
+                "available_phone_numbers": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/AvailablePhoneNumbers.json",
+                "calls": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Calls.json",
+                "conferences": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Conferences.json",
+                "connect_apps": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/ConnectApps.json",
+                "incoming_phone_numbers": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/IncomingPhoneNumbers.json",
+                "media": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Media.json",
+                "messages": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Messages.json",
+                "notifications": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Notifications.json",
+                "outgoing_caller_ids": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/OutgoingCallerIds.json",
+                "queues": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Queues.json",
+                "recordings": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Recordings.json",
+                "sandbox": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Sandbox.json",
+                "sip": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/SIP.json",
+                "sms_messages": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/SMS/Messages.json",
+                "transcriptions": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Transcriptions.json",
+                "usage": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7/Usage.json"
+            },
+            "type": "Full",
+            "uri": "/2010-04-01/Accounts/ACdd54a711c3d4031ac500c5236ab121d7.json"
+        }
+    ],
+    "end": 1,
+    "first_page_uri": "/2010-04-01/Accounts.json?PageSize=2&Page=0",
+    "next_page_uri": "/2010-04-01/Accounts.json?PageSize=2&Page=1&AfterSid=ACdd54a711c3d4031ac500c5236ab121d7",
+    "page": 0,
+    "page_size": 2,
+    "previous_page_uri": null,
+    "start": 0,
+    "uri": "/2010-04-01/Accounts.json?PageSize=2"
+}
+`)
+
 const from = "+19253920364"
 const to = "+19253920364"

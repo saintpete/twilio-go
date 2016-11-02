@@ -42,6 +42,7 @@ type Client struct {
 	AuthToken  string
 
 	// The API Client uses these resources
+	Accounts          *AccountService
 	Applications      *ApplicationService
 	Calls             *CallService
 	Conferences       *ConferenceService
@@ -129,6 +130,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	}
 	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
 
+	c.Accounts = &AccountService{client: c}
 	c.Applications = &ApplicationService{client: c}
 	c.Calls = &CallService{client: c}
 	c.Conferences = &ConferenceService{client: c}

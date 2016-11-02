@@ -58,6 +58,7 @@ godoc.org](https://godoc.org/github.com/kevinburke/twilio-go).
 The API is open to, but unlikely to change, and currently only covers
 these resources:
 
+- Alerts
 - Applications
 - Calls
 - Conferences
