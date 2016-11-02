@@ -95,6 +95,9 @@ func TestAccountGetPage(t *testing.T) {
 }
 
 func TestAccountGetPageIterator(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
 	t.Parallel()
 	data := url.Values{}
 	data.Set("PageSize", "2")
