@@ -86,10 +86,16 @@ returning. Here's an example 404.
     Detail: "",
     Instance: "",
     Type: "https://www.twilio.com/docs/errors/20404",
-    StatusCode:404
+    StatusCode: 404
 }
 ```
 
 Not all errors will be a `rest.Error` however - HTTP timeouts, canceled
 context.Contexts, and JSON parse errors (HTML error pages, bad gateway
 responses from proxies) may also be returned as plain Go errors.
+
+### Twiml Generation
+
+There are no plans to support Twiml generation in this library. It may be
+more readable and maintainable to manually write the XML involved in a Twiml
+response.
