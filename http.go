@@ -190,7 +190,7 @@ func (c *Client) CreateResource(ctx context.Context, pathPart string, data url.V
 
 func (c *Client) UpdateResource(ctx context.Context, pathPart string, sid string, data url.Values, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
-	return c.MakeRequest(ctx, "POST", sidPart, nil, v)
+	return c.MakeRequest(ctx, "POST", sidPart, data, v)
 }
 
 func (c *Client) DeleteResource(ctx context.Context, pathPart string, sid string) error {

@@ -1,3 +1,10 @@
+## 0.39
+
+The data in Update() requests was silently being ignored. They are not ignored
+any more.
+
+Support the Accounts resource.
+
 ## 0.38
 
 Add RequestOnBehalfOf function to make requests on behalf of a subaccount.

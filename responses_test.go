@@ -444,5 +444,39 @@ var accountList = []byte(`
 }
 `)
 
+var accountCreateResponse = []byte(`
+{
+    "auth_token": "[redacted]",
+    "date_created": "Wed, 02 Nov 2016 16:44:41 +0000",
+    "date_updated": "Wed, 02 Nov 2016 16:44:42 +0000",
+    "friendly_name": "new account name 1478105087",
+    "owner_account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "sid": "ACde8301520edc3b9171b8a68420d6e149",
+    "status": "active",
+    "subresource_uris": {
+        "applications": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Applications.json",
+        "authorized_connect_apps": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/AuthorizedConnectApps.json",
+        "available_phone_numbers": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/AvailablePhoneNumbers.json",
+        "calls": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Calls.json",
+        "conferences": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Conferences.json",
+        "connect_apps": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/ConnectApps.json",
+        "incoming_phone_numbers": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/IncomingPhoneNumbers.json",
+        "media": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Media.json",
+        "messages": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Messages.json",
+        "notifications": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Notifications.json",
+        "outgoing_caller_ids": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/OutgoingCallerIds.json",
+        "queues": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Queues.json",
+        "recordings": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Recordings.json",
+        "sandbox": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Sandbox.json",
+        "sip": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/SIP.json",
+        "sms_messages": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/SMS/Messages.json",
+        "transcriptions": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Transcriptions.json",
+        "usage": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149/Usage.json"
+    },
+    "type": "Full",
+    "uri": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149.json"
+}
+`)
+
 const from = "+19253920364"
 const to = "+19253920364"
