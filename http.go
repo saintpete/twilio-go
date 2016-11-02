@@ -160,12 +160,15 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	return c
 }
 
-// RequestOnBehalfOf will make requests using the same Account Sid and Auth
-// Token for Basic Auth, but will use the provided subaccountSid in the URL.
-// Use this to make requests on behalf of a subaccount, using the parent
-// account's credentials.
+// RequestOnBehalfOf will make all future client requests using the same
+// Account Sid and Auth Token for Basic Auth, but will use the provided
+// subaccountSid in the URL. Use this to make requests on behalf of a
+// subaccount, using the parent account's credentials.
 //
-// RequestOnBehalfOf should only be used with an API Client, not (for example)
+// RequestOnBehalfOf is *not* thread safe, and modifies the Client's behavior
+// for all requests going forward.
+//
+// RequestOnBehalfOf should only be used with api.twilio.com, not (for example)
 // Twilio Monitor.
 //
 // To authenticate using a subaccount sid / auth token, create a new Client
