@@ -59,13 +59,13 @@ func (t *AccessToken) AddGrant(grant Grant) {
 }
 
 func (t *AccessToken) JWT() (string, error) {
-	tNow := time.Now()
+	now := time.Now().UTC()
 
 	stdClaims := &jwt.StandardClaims{
-		Id:        fmt.Sprintf("%s-%d", t.apiKey, tNow.UTC().Unix()),
-		ExpiresAt: tNow.Add(t.ttl).UTC().Unix(),
+		Id:        fmt.Sprintf("%s-%d", t.apiKey, now.Unix()),
+		ExpiresAt: now.Add(t.ttl).Unix(),
 		Issuer:    t.apiKey,
-		IssuedAt:  tNow.Unix(),
+		IssuedAt:  now.Unix(),
 		Subject:   t.accountSid,
 	}
 	if !t.NotBefore.IsZero() {

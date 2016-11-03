@@ -3,14 +3,15 @@ package twilioclient
 import (
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
-	jwt "github.com/marcuswestin/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type Capability struct {
 	accountSid   string
-	authToken    string
+	authToken    []byte
 	capabilities []string
 
 	incomingClientName       string
@@ -19,12 +20,13 @@ type Capability struct {
 	shouldBuildOutgoingScope bool
 	outgoingParams           map[string]string
 	appSid                   string
+	mu                       sync.Mutex
 }
 
 func NewCapability(sid, token string) *Capability {
 	return &Capability{
 		accountSid: sid,
-		authToken:  token,
+		authToken:  []byte(token),
 	}
 }
 
@@ -54,17 +56,26 @@ func (c *Capability) AllowEventStream(filters map[string]string) {
 	c.addCapability("stream", "subscribe", params)
 }
 
-// Generate the twilio capability token.
-// Deliver this token to you JS/iOS/Android Twilio client.
+type customClaim struct {
+	*jwt.StandardClaims
+	Scope string
+}
+
+// Generate the twilio capability token. Deliver this token to your
+// JS/iOS/Android Twilio client.
 func (c *Capability) GenerateToken(ttl time.Duration) (string, error) {
 	c.doBuildIncomingScope()
 	c.doBuildOutgoingScope()
-	token := jwt.New(jwt.GetSigningMethod("HS256"))
-	token.Claims = map[string]interface{}{
-		"iss":   c.accountSid,
-		"exp":   time.Duration(time.Now().Unix()) + ttl,
-		"scope": strings.Join(c.capabilities, " "),
+	now := time.Now().UTC()
+	cc := &customClaim{
+		Scope: strings.Join(c.capabilities, " "),
+		StandardClaims: &jwt.StandardClaims{
+			ExpiresAt: now.Add(ttl).Unix(),
+			Issuer:    c.accountSid,
+			IssuedAt:  now.Unix(),
+		},
 	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, cc)
 	return token.SignedString([]byte(c.authToken))
 }
 
