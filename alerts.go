@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
-	"unicode"
-	"unicode/utf8"
 
 	"golang.org/x/net/context"
 )
@@ -78,14 +76,6 @@ func (a *AlertPageIterator) Next(ctx context.Context) (*AlertPage, error) {
 	}
 	a.p.SetNextPageURI(ap.Meta.NextPageURL)
 	return ap, nil
-}
-
-// capitalize the first letter in s
-func capitalize(s string) string {
-	r, l := utf8.DecodeRuneInString(s)
-	b := make([]byte, l)
-	utf8.EncodeRune(b, unicode.ToTitle(r))
-	return strings.Join([]string{string(b), s[l:]}, "")
 }
 
 func (a *Alert) description() string {

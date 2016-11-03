@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/ttacon/libphonenumber"
 )
@@ -295,3 +297,15 @@ const LogLevelError = LogLevel("error")
 const LogLevelWarning = LogLevel("warning")
 const LogLevelNotice = LogLevel("notice")
 const LogLevelDebug = LogLevel("debug")
+
+func (l LogLevel) Friendly() string {
+	return capitalize(string(l))
+}
+
+// capitalize the first letter in s
+func capitalize(s string) string {
+	r, l := utf8.DecodeRuneInString(s)
+	b := make([]byte, l)
+	utf8.EncodeRune(b, unicode.ToTitle(r))
+	return strings.Join([]string{string(b), s[l:]}, "")
+}
