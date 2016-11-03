@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"testing"
@@ -91,5 +92,26 @@ func TestGetAlertIterator(t *testing.T) {
 	}
 	if count < 10 {
 		t.Errorf("Too small of a count - expected at least 10, got %d", count)
+	}
+}
+
+var descriptionTests = []struct {
+	in       []byte
+	expected string
+}{
+	{alertDestination, "The destination number for a TwiML message can not be the same as the originating number of an incoming message"},
+	{alert11200, "HTTP retrieval failure: status code 405 when fetching TwiML"},
+	{alertUnknown, "Error 235342434: https://www.twilio.com/docs/errors/93455"},
+}
+
+func TestAlertDescription(t *testing.T) {
+	for _, tt := range descriptionTests {
+		alert := new(Alert)
+		if err := json.Unmarshal(tt.in, alert); err != nil {
+			panic(err)
+		}
+		if desc := alert.Description(); desc != tt.expected {
+			t.Errorf("bad description: got %s, want %s", desc, tt.expected)
+		}
 	}
 }

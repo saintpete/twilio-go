@@ -2,7 +2,9 @@ package twilio
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
+	"strings"
 
 	"golang.org/x/net/context"
 )
@@ -74,4 +76,35 @@ func (a *AlertPageIterator) Next(ctx context.Context) (*AlertPage, error) {
 	}
 	a.p.SetNextPageURI(ap.Meta.NextPageURL)
 	return ap, nil
+}
+
+// Description tries as hard as possible to give you a one sentence description
+// of this Alert, based on its contents. Description does not include a
+// trailing period.
+func (a *Alert) Description() string {
+	vals, err := url.ParseQuery(a.AlertText)
+	if err == nil {
+		if msg := vals.Get("Msg"); msg != "" {
+			return strings.TrimSpace(strings.TrimSuffix(msg, "."))
+		}
+	}
+	if a.ErrorCode != 0 {
+		switch a.ErrorCode {
+		case CodeHTTPRetrievalFailure:
+			s := "HTTP retrieval failure"
+			if err == nil && vals.Get("httpResponse") != "" {
+				s = fmt.Sprintf("%s: status code %s when fetching TwiML", s, vals.Get("httpResponse"))
+			}
+			return s
+		default:
+			if a.MoreInfo != "" {
+				return fmt.Sprintf("Error %d: %s", a.ErrorCode, a.MoreInfo)
+			}
+			return fmt.Sprintf("Error %d", a.ErrorCode)
+		}
+	}
+	if a.MoreInfo != "" {
+		return "Unknown failure: " + a.MoreInfo
+	}
+	return "Unknown failure"
 }

@@ -18,6 +18,8 @@ A client for accessing the Twilio API with several nice features:
 - Uses threads to fetch resources concurrently; for example, has methods to
 fetch all Media for a Message concurrently.
 
+- Usable descriptions of Alerts.
+
 Here are some example use cases:
 
 ```go
