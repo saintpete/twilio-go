@@ -48,6 +48,31 @@ var alert11200 = []byte(`
 }
 `)
 
+// Note 4107 in response, I reported this to Twilio Support
+var alert14107 = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "alert_text": "EmailNotification=true&LogLevel=ERROR&To=%2B19253920364&Msg=Reply+rate+limit+hit+replying+to+%2B14156305833+from+%2B19253920364+over+2014-02-05+14%3A06%3A59.0&ErrorCode=4107&From=%2B14156305833&RepliesSent=16",
+    "api_version": null,
+    "date_created": "2014-02-05T22:07:02Z",
+    "date_generated": "2014-02-05T22:07:02Z",
+    "date_updated": "2014-02-05T22:07:03Z",
+    "error_code": "4107",
+    "log_level": "error",
+    "more_info": "https://www.twilio.com/docs/errors/4107",
+    "request_headers": null,
+    "request_method": null,
+    "request_url": null,
+    "request_variables": null,
+    "resource_sid": "SM77db020c59a94d4f29ac4d43b8bef592",
+    "response_body": null,
+    "response_headers": null,
+    "service_sid": null,
+    "sid": "NOf57de2bb5cccd77c67288a7c433fa9d5",
+    "url": "https://monitor.twilio.com/v1/Alerts/NOf57de2bb5cccd77c67288a7c433fa9d5"
+}
+`)
+
 var alertUnknown = []byte(`
 {
     "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",

@@ -1,3 +1,8 @@
+## 0.42
+
+Add more Description fields based on errors I've received in the past. There
+are probably more to be found, but this is a good start.
+
 ## 0.41
 
 Use the same JWT library instead of using two different ones.

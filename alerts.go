@@ -88,6 +88,22 @@ func (a *Alert) description() string {
 				s = fmt.Sprintf("%s: status code %s when fetching TwiML", s, resp)
 			}
 			return s
+		case CodeReplyLimitExceeded:
+			msg := vals.Get("Msg")
+			if msg == "" {
+				break
+			}
+			if idx := strings.Index(msg, "over"); idx >= 0 {
+				return msg[:idx]
+			}
+			return msg
+		case CodeDocumentParseFailure:
+			// There's a more detailed error message here but it doesn't really
+			// make sense in a sentence context: "Error on line 18 of document:
+			// Content is not allowed in trailing section."
+			return "Document parse failure"
+		case CodeSayInvalidText:
+			return "The text of the Say verb was empty or un-parsable"
 		case CodeForbiddenPhoneNumber, CodeNoInternationalAuthorization:
 			if vals.Get("Msg") != "" && vals.Get("phonenumber") != "" {
 				return strings.TrimSpace(vals.Get("Msg")) + " " + vals.Get("phonenumber")

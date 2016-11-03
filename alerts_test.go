@@ -113,6 +113,7 @@ var descriptionTests = []struct {
 }{
 	{alertDestination, "The destination number for a TwiML message can not be the same as the originating number of an incoming message"},
 	{alert11200, "HTTP retrieval failure: status code 405 when fetching TwiML"},
+	{alert14107, "Reply rate limit hit replying to +14156305833 from +19253920364"},
 	{alert13225, "Forbidden phone number +886225475050"},
 	{alert13227, "Not authorized to call +864008895080"},
 	{alertUnknown, "Error 235342434: https://www.twilio.com/docs/errors/93455"},
