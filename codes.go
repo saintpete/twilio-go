@@ -35,6 +35,8 @@ func (c *Code) UnmarshalJSON(b []byte) error {
 const CodeHTTPRetrievalFailure = 11200
 const CodeHTTPConnectionFailure = 11205
 const CodeHTTPProtocolViolation = 11206
+const CodeForbiddenPhoneNumber = 13225
+const CodeNoInternationalAuthorization = 13227
 const CodeQueueOverflow = 30001
 const CodeAccountSuspended = 30002
 const CodeUnreachable = 30003

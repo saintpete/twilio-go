@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"golang.org/x/net/context"
 )
@@ -78,25 +80,32 @@ func (a *AlertPageIterator) Next(ctx context.Context) (*AlertPage, error) {
 	return ap, nil
 }
 
-// Description tries as hard as possible to give you a one sentence description
-// of this Alert, based on its contents. Description does not include a
-// trailing period.
-func (a *Alert) Description() string {
+// capitalize the first letter in s
+func capitalize(s string) string {
+	r, l := utf8.DecodeRuneInString(s)
+	b := make([]byte, l)
+	utf8.EncodeRune(b, unicode.ToTitle(r))
+	return strings.Join([]string{string(b), s[l:]}, "")
+}
+
+func (a *Alert) description() string {
 	vals, err := url.ParseQuery(a.AlertText)
-	if err == nil {
-		if msg := vals.Get("Msg"); msg != "" {
-			return strings.TrimSpace(strings.TrimSuffix(msg, "."))
-		}
-	}
-	if a.ErrorCode != 0 {
+	if err == nil && a.ErrorCode != 0 {
 		switch a.ErrorCode {
 		case CodeHTTPRetrievalFailure:
 			s := "HTTP retrieval failure"
-			if err == nil && vals.Get("httpResponse") != "" {
-				s = fmt.Sprintf("%s: status code %s when fetching TwiML", s, vals.Get("httpResponse"))
+			if resp := vals.Get("httpResponse"); resp != "" {
+				s = fmt.Sprintf("%s: status code %s when fetching TwiML", s, resp)
 			}
 			return s
+		case CodeForbiddenPhoneNumber, CodeNoInternationalAuthorization:
+			if vals.Get("Msg") != "" && vals.Get("phonenumber") != "" {
+				return strings.TrimSpace(vals.Get("Msg")) + " " + vals.Get("phonenumber")
+			}
 		default:
+			if msg := vals.Get("Msg"); msg != "" {
+				return msg
+			}
 			if a.MoreInfo != "" {
 				return fmt.Sprintf("Error %d: %s", a.ErrorCode, a.MoreInfo)
 			}
@@ -107,4 +116,11 @@ func (a *Alert) Description() string {
 		return "Unknown failure: " + a.MoreInfo
 	}
 	return "Unknown failure"
+}
+
+// Description tries as hard as possible to give you a one sentence description
+// of this Alert, based on its contents. Description does not include a
+// trailing period.
+func (a *Alert) Description() string {
+	return capitalize(strings.TrimSpace(strings.TrimSuffix(a.description(), ".")))
 }

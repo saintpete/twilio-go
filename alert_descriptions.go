@@ -71,3 +71,51 @@ var alertUnknown = []byte(`
     "url": "https://monitor.twilio.com/v1/Alerts/NO00ed1fb4aa449be2434d54ec8e492349"
 }
 `)
+
+var alert13225 = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "alert_text": "phonenumber=%2B886225475050&LogLevel=WARN&Msg=forbidden+phone+number+&ErrorCode=13225",
+    "api_version": "2008-08-01",
+    "date_created": "2014-03-22T09:25:48Z",
+    "date_generated": "2014-03-22T09:25:48Z",
+    "date_updated": "2014-03-22T09:25:49Z",
+    "error_code": "13225",
+    "log_level": "warning",
+    "more_info": "https://www.twilio.com/docs/errors/13225",
+    "request_headers": null,
+    "request_method": "POST",
+    "request_url": "http://twilio-amaze-client.herokuapp.com/client/incoming",
+    "request_variables": "AccountSid=AC58f1e8f2b1c6b88ca90a012a4be0c279&ApplicationSid=AP7d6fd7b9a8894e36877dc2355da381c8&Caller=client%3Ajoey_ramone&CallStatus=ringing&Called=&To=&PhoneNumber=%2B886225475050&CallSid=CA2d4f6f887f3d24b5fdb945ff88ef8e41&From=client%3Ajoey_ramone&Direction=inbound&CallerID=%2B19252724527&ApiVersion=2010-04-01",
+    "resource_sid": "CA2d4f6f887f3d24b5fdb945ff88ef8e41",
+    "response_body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response><Dial callerId=\"+19252724527\"><Number>+886225475050</Number></Dial></Response>",
+    "response_headers": "Date=Sat%2C+22+Mar+2014+09%3A25%3A47+GMT&Content-Length=126&Content-Type=text%2Fhtml%3B+charset%3Dutf-8&Server=Werkzeug%2F0.9.1+Python%2F2.7.4",
+    "service_sid": null,
+    "sid": "NOd6b8b10848fdb8b50198fdad4c43b102",
+    "url": "https://monitor.twilio.com/v1/Alerts/NOd6b8b10848fdb8b50198fdad4c43b102"
+}
+`)
+
+var alert13227 = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "alert_text": "phonenumber=%2B864008895080&LogLevel=WARN&Msg=not+authorized+to+call+&ErrorCode=13227",
+    "api_version": "2008-08-01",
+    "date_created": "2014-03-20T01:19:39Z",
+    "date_generated": "2014-03-20T01:19:39Z",
+    "date_updated": "2014-03-20T01:19:39Z",
+    "error_code": "13227",
+    "log_level": "warning",
+    "more_info": "https://www.twilio.com/docs/errors/13227",
+    "request_headers": null,
+    "request_method": "POST",
+    "request_url": "http://twilio-amaze-client.herokuapp.com/client/incoming",
+    "request_variables": "AccountSid=AC58f1e8f2b1c6b88ca90a012a4be0c279&ApplicationSid=AP7d6fd7b9a8894e36877dc2355da381c8&Caller=client%3Ajoey_ramone&CallStatus=ringing&Called=&To=&PhoneNumber=%2B864008895080&CallSid=CA36e37790f601cffb56008f5ea0ef8ab9&From=client%3Ajoey_ramone&Direction=inbound&CallerID=%2B19252724527&ApiVersion=2010-04-01",
+    "resource_sid": "CA36e37790f601cffb56008f5ea0ef8ab9",
+    "response_body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response><Dial callerId=\"+19252724527\"><Number>+864008895080</Number></Dial></Response>",
+    "response_headers": "Date=Thu%2C+20+Mar+2014+01%3A19%3A38+GMT&Content-Length=126&Content-Type=text%2Fhtml%3B+charset%3Dutf-8&Server=Werkzeug%2F0.9.1+Python%2F2.7.4",
+    "service_sid": null,
+    "sid": "NO5951001c254600e61c5ee189e0165680",
+    "url": "https://monitor.twilio.com/v1/Alerts/NO5951001c254600e61c5ee189e0165680"
+}
+`)
