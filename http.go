@@ -217,6 +217,9 @@ func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Val
 // should be a next_page_uri returned in the response to a paging request, and
 // should be the full path, eg "/2010-04-01/.../Messages?Page=1&PageToken=..."
 func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{}) error {
+	if strings.HasPrefix(fullUri, c.Base) {
+		fullUri = fullUri[len(c.Base):]
+	}
 	return c.MakeRequest(ctx, "GET", fullUri, nil, v)
 }
 
