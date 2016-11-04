@@ -169,6 +169,9 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 	if start.After(end) {
 		panic("start date is after end date")
 	}
+	if data == nil {
+		data = url.Values{}
+	}
 	data.Del("DateSent")
 	data.Del("Page") // just in case
 	startFormat := start.UTC().Format(APISearchLayout)

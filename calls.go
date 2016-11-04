@@ -156,6 +156,9 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 	if start.After(end) {
 		panic("start date is after end date")
 	}
+	if data == nil {
+		data = url.Values{}
+	}
 	data.Del("StartTime")
 	data.Del("Page") // just in case
 	startFormat := start.UTC().Format(APISearchLayout)
