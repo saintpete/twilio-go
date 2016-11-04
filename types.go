@@ -119,8 +119,16 @@ func NewTwilioTime(val string) *TwilioTime {
 	}
 }
 
+// Epoch is a time that predates the formation of the company (January 1,
+// 2005). Use this for start filters when you don't want to filter old results.
+var Epoch = time.Date(2005, 1, 1, 0, 0, 0, 0, time.UTC)
+
 // The reference time, as it appears in the Twilio API.
 const TimeLayout = "Mon, 2 Jan 2006 15:04:05 -0700"
+
+// Format expected by Twilio for searching date ranges. Monitor and other API's
+// offer better date search filters
+const APISearchLayout = "2006-01-02"
 
 func (t *TwilioTime) UnmarshalJSON(b []byte) error {
 	s := new(string)

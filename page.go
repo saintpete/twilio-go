@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/url"
 	"strings"
+	"time"
 
 	types "github.com/kevinburke/go-types"
 	"golang.org/x/net/context"
@@ -77,4 +78,49 @@ func NewPageIterator(client *Client, data url.Values, pathPart string) *PageIter
 		nextPageURI: types.NullString{},
 		pathPart:    pathPart,
 	}
+}
+
+// containsResultsInRange returns true if any results are in the range
+// [start, end).
+func containsResultsInRange(start time.Time, end time.Time, results []time.Time) bool {
+	for _, result := range results {
+		if (result.Equal(start) || result.After(start)) && result.Before(end) {
+			return true
+		}
+	}
+	return false
+}
+
+// shouldContinuePaging returns true if fetching more results (that have
+// earlier timestamps than the provided results) could possibly return results
+// in the range. shouldContinuePaging assumes results is sorted so the first
+// result in the slice has the latest timestamp, and the last result in the
+// slice has the earliest timestamp. shouldContinuePaging panics if results is
+// empty.
+func shouldContinuePaging(start time.Time, results []time.Time) bool {
+	// the last result in results is the earliest. if the earliest result is
+	// before the start, fetching more resources may return more results.
+	if len(results) == 0 {
+		panic("zero length result set")
+	}
+	last := results[len(results)-1]
+	return last.After(start)
+}
+
+// indexesOutsideRange returns the indexes of times in results that are outside
+// of [start, end). indexesOutsideRange panics if start is later than end.
+func indexesOutsideRange(start time.Time, end time.Time, results []time.Time) []int {
+	if start.After(end) {
+		panic("start date is after end date")
+	}
+	indexes := make([]int, 0, len(results))
+	for i, result := range results {
+		if result.Equal(end) || result.After(end) {
+			indexes = append(indexes, i)
+		}
+		if result.Before(start) {
+			indexes = append(indexes, i)
+		}
+	}
+	return indexes
 }

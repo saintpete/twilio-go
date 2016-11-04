@@ -65,3 +65,51 @@ func TestMakeCall(t *testing.T) {
 		t.Errorf("Wrong status: %s", call.Status)
 	}
 }
+
+func TestGetCallRange(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	t.Parallel()
+	// from Kevin's account, there should be exactly 2 results in this range.
+	data := url.Values{}
+	data.Set("PageSize", "2")
+	nyc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 10:34:00 Oct 26 to 19:25:59 Oct 27 NYC time. I made 2 calls in this
+	// range, and 5 calls on this day. There are 2 calls before this time on
+	// this day, and 1 call after.
+	start := time.Date(2016, 10, 26, 22, 34, 00, 00, nyc)
+	end := time.Date(2016, 10, 27, 19, 25, 59, 00, nyc)
+	iter := envClient.Calls.GetCallsInRange(start, end, data)
+	count := 0
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	for {
+		count++
+		page, err := iter.Next(ctx)
+		if err == NoMoreResults {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(page.Calls) != 2 {
+			t.Errorf("expected 2 calls in result set, got %d", len(page.Calls))
+			break
+		}
+		// the 19:25 call on 10-27
+		if page.Calls[0].Sid != "CA5757109d6dcbc4bebf6847f5dd45191e" {
+			t.Errorf("wrong sid")
+		}
+		// the 22:34 call on 10-26
+		if page.Calls[1].Sid != "CA47b862ce3b99a6d79939320a9aa54a02" {
+			t.Errorf("wrong sid")
+		}
+	}
+	if count != 2 {
+		t.Errorf("wrong count, expected exactly 2 calls to Next(), got %d", count)
+	}
+}
