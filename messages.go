@@ -199,7 +199,7 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 // end, or we determine there are no more records to be found in that range.
 //
 // If MessagePage is non-nil, it will have at least one result.
-func (c *MessageService) GetNextMessagesInRange(ctx context.Context, start time.Time, end time.Time, nextPageURI string) MessagePageIterator {
+func (c *MessageService) GetNextMessagesInRange(start time.Time, end time.Time, nextPageURI string) MessagePageIterator {
 	if nextPageURI == "" {
 		panic("nextpageuri is empty")
 	}

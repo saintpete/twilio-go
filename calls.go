@@ -184,7 +184,7 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 // end, or we determine there are no more records to be found in that range.
 //
 // If CallPage is non-nil, it will have at least one result.
-func (c *CallService) GetNextCallsInRange(ctx context.Context, start time.Time, end time.Time, nextPageURI string) CallPageIterator {
+func (c *CallService) GetNextCallsInRange(start time.Time, end time.Time, nextPageURI string) CallPageIterator {
 	if nextPageURI == "" {
 		panic("nextpageuri is empty")
 	}
