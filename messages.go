@@ -194,6 +194,23 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 	}
 }
 
+// GetNextMessagesInRange retrieves the page at the nextPageURI and continues
+// retrieving pages until any results are found in the range given by start or
+// end, or we determine there are no more records to be found in that range.
+//
+// If MessagePage is non-nil, it will have at least one result.
+func (c *MessageService) GetNextMessagesInRange(ctx context.Context, start time.Time, end time.Time, nextPageURI string) MessagePageIterator {
+	if nextPageURI == "" {
+		panic("nextpageuri is empty")
+	}
+	iter := NewNextPageIterator(c.client, messagesPathPart)
+	return &messageDateIterator{
+		start: start,
+		end:   end,
+		p:     iter,
+	}
+}
+
 type messageDateIterator struct {
 	p     *PageIterator
 	start time.Time

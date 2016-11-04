@@ -179,6 +179,23 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 	}
 }
 
+// GetNextCallsInRange retrieves the page at the nextPageURI and continues
+// retrieving pages until any results are found in the range given by start or
+// end, or we determine there are no more records to be found in that range.
+//
+// If CallPage is non-nil, it will have at least one result.
+func (c *CallService) GetNextCallsInRange(ctx context.Context, start time.Time, end time.Time, nextPageURI string) CallPageIterator {
+	if nextPageURI == "" {
+		panic("nextpageuri is empty")
+	}
+	iter := NewNextPageIterator(c.client, callsPathPart)
+	return &callDateIterator{
+		start: start,
+		end:   end,
+		p:     iter,
+	}
+}
+
 type callDateIterator struct {
 	p     *PageIterator
 	start time.Time
