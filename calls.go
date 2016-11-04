@@ -232,6 +232,8 @@ func (c *callDateIterator) Next(ctx context.Context) (*CallPage, error) {
 
 // CallPageIterator lets you retrieve consecutive pages of resources.
 type CallPageIterator interface {
+	// Next returns the next page of resources. If there are no more resources,
+	// NoMoreResults is returned.
 	Next(context.Context) (*CallPage, error)
 }
 

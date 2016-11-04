@@ -1,3 +1,8 @@
+## 0.44
+
+Support filtering Calls/Messages down to the nanosecond in a TZ-aware way, with
+Calls.GetCallsInRange / Messages/GetMessagesInRange.
+
 ## 0.42
 
 Add more Description fields based on errors I've received in the past. There

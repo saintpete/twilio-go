@@ -113,6 +113,8 @@ func (m *MessageService) SendMessage(from string, to string, body string, mediaU
 
 // MessagePageIterator lets you retrieve consecutive pages of resources.
 type MessagePageIterator interface {
+	// Next returns the next page of resources. If there are no more resources,
+	// NoMoreResults is returned.
 	Next(context.Context) (*MessagePage, error)
 }
 
