@@ -1,3 +1,8 @@
+## 0.45
+
+Fix go 1.6 (messages_example_test) relied on the stdlib Context package by
+accident.
+
 ## 0.44
 
 Support filtering Calls/Messages down to the nanosecond in a TZ-aware way, with

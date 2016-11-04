@@ -4,7 +4,7 @@ A client for accessing the Twilio API with several nice features:
 
 - Easy-to-use helpers for purchasing phone numbers and sending MMS messages
 
-- E.164 support and other smart types.
+- E.164 support, times that are parsed into a time.Time, and other smart types.
 
 - Finer grained control over timeouts with a Context, and the library uses
   wall-clock HTTP timeouts, not socket timeouts.
@@ -12,11 +12,12 @@ A client for accessing the Twilio API with several nice features:
 - Easy debugging network traffic by setting DEBUG_HTTP_TRAFFIC=true in your
   environment.
 
-- Easily find calls and messages that occurred between a particular set of
-times, down to the nanosecond.
+- Easily find calls and messages that occurred between a particular
+set of `time.Time`s, down to the nanosecond, with GetCallsInRange /
+GetMessagesInRange.
 
-- Clarity; it's clear when the library will make a network request, there's no
-  unexpected giant latency spikes when paging through resources.
+- It's clear when the library will make a network request, there are no
+unexpected latency spikes when paging from one resource to the next.
 
 - Uses threads to fetch resources concurrently; for example, has methods to
 fetch all Media for a Message concurrently.
