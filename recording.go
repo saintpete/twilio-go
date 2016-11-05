@@ -68,9 +68,8 @@ func (r *RecordingService) Delete(ctx context.Context, sid string) error {
 }
 
 func (r *RecordingService) GetPage(ctx context.Context, data url.Values) (*RecordingPage, error) {
-	rp := new(RecordingPage)
-	err := r.client.ListResource(ctx, recordingsPathPart, data, rp)
-	return rp, err
+	iter := r.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 type RecordingPageIterator struct {

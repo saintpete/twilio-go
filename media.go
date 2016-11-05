@@ -16,6 +16,7 @@ import (
 	"golang.org/x/net/context"
 )
 
+// A MediaService lets you retrieve a message's associated Media.
 type MediaService struct {
 	client *Client
 }

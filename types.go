@@ -123,6 +123,11 @@ func NewTwilioTime(val string) *TwilioTime {
 // 2005). Use this for start filters when you don't want to filter old results.
 var Epoch = time.Date(2005, 1, 1, 0, 0, 0, 0, time.UTC)
 
+// HeatDeath is a sentinel time that should outdate the extinction of the
+// company. Use this with GetXInRange calls when you don't want to specify an
+// end date. Feel free to adjust this number in the year 5960 or so.
+var HeatDeath = time.Date(6000, 1, 1, 0, 0, 0, 0, time.UTC)
+
 // The reference time, as it appears in the Twilio API.
 const TimeLayout = "Mon, 2 Jan 2006 15:04:05 -0700"
 

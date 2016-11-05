@@ -38,9 +38,8 @@ func (c *ConferenceService) Get(ctx context.Context, sid string) (*Conference, e
 }
 
 func (c *ConferenceService) GetPage(ctx context.Context, data url.Values) (*ConferencePage, error) {
-	cp := new(ConferencePage)
-	err := c.client.ListResource(ctx, conferencePathPart, data, cp)
-	return cp, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // ConferencePageIterator lets you retrieve consecutive ConferencePages.

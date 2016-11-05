@@ -47,9 +47,8 @@ func (c *ApplicationService) Get(ctx context.Context, sid string) (*Application,
 }
 
 func (c *ApplicationService) GetPage(ctx context.Context, data url.Values) (*ApplicationPage, error) {
-	ap := new(ApplicationPage)
-	err := c.client.ListResource(ctx, applicationPathPart, data, ap)
-	return ap, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // Create a new Application. This request must include a FriendlyName, and can

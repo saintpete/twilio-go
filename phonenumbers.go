@@ -89,9 +89,8 @@ func (ipn *IncomingNumberService) Get(ctx context.Context, sid string) (*Incomin
 }
 
 func (ins *IncomingNumberService) GetPage(ctx context.Context, data url.Values) (*IncomingPhoneNumberPage, error) {
-	inp := new(IncomingPhoneNumberPage)
-	err := ins.client.ListResource(ctx, numbersPathPart, data, inp)
-	return inp, err
+	iter := ins.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 type IncomingPhoneNumberPageIterator struct {

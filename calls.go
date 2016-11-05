@@ -137,15 +137,16 @@ func (c *CallService) MakeCall(from string, to string, u *url.URL) (*Call, error
 }
 
 func (c *CallService) GetPage(ctx context.Context, data url.Values) (*CallPage, error) {
-	cp := new(CallPage)
-	err := c.client.ListResource(ctx, callsPathPart, data, cp)
-	return cp, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // GetCallsInRange gets an Iterator containing calls in the range [start, end),
 // optionally further filtered by data. GetCallsInRange panics if start is not
 // before end. Any date filters provided in data will be ignored. If you have
-// an end, but don't want to specify a start, use twilio.Epoch for start.
+// an end, but don't want to specify a start, use twilio.Epoch for start. If
+// you have a start, but don't want to specify an end, use twilio.HeatDeath for
+// end.
 //
 // Assumes that Twilio returns resources in chronological order, latest
 // first. If this assumption is incorrect, your results will not be correct.
@@ -161,16 +162,20 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 	}
 	data.Del("StartTime")
 	data.Del("Page") // just in case
-	startFormat := start.UTC().Format(APISearchLayout)
-	// If you specify "StartTime<=YYYY-MM-DD", the *latest* result returned
-	// will be midnight (the earliest possible second) on DD. We want all of
-	// the results for DD so we need to specify DD+1 in the API.
-	//
-	// TODO validate midnight-instant math more closely, since I don't think
-	// Twilio returns the correct results for that instant.
-	endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
-	data.Set("StartTime>", startFormat)
-	data.Set("StartTime<", endFormat)
+	if start != Epoch {
+		startFormat := start.UTC().Format(APISearchLayout)
+		data.Set("StartTime>", startFormat)
+	}
+	if end != HeatDeath {
+		// If you specify "StartTime<=YYYY-MM-DD", the *latest* result returned
+		// will be midnight (the earliest possible second) on DD. We want all
+		// of the results for DD so we need to specify DD+1 in the API.
+		//
+		// TODO validate midnight-instant math more closely, since I don't think
+		// Twilio returns the correct results for that instant.
+		endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
+		data.Set("StartTime<", endFormat)
+	}
 	iter := NewPageIterator(c.client, data, callsPathPart)
 	return &callDateIterator{
 		start: start,

@@ -68,9 +68,8 @@ func (a *AccountService) Update(ctx context.Context, sid string, data url.Values
 }
 
 func (a *AccountService) GetPage(ctx context.Context, data url.Values) (*AccountPage, error) {
-	ap := new(AccountPage)
-	err := a.client.ListResource(ctx, accountPathPart+".json", data, ap)
-	return ap, err
+	iter := a.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // AccountPageIterator lets you retrieve consecutive AccountPages.

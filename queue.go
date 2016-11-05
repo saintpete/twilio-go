@@ -51,9 +51,8 @@ func (c *QueueService) Delete(ctx context.Context, sid string) error {
 }
 
 func (c *QueueService) GetPage(ctx context.Context, data url.Values) (*QueuePage, error) {
-	qp := new(QueuePage)
-	err := c.client.ListResource(ctx, queuePathPart, data, qp)
-	return qp, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 type QueuePageIterator struct {

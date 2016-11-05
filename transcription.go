@@ -59,9 +59,8 @@ func (c *TranscriptionService) Delete(ctx context.Context, sid string) error {
 }
 
 func (c *TranscriptionService) GetPage(ctx context.Context, data url.Values) (*TranscriptionPage, error) {
-	cp := new(TranscriptionPage)
-	err := c.client.ListResource(ctx, transcriptionPathPart, data, cp)
-	return cp, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 type TranscriptionPageIterator struct {

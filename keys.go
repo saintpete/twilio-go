@@ -34,9 +34,8 @@ func (c *KeyService) Get(ctx context.Context, sid string) (*Key, error) {
 }
 
 func (c *KeyService) GetPage(ctx context.Context, data url.Values) (*KeyPage, error) {
-	kp := new(KeyPage)
-	err := c.client.ListResource(ctx, keyPathPart, data, kp)
-	return kp, err
+	iter := c.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // Create a new Key. Note the Secret is only returned in response to a Create,

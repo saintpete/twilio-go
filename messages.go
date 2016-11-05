@@ -151,16 +151,16 @@ func (m *MessageService) Get(ctx context.Context, sid string) (*Message, error) 
 // GetPage returns a single page of resources. To retrieve multiple pages, use
 // GetPageIterator.
 func (m *MessageService) GetPage(ctx context.Context, data url.Values) (*MessagePage, error) {
-	mp := new(MessagePage)
-	err := m.client.ListResource(ctx, messagesPathPart, data, mp)
-	return mp, err
+	iter := m.GetPageIterator(data)
+	return iter.Next(ctx)
 }
 
 // GetMessagesInRange gets an Iterator containing calls in the range [start,
 // end), optionally further filtered by data. GetMessagesInRange panics if
 // start is not before end. Any date filters provided in data will be ignored.
 // If you have an end, but don't want to specify a start, use twilio.Epoch for
-// start.
+// start. If you have a start, but don't want to specify an end, use
+// twilio.HeatDeath for end.
 //
 // Assumes that Twilio returns resources in chronological order, latest
 // first. If this assumption is incorrect, your results will not be correct.
@@ -176,16 +176,22 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 	}
 	data.Del("DateSent")
 	data.Del("Page") // just in case
-	startFormat := start.UTC().Format(APISearchLayout)
-	// If you specify "DateSent<=YYYY-MM-DD", the *latest* result returned
-	// will be midnight (the earliest possible second) on DD. We want all of
-	// the results for DD so we need to specify DD+1 in the API.
-	//
-	// TODO validate midnight-instant math more closely, since I don't think
-	// Twilio returns the correct results for that instant.
-	endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
-	data.Set("DateSent>", startFormat)
-	data.Set("DateSent<", endFormat)
+	// Omit these parameters if they are the sentinel values, since I think
+	// that API paging will be faster.
+	if start != Epoch {
+		startFormat := start.UTC().Format(APISearchLayout)
+		data.Set("DateSent>", startFormat)
+	}
+	if end != HeatDeath {
+		// If you specify "DateSent<=YYYY-MM-DD", the *latest* result returned
+		// will be midnight (the earliest possible second) on DD. We want all of
+		// the results for DD so we need to specify DD+1 in the API.
+		//
+		// TODO validate midnight-instant math more closely, since I don't think
+		// Twilio returns the correct results for that instant.
+		endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
+		data.Set("DateSent<", endFormat)
+	}
 	iter := NewPageIterator(c.client, data, messagesPathPart)
 	return &messageDateIterator{
 		start: start,
