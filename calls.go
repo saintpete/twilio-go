@@ -194,6 +194,7 @@ func (c *CallService) GetNextCallsInRange(start time.Time, end time.Time, nextPa
 		panic("nextpageuri is empty")
 	}
 	iter := NewNextPageIterator(c.client, callsPathPart)
+	iter.SetNextPageURI(types.NullString{Valid: true, String: nextPageURI})
 	return &callDateIterator{
 		start: start,
 		end:   end,

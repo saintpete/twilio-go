@@ -210,6 +210,7 @@ func (c *MessageService) GetNextMessagesInRange(start time.Time, end time.Time, 
 		panic("nextpageuri is empty")
 	}
 	iter := NewNextPageIterator(c.client, messagesPathPart)
+	iter.SetNextPageURI(types.NullString{Valid: true, String: nextPageURI})
 	return &messageDateIterator{
 		start: start,
 		end:   end,
