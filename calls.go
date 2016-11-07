@@ -210,7 +210,8 @@ type callDateIterator struct {
 
 // Next returns the next page of resources. We may need to fetch multiple
 // pages from the Twilio API before we find one in the right date range, so
-// latency may be higher than usual.
+// latency may be higher than usual. If page is non-nil, it contains at least
+// one result.
 func (c *callDateIterator) Next(ctx context.Context) (*CallPage, error) {
 	var page *CallPage
 	for {
@@ -224,7 +225,6 @@ func (c *callDateIterator) Next(ctx context.Context) (*CallPage, error) {
 		}
 		times := make([]time.Time, len(page.Calls), len(page.Calls))
 		for i, call := range page.Calls {
-
 			if !call.DateCreated.Valid {
 				// we really should not ever hit this case but if we can't parse
 				// a date, better to give you back an error than to give you back
