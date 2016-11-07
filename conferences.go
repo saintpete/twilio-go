@@ -64,11 +64,11 @@ func (c *ConferenceService) GetConferencesInRange(start time.Time, end time.Time
 	if data == nil {
 		data = url.Values{}
 	}
-	data.Del("StartTime")
+	data.Del("DateCreated")
 	data.Del("Page") // just in case
 	if start != Epoch {
 		startFormat := start.UTC().Format(APISearchLayout)
-		data.Set("StartTime>", startFormat)
+		data.Set("DateCreated>", startFormat)
 	}
 	if end != HeatDeath {
 		// If you specify "StartTime<=YYYY-MM-DD", the *latest* result returned
@@ -78,7 +78,7 @@ func (c *ConferenceService) GetConferencesInRange(start time.Time, end time.Time
 		// TODO validate midnight-instant math more closely, since I don't think
 		// Twilio returns the correct results for that instant.
 		endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
-		data.Set("StartTime<", endFormat)
+		data.Set("DateCreated<", endFormat)
 	}
 	iter := NewPageIterator(c.client, data, conferencePathPart)
 	return &conferenceDateIterator{
