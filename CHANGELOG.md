@@ -1,3 +1,17 @@
+## 0.51
+
+Implement GetNextConferencesInRange
+
+## 0.50
+
+Implement GetConferencesInRange. Fix paging error in
+GetCallsInRange/GetMessagesInRange.
+
+## 0.47
+
+Implement GetNextXInRange - if you have a next page URI and want to get an
+Iterator (instead of starting with a url.Values).
+
 ## 0.45
 
 Fix go 1.6 (messages_example_test) relied on the stdlib Context package by

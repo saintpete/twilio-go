@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"time"
 
+	types "github.com/kevinburke/go-types"
+
 	"golang.org/x/net/context"
 )
 
@@ -79,6 +81,24 @@ func (c *ConferenceService) GetConferencesInRange(start time.Time, end time.Time
 		data.Set("StartTime<", endFormat)
 	}
 	iter := NewPageIterator(c.client, data, conferencePathPart)
+	return &conferenceDateIterator{
+		start: start,
+		end:   end,
+		p:     iter,
+	}
+}
+
+// GetNextConferencesInRange retrieves the page at the nextPageURI and continues
+// retrieving pages until any results are found in the range given by start or
+// end, or we determine there are no more records to be found in that range.
+//
+// If ConferencePage is non-nil, it will have at least one result.
+func (c *ConferenceService) GetNextConferencesInRange(start time.Time, end time.Time, nextPageURI string) ConferencePageIterator {
+	if nextPageURI == "" {
+		panic("nextpageuri is empty")
+	}
+	iter := NewNextPageIterator(c.client, conferencePathPart)
+	iter.SetNextPageURI(types.NullString{Valid: true, String: nextPageURI})
 	return &conferenceDateIterator{
 		start: start,
 		end:   end,
