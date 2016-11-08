@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"time"
+
+	types "github.com/kevinburke/go-types"
 
 	"golang.org/x/net/context"
 )
@@ -49,29 +52,151 @@ func (a *AlertService) Get(ctx context.Context, sid string) (*Alert, error) {
 	return alert, err
 }
 
+// GetPage returns a single Page of resources, filtered by data.
+//
+// See https://www.twilio.com/docs/api/monitor/alerts#list-get-filters.
 func (a *AlertService) GetPage(ctx context.Context, data url.Values) (*AlertPage, error) {
-	iter := a.GetPageIterator(data)
-	return iter.Next(ctx)
+	return a.GetPageIterator(data).Next(ctx)
 }
 
 // AlertPageIterator lets you retrieve consecutive pages of resources.
-type AlertPageIterator struct {
+type AlertPageIterator interface {
+	// Next returns the next page of resources. If there are no more resources,
+	// NoMoreResults is returned.
+	Next(context.Context) (*AlertPage, error)
+}
+
+type alertPageIterator struct {
 	p *PageIterator
+}
+
+// GetAlertsInRange gets an Iterator containing conferences in the range
+// [start, end), optionally further filtered by data. GetAlertsInRange
+// panics if start is not before end. Any date filters provided in data will
+// be ignored. If you have an end, but don't want to specify a start, use
+// twilio.Epoch for start. If you have a start, but don't want to specify an
+// end, use twilio.HeatDeath for end.
+//
+// Assumes that Twilio returns resources in chronological order, latest
+// first. If this assumption is incorrect, your results will not be correct.
+//
+// Returned AlertPages will have at most PageSize results, but may have fewer,
+// based on filtering.
+func (a *AlertService) GetAlertsInRange(start time.Time, end time.Time, data url.Values) AlertPageIterator {
+	if start.After(end) {
+		panic("start date is after end date")
+	}
+	d := url.Values{}
+	if data != nil {
+		for k, v := range data {
+			d[k] = v
+		}
+	}
+	d.Del("Page") // just in case
+	if start != Epoch {
+		startFormat := start.UTC().Format(time.RFC3339)
+		d.Set("StartDate", startFormat)
+	}
+	if end != HeatDeath {
+		// If you specify "StartTime<=YYYY-MM-DD", the *latest* result returned
+		// will be midnight (the earliest possible second) on DD. We want all
+		// of the results for DD so we need to specify DD+1 in the API.
+		//
+		// TODO validate midnight-instant math more closely, since I don't think
+		// Twilio returns the correct results for that instant.
+		endFormat := end.UTC().Format(time.RFC3339)
+		d.Set("EndDate", endFormat)
+	}
+	iter := NewPageIterator(a.client, d, alertPathPart)
+	return &alertDateIterator{
+		start: start,
+		end:   end,
+		p:     iter,
+	}
+}
+
+// GetNextAlertsInRange retrieves the page at the nextPageURI and continues
+// retrieving pages until any results are found in the range given by start or
+// end, or we determine there are no more records to be found in that range.
+//
+// If AlertPage is non-nil, it will have at least one result.
+func (a *AlertService) GetNextAlertsInRange(start time.Time, end time.Time, nextPageURI string) AlertPageIterator {
+	if nextPageURI == "" {
+		panic("nextpageuri is empty")
+	}
+	iter := NewNextPageIterator(a.client, callsPathPart)
+	iter.SetNextPageURI(types.NullString{Valid: true, String: nextPageURI})
+	return &alertDateIterator{
+		start: start,
+		end:   end,
+		p:     iter,
+	}
+}
+
+type alertDateIterator struct {
+	p     *PageIterator
+	start time.Time
+	end   time.Time
+}
+
+// Next returns the next page of resources. We may need to fetch multiple
+// pages from the Twilio API before we find one in the right date range, so
+// latency may be higher than usual. If page is non-nil, it contains at least
+// one result.
+func (a *alertDateIterator) Next(ctx context.Context) (*AlertPage, error) {
+	var page *AlertPage
+	for {
+		// just wipe it clean every time to avoid remnants hanging around
+		page = new(AlertPage)
+		if err := a.p.Next(ctx, page); err != nil {
+			return nil, err
+		}
+		if len(page.Alerts) == 0 {
+			return nil, NoMoreResults
+		}
+		times := make([]time.Time, len(page.Alerts), len(page.Alerts))
+		for i, alert := range page.Alerts {
+			if !alert.DateCreated.Valid {
+				// we really should not ever hit this case but if we can't parse
+				// a date, better to give you back an error than to give you back
+				// a list of alerts that may or may not be in the time range
+				return nil, fmt.Errorf("Couldn't verify the date of alert: %#v", alert)
+			}
+			times[i] = alert.DateCreated.Time
+		}
+		if containsResultsInRange(a.start, a.end, times) {
+			indexesToDelete := indexesOutsideRange(a.start, a.end, times)
+			// reverse order so we don't delete the wrong index
+			for i := len(indexesToDelete) - 1; i >= 0; i-- {
+				index := indexesToDelete[i]
+				page.Alerts = append(page.Alerts[:index], page.Alerts[index+1:]...)
+			}
+			a.p.SetNextPageURI(page.Meta.NextPageURL)
+			return page, nil
+		}
+		if shouldContinuePaging(a.start, times) {
+			a.p.SetNextPageURI(page.Meta.NextPageURL)
+			continue
+		} else {
+			// should not continue paging and no results in range, stop
+			return nil, NoMoreResults
+		}
+	}
 }
 
 // GetPageIterator returns a AlertPageIterator with the given page
 // filters. Call iterator.Next() to get the first page of resources (and again
 // to retrieve subsequent pages).
-func (a *AlertService) GetPageIterator(data url.Values) *AlertPageIterator {
+func (a *AlertService) GetPageIterator(data url.Values) AlertPageIterator {
 	iter := NewPageIterator(a.client, data, alertPathPart)
-	return &AlertPageIterator{
+	return &alertPageIterator{
 		p: iter,
 	}
 }
 
 // Next returns the next page of resources. If there are no more resources,
 // NoMoreResults is returned.
-func (a *AlertPageIterator) Next(ctx context.Context) (*AlertPage, error) {
+func (a *alertPageIterator) Next(ctx context.Context) (*AlertPage, error) {
 	ap := new(AlertPage)
 	err := a.p.Next(ctx, ap)
 	if err != nil {
