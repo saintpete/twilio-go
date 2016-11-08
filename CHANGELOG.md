@@ -1,3 +1,9 @@
+# Changes
+
+## 0.52
+
+Copy url.Values for GetXInRange() functions before modifying them.
+
 ## 0.51
 
 Implement GetNextConferencesInRange

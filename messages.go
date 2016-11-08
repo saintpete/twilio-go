@@ -171,16 +171,19 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 	if start.After(end) {
 		panic("start date is after end date")
 	}
-	if data == nil {
-		data = url.Values{}
+	d := url.Values{}
+	if data != nil {
+		for k, v := range data {
+			d[k] = v
+		}
 	}
-	data.Del("DateSent")
-	data.Del("Page") // just in case
+	d.Del("DateSent")
+	d.Del("Page") // just in case
 	// Omit these parameters if they are the sentinel values, since I think
 	// that API paging will be faster.
 	if start != Epoch {
 		startFormat := start.UTC().Format(APISearchLayout)
-		data.Set("DateSent>", startFormat)
+		d.Set("DateSent>", startFormat)
 	}
 	if end != HeatDeath {
 		// If you specify "DateSent<=YYYY-MM-DD", the *latest* result returned
@@ -190,9 +193,9 @@ func (c *MessageService) GetMessagesInRange(start time.Time, end time.Time, data
 		// TODO validate midnight-instant math more closely, since I don't think
 		// Twilio returns the correct results for that instant.
 		endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
-		data.Set("DateSent<", endFormat)
+		d.Set("DateSent<", endFormat)
 	}
-	iter := NewPageIterator(c.client, data, messagesPathPart)
+	iter := NewPageIterator(c.client, d, messagesPathPart)
 	return &messageDateIterator{
 		start: start,
 		end:   end,

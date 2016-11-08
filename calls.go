@@ -157,14 +157,17 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 	if start.After(end) {
 		panic("start date is after end date")
 	}
-	if data == nil {
-		data = url.Values{}
+	d := url.Values{}
+	if data != nil {
+		for k, v := range data {
+			d[k] = v
+		}
 	}
-	data.Del("StartTime")
-	data.Del("Page") // just in case
+	d.Del("StartTime")
+	d.Del("Page") // just in case
 	if start != Epoch {
 		startFormat := start.UTC().Format(APISearchLayout)
-		data.Set("StartTime>", startFormat)
+		d.Set("StartTime>", startFormat)
 	}
 	if end != HeatDeath {
 		// If you specify "StartTime<=YYYY-MM-DD", the *latest* result returned
@@ -174,9 +177,9 @@ func (c *CallService) GetCallsInRange(start time.Time, end time.Time, data url.V
 		// TODO validate midnight-instant math more closely, since I don't think
 		// Twilio returns the correct results for that instant.
 		endFormat := end.UTC().Add(24 * time.Hour).Format(APISearchLayout)
-		data.Set("StartTime<", endFormat)
+		d.Set("StartTime<", endFormat)
 	}
-	iter := NewPageIterator(c.client, data, callsPathPart)
+	iter := NewPageIterator(c.client, d, callsPathPart)
 	return &callDateIterator{
 		start: start,
 		end:   end,
