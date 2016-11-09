@@ -1,5 +1,10 @@
 # Changes
 
+## 0.53
+
+Add Alert.StatusCode() function for retrieving a HTTP status code (if one
+exists) from an alert.
+
 ## 0.52
 
 Copy url.Values for GetXInRange() functions before modifying them.
