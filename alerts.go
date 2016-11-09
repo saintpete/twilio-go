@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -257,4 +258,20 @@ func (a *Alert) description() string {
 // trailing period.
 func (a *Alert) Description() string {
 	return capitalize(strings.TrimSpace(strings.TrimSuffix(a.description(), ".")))
+}
+
+// StatusCode attempts to return a HTTP status code for this Alert. Returns
+// 0 if the status code cannot be found.
+func (a *Alert) StatusCode() int {
+	vals, err := url.ParseQuery(a.AlertText)
+	if err != nil {
+		return 0
+	}
+	if code := vals.Get("httpResponse"); code != "" {
+		i, err := strconv.ParseInt(code, 10, 64)
+		if err == nil && i > 99 && i < 600 {
+			return int(i)
+		}
+	}
+	return 0
 }

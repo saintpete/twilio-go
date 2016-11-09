@@ -133,3 +133,15 @@ func TestAlertDescription(t *testing.T) {
 		}
 	}
 }
+
+func TestAlertStatusCode(t *testing.T) {
+	alert := new(Alert)
+	alert.AlertText = "Msg&sourceComponent=12000&ErrorCode=11200&httpResponse=405&url=https%3A%2F%2Fkev.inburke.com%2Fzombo%2Fzombocom.mp3&LogLevel=ERROR"
+	if code := alert.StatusCode(); code != 405 {
+		t.Errorf("expected Code to be 405, got %d", code)
+	}
+	alert.AlertText = "Msg&sourceComponent=12000&ErrorCode=11200&httpResponse=4050&url=https%3A%2F%2Fkev.inburke.com%2Fzombo%2Fzombocom.mp3&LogLevel=ERROR"
+	if code := alert.StatusCode(); code != 0 {
+		t.Errorf("expected Code to be 0, got %d", code)
+	}
+}
