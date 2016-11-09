@@ -72,6 +72,15 @@ func (r *RecordingService) GetPage(ctx context.Context, data url.Values) (*Recor
 	return iter.Next(ctx)
 }
 
+func (r *RecordingService) GetTranscriptions(ctx context.Context, recordingSid string, data url.Values) (*TranscriptionPage, error) {
+	if data == nil {
+		data = url.Values{}
+	}
+	tp := new(TranscriptionPage)
+	err := r.client.ListResource(ctx, recordingsPathPart+"/"+recordingSid+"/Transcriptions", data, tp)
+	return tp, err
+}
+
 type RecordingPageIterator struct {
 	p *PageIterator
 }

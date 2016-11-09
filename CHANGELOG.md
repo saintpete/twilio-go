@@ -1,5 +1,10 @@
 # Changes
 
+## 0.54
+
+Add Recordings.GetTranscriptions() to get Transcriptions for a recording. The
+Transcriptions resource doesn't support filtering by Recording Sid.
+
 ## 0.53
 
 Add Alert.StatusCode() function for retrieving a HTTP status code (if one
