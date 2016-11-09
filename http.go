@@ -27,6 +27,12 @@ var MonitorBaseURL = "https://monitor.twilio.com"
 // Version of the Twilio Monitor API.
 const MonitorVersion = "v1"
 
+// The base URL for Twilio Pricing.
+var PricingBaseURL = "https://pricing.twilio.com"
+
+// Version of the Twilio Pricing API.
+const PricingVersion = "v1"
+
 // The APIVersion to use. Your mileage may vary using other values for the
 // APIVersion; the resource representations may not match.
 const APIVersion = "2010-04-01"
@@ -34,6 +40,7 @@ const APIVersion = "2010-04-01"
 type Client struct {
 	*rest.Client
 	Monitor *Client
+	Pricing *Client
 
 	FullPath   func(pathPart string) string
 	APIVersion string
@@ -57,6 +64,11 @@ type Client struct {
 
 	// NewMonitorClient initializes these services
 	Alerts *AlertService
+
+	// NewPricingClient initializes these services
+	Voice        *VoicePriceService
+	Messaging    *MessagingPriceService
+	PhoneNumbers *PhoneNumberPriceService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -109,6 +121,30 @@ func NewMonitorClient(accountSid string, authToken string, httpClient *http.Clie
 	return c
 }
 
+// returns a new Client to use the pricing API
+func NewPricingClient(accountSid string, authToken string, httpClient *http.Client) *Client {
+	if httpClient == nil {
+		httpClient = &http.Client{Timeout: defaultTimeout}
+	}
+	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", PricingBaseURL, PricingVersion))
+	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
+	c.FullPath = func(pathPart string) string {
+		return "/" + pathPart
+	}
+	c.APIVersion = PricingVersion
+	c.Voice = &VoicePriceService{
+		Countries: &CountryVoicePriceService{client: c},
+		Numbers:   &NumberVoicePriceService{client: c},
+	}
+	c.Messaging = &MessagingPriceService{
+		Countries: &CountryMessagingPriceService{client: c},
+	}
+	c.PhoneNumbers = &PhoneNumberPriceService{
+		Countries: &CountryPhoneNumberPriceService{client: c},
+	}
+	return c
+}
+
 // NewClient creates a Client for interacting with the Twilio API. This is the
 // main entrypoint for API interactions; view the methods on the subresources
 // for more information.
@@ -129,6 +165,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 		return "/" + strings.Join([]string{"Accounts", c.AccountSid, pathPart + ".json"}, "/")
 	}
 	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
+	c.Pricing = NewPricingClient(accountSid, authToken, httpClient)
 
 	c.Accounts = &AccountService{client: c}
 	c.Applications = &ApplicationService{client: c}
