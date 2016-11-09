@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -254,13 +253,13 @@ func (s Status) Friendly() string {
 	}
 }
 
-// Header has the methods of http.Header, but can decode JSON from the
+// Values has the methods of url.Values, but can decode JSON from the
 // response_headers field of an Alert.
-type Header struct {
-	http.Header
+type Values struct {
+	url.Values
 }
 
-func (h *Header) UnmarshalJSON(b []byte) error {
+func (h *Values) UnmarshalJSON(b []byte) error {
 	s := new(string)
 	if err := json.Unmarshal(b, s); err != nil {
 		return err
@@ -269,7 +268,7 @@ func (h *Header) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	*h = Header{http.Header{}}
+	*h = Values{url.Values{}}
 	for k, arr := range vals {
 		for _, val := range arr {
 			h.Add(k, val)

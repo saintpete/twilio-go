@@ -149,7 +149,7 @@ var hdr = `"Transfer-Encoding=chunked&Server=cloudflare-nginx&CF-RAY=2f82bf9cb81
 
 func TestUnmarshalHeader(t *testing.T) {
 	t.Parallel()
-	h := new(Header)
+	h := new(Values)
 	if err := json.Unmarshal([]byte(hdr), h); err != nil {
 		t.Fatal(err)
 	}
@@ -159,10 +159,10 @@ func TestUnmarshalHeader(t *testing.T) {
 	if val := h.Get("Transfer-Encoding"); val != "chunked" {
 		t.Errorf("expected Transfer-Encoding: chunked header, got %s", val)
 	}
-	if vals := h.Header["Cf-Ray"]; len(vals) < 2 {
+	if vals := h.Values["CF-RAY"]; len(vals) < 2 {
 		t.Errorf("expected to parse two CF-RAY headers, got less than 2")
 	}
-	if vals := h.Header["Cf-Ray"]; vals[1] != "two" {
+	if vals := h.Values["CF-RAY"]; vals[1] != "two" {
 		t.Errorf("expected second header to be 'two', got %v", vals[1])
 	}
 }

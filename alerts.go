@@ -33,9 +33,9 @@ type Alert struct {
 	MoreInfo         string          `json:"more_info"`
 	RequestMethod    string          `json:"request_method"`
 	RequestURL       string          `json:"request_url"`
-	RequestVariables string          `json:"request_variables"`
+	RequestVariables Values          `json:"request_variables"`
 	ResponseBody     string          `json:"response_body"`
-	ResponseHeaders  Header          `json:"response_headers"`
+	ResponseHeaders  Values          `json:"response_headers"`
 	ResourceSid      string          `json:"resource_sid"`
 	ServiceSid       json.RawMessage `json:"service_sid"`
 	URL              string          `json:"url"`

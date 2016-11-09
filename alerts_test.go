@@ -22,6 +22,9 @@ func TestGetAlert(t *testing.T) {
 	if alert.Sid != sid {
 		t.Errorf("expected Sid to be %s, got %s", sid, alert.Sid)
 	}
+	if city := alert.RequestVariables.Get("CallerCity"); city != "BRENTWOOD" {
+		t.Errorf("expected to get BRENTWOOD for CallerCity, got %s", city)
+	}
 }
 
 func TestGetAlertPage(t *testing.T) {
