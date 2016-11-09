@@ -79,6 +79,7 @@ these resources:
 - Recordings
 - Transcriptions
 - Access Tokens for IPMessaging, Video and Programmable Voice SDK
+- Pricing
 
 ### Error Parsing
 

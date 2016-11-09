@@ -27,6 +27,7 @@ func getServer(response []byte) (*Client, *httptest.Server) {
 	client := NewClient("AC123", "456", nil)
 	client.Base = s.URL
 	client.Monitor.Base = s.URL
+	client.Pricing.Base = s.URL
 	return client, s
 }
 
@@ -35,6 +36,7 @@ func getServerCode(response []byte, code int) (*Client, *httptest.Server) {
 	client := NewClient("AC123", "456", nil)
 	client.Base = s.URL
 	client.Monitor.Base = s.URL
+	client.Pricing.Base = s.URL
 	return client, s
 }
 
@@ -477,6 +479,2565 @@ var accountCreateResponse = []byte(`
     "uri": "/2010-04-01/Accounts/ACde8301520edc3b9171b8a68420d6e149.json"
 }
 `)
+
+var voicePriceUS = []byte(`{
+    "country": "United States",
+    "iso_country": "US",
+    "outbound_prefix_prices": [
+        {
+            "prefixes": [
+                "1907"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United States - Alaska",
+            "base_price": "0.090",
+            "current_price": "0.090"
+        },
+        {
+            "prefixes": [
+                "1808"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United States - Hawaii",
+            "base_price": "0.015",
+            "current_price": "0.015"
+        },
+        {
+            "prefixes": [
+                "1800",
+                "1844",
+                "1855",
+                "1866",
+                "1877",
+                "1888"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United States - Toll Free",
+            "base_price": "0.015",
+            "current_price": "0.015"
+        },
+        {
+            "prefixes": [
+                "1"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United States & Canada",
+            "base_price": "0.015",
+            "current_price": "0.015"
+        }
+    ],
+    "inbound_call_prices": [
+        {
+            "number_type": "local",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        },
+        {
+            "number_type": "toll free",
+            "base_price": "0.0275",
+            "current_price": "0.0275"
+        }
+    ],
+    "price_unit": "USD",
+    "url": "https://pricing.twilio.com/v1/Voice/Countries/US"
+}`)
+
+var voicePricesGB = []byte(`{
+    "country": "United Kingdom",
+    "iso_country": "GB",
+    "outbound_prefix_prices": [
+        {
+            "prefixes": [
+                "44",
+                "44203",
+                "44207",
+                "44208"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United Kingdom",
+            "base_price": "0.0175",
+            "current_price": "0.0175"
+        },
+        {
+            "prefixes": [
+                "447",
+                "4470",
+                "4474408",
+                "44870",
+                "44871",
+                "44872",
+                "44873"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United Kingdom - Other",
+            "base_price": "0.32",
+            "current_price": "0.32"
+        },
+        {
+            "prefixes": [
+                "443",
+                "445",
+                "44551107"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United Kingdom - Other - Service ",
+            "base_price": "0.045",
+            "current_price": "0.045"
+        },
+        {
+            "prefixes": [
+                "44843",
+                "44844",
+                "44845"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United Kingdom - Other - Local",
+            "base_price": "0.25",
+            "current_price": "0.25"
+        },
+        {
+            "prefixes": [
+                "447106",
+                "447107",
+                "447340",
+                "447341",
+                "447342",
+                "4473970",
+                "4473971",
+                "4473972",
+                "4473973",
+                "4473975",
+                "4473976",
+                "4473977",
+                "4473978",
+                "4473979",
+                "447398",
+                "447399",
+                "447400",
+                "447401",
+                "447402",
+                "447403",
+                "447407",
+                "447409",
+                "447410",
+                "447411",
+                "447412",
+                "447413",
+                "447414",
+                "447415",
+                "447416",
+                "4474170",
+                "4474180",
+                "447419",
+                "447420",
+                "447421",
+                "447422",
+                "447423",
+                "447425",
+                "447426",
+                "447427",
+                "447428",
+                "447429",
+                "447430",
+                "447431",
+                "447432",
+                "447433",
+                "447434",
+                "447435",
+                "447436",
+                "447437",
+                "447442",
+                "447443",
+                "447444",
+                "447445",
+                "447446",
+                "447447",
+                "447449",
+                "447450",
+                "4474527",
+                "4474528",
+                "4474529",
+                "447453",
+                "447454",
+                "447455",
+                "447456",
+                "4474586",
+                "4474589",
+                "447460",
+                "447461",
+                "447462",
+                "447463",
+                "447464",
+                "4474652",
+                "4474654",
+                "4474656",
+                "4474657",
+                "4474658",
+                "4474659",
+                "447467",
+                "447468",
+                "447469",
+                "447470",
+                "447471",
+                "447472",
+                "447473",
+                "447474",
+                "447475",
+                "447476",
+                "447477",
+                "447478",
+                "447479",
+                "447480",
+                "447481",
+                "447482",
+                "447483",
+                "447484",
+                "447485",
+                "447486",
+                "447487",
+                "4474884",
+                "4474885",
+                "4474887",
+                "4474889",
+                "447489",
+                "447490",
+                "447491",
+                "447492",
+                "447493",
+                "447494",
+                "447495",
+                "447496",
+                "447497",
+                "447498",
+                "447499",
+                "447500",
+                "447501",
+                "447502",
+                "447503",
+                "447504",
+                "447505",
+                "447506",
+                "447507",
+                "447508",
+                "44751",
+                "447521",
+                "447522",
+                "447523",
+                "447525",
+                "447526",
+                "447527",
+                "447528",
+                "447529",
+                "447530",
+                "447531",
+                "4475320",
+                "4475321",
+                "4475322",
+                "4475323",
+                "4475324",
+                "4475326",
+                "4475327",
+                "4475328",
+                "447533",
+                "447534",
+                "447535",
+                "447536",
+                "4475374",
+                "4475378",
+                "4475379",
+                "447538",
+                "447539",
+                "44754",
+                "447550",
+                "447551",
+                "447552",
+                "447553",
+                "447554",
+                "447555",
+                "447556",
+                "447557",
+                "44756",
+                "447570",
+                "447572",
+                "447573",
+                "447574",
+                "447575",
+                "447576",
+                "447577",
+                "447578",
+                "447579",
+                "447580",
+                "447581",
+                "447582",
+                "447583",
+                "447584",
+                "447585",
+                "447586",
+                "447587",
+                "447588",
+                "44759",
+                "447701",
+                "447702",
+                "447703",
+                "447704",
+                "447705",
+                "447706",
+                "447707",
+                "447708",
+                "447709",
+                "447710",
+                "447711",
+                "447712",
+                "447713",
+                "447714",
+                "447715",
+                "447716",
+                "447717",
+                "447718",
+                "447719",
+                "447720",
+                "447721",
+                "447722",
+                "447723",
+                "447724",
+                "447725",
+                "447726",
+                "447727",
+                "447728",
+                "447729",
+                "447730",
+                "447731",
+                "447732",
+                "447733",
+                "447734",
+                "447735",
+                "447736",
+                "447737",
+                "447738",
+                "447739",
+                "447740",
+                "447741",
+                "447742",
+                "447743",
+                "447745",
+                "447746",
+                "447747",
+                "447748",
+                "447749",
+                "447750",
+                "447751",
+                "447752",
+                "4477531",
+                "4477532",
+                "4477533",
+                "4477534",
+                "4477535",
+                "4477536",
+                "4477537",
+                "4477538",
+                "4477539",
+                "447754",
+                "447756",
+                "447757",
+                "447758",
+                "447759",
+                "447760",
+                "447761",
+                "447762",
+                "447763",
+                "447764",
+                "447765",
+                "447766",
+                "447767",
+                "447768",
+                "447769",
+                "447770",
+                "447771",
+                "447772",
+                "447773",
+                "447774",
+                "447775",
+                "447776",
+                "447778",
+                "447779",
+                "447780",
+                "447782",
+                "447783",
+                "447784",
+                "447785",
+                "447786",
+                "447787",
+                "447788",
+                "447789",
+                "447790",
+                "447791",
+                "447792",
+                "447793",
+                "447794",
+                "447795",
+                "447796",
+                "447798",
+                "447799",
+                "447800",
+                "447801",
+                "447802",
+                "447803",
+                "447804",
+                "447805",
+                "447806",
+                "447807",
+                "447808",
+                "447809",
+                "447810",
+                "447811",
+                "447812",
+                "447813",
+                "447814",
+                "447815",
+                "447816",
+                "447817",
+                "447818",
+                "447819",
+                "447820",
+                "447821",
+                "447823",
+                "447824",
+                "447825",
+                "447826",
+                "447827",
+                "447828",
+                "4478290",
+                "4478291",
+                "4478292",
+                "4478293",
+                "4478294",
+                "4478295",
+                "4478296",
+                "447830",
+                "447831",
+                "447832",
+                "447833",
+                "447834",
+                "447835",
+                "447836",
+                "447837",
+                "447838",
+                "447840",
+                "447841",
+                "447842",
+                "447843",
+                "447844",
+                "447845",
+                "447846",
+                "447847",
+                "447848",
+                "447849",
+                "447850",
+                "447851",
+                "447852",
+                "447853",
+                "447854",
+                "447855",
+                "447856",
+                "447857",
+                "447858",
+                "447859",
+                "447860",
+                "447861",
+                "447862",
+                "447863",
+                "4478640",
+                "4478641",
+                "4478642",
+                "4478643",
+                "4478645",
+                "4478646",
+                "4478647",
+                "4478648",
+                "4478649",
+                "447865",
+                "447866",
+                "447867",
+                "447868",
+                "447869",
+                "447870",
+                "447871",
+                "4478720",
+                "4478721",
+                "4478723",
+                "4478724",
+                "4478725",
+                "4478726",
+                "4478728",
+                "4478729",
+                "4478731",
+                "4478732",
+                "4478733",
+                "4478734",
+                "4478735",
+                "4478736",
+                "4478737",
+                "4478738",
+                "4478739",
+                "4478740",
+                "4478741",
+                "4478742",
+                "4478743",
+                "4478746",
+                "4478747",
+                "4478748",
+                "4478749",
+                "447875",
+                "447876",
+                "447877",
+                "447878",
+                "447879",
+                "447880",
+                "447881",
+                "447882",
+                "447883",
+                "447884",
+                "447885",
+                "447886",
+                "447887",
+                "447888",
+                "447889",
+                "447890",
+                "447891",
+                "4478923",
+                "4478924",
+                "4478926",
+                "4478927",
+                "4478928",
+                "4478929",
+                "4478932",
+                "4478934",
+                "4478935",
+                "4478936",
+                "4478937",
+                "447894",
+                "447895",
+                "447896",
+                "447897",
+                "447898",
+                "447899",
+                "447900",
+                "447901",
+                "447902",
+                "447903",
+                "447904",
+                "447905",
+                "447906",
+                "447907",
+                "447908",
+                "447909",
+                "447910",
+                "447912",
+                "447913",
+                "447914",
+                "447915",
+                "447916",
+                "447917",
+                "447918",
+                "447919",
+                "447920",
+                "447921",
+                "447922",
+                "447923",
+                "447925",
+                "447926",
+                "447927",
+                "447928",
+                "447929",
+                "447930",
+                "447931",
+                "447932",
+                "447933",
+                "447934",
+                "447935",
+                "447936",
+                "447938",
+                "447939",
+                "44794",
+                "447950",
+                "447951",
+                "447952",
+                "447953",
+                "447954",
+                "447955",
+                "447956",
+                "447957",
+                "447958",
+                "447959",
+                "447960",
+                "447961",
+                "447962",
+                "447963",
+                "447964",
+                "447965",
+                "447966",
+                "447967",
+                "447968",
+                "447969",
+                "447970",
+                "447971",
+                "447972",
+                "447973",
+                "447974",
+                "447975",
+                "447976",
+                "447977",
+                "447979",
+                "447980",
+                "447981",
+                "447982",
+                "447983",
+                "447984",
+                "447985",
+                "447986",
+                "447987",
+                "447988",
+                "447989",
+                "447990",
+                "447999"
+            ],
+            "friendly_name": "Programmable Outbound Minute - United Kingdom - Mobile",
+            "base_price": "0.040",
+            "current_price": "0.040"
+        }
+    ],
+    "inbound_call_prices": [
+        {
+            "number_type": "local",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        },
+        {
+            "number_type": "national",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        },
+        {
+            "number_type": "toll free",
+            "base_price": "0.0575",
+            "current_price": "0.0575"
+        }
+    ],
+    "price_unit": "USD",
+    "url": "https://pricing.twilio.com/v1/Voice/Countries/GB"
+}`)
+
+var voicePriceNumberUS = []byte(`{
+    "number": "+19253920364",
+    "country": "United States",
+    "iso_country": "US",
+    "outbound_call_price": {
+        "base_price": "0.015",
+        "current_price": "0.015"
+    },
+    "inbound_call_price": {
+        "number_type": null,
+        "base_price": null,
+        "current_price": null
+    },
+    "price_unit": "USD",
+    "url": "https://pricing.twilio.com/v1/Voice/Numbers/+19253920364"
+}`)
+
+var messagePriceGB = []byte(`{
+    "url": "https://pricing.twilio.com/v1/Messaging/Countries/GB",
+    "country": "United Kingdom",
+    "iso_country": "GB",
+    "price_unit": "USD",
+    "outbound_sms_prices": [
+        {
+            "mcc": "234",
+            "mnc": "55",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "3",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "50",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "58",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "18",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "9",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "33",
+            "carrier": "Orange",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "30",
+            "carrier": "T-Mobile",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "2",
+            "carrier": "O2",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "10",
+            "carrier": "O2",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "0",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "20",
+            "carrier": "3",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "7",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "994",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "26",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "1",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "19",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "5",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "6",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "8",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "11",
+            "carrier": "O2",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "14",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "15",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "16",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "17",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "22",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "24",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "25",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "31",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "32",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "34",
+            "carrier": "Orange",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "35",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "36",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "37",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "51",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "76",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "78",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "0",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "1",
+            "carrier": "Everything Everywhere",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "2",
+            "carrier": "Everything Everywhere",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "77",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "91",
+            "carrier": "Vodafone",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "92",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "94",
+            "carrier": "3",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "999",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "shortcode",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "235",
+            "mnc": "999",
+            "carrier": "Other",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "27",
+            "carrier": "Teleena",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "28",
+            "carrier": "Marathon Telecom",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "99",
+            "carrier": "Lleida.net",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "39",
+            "carrier": "SSE Energy Supply",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "38",
+            "carrier": "Virgin",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "23",
+            "carrier": "Vectofone Mobile",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        },
+        {
+            "mcc": "234",
+            "mnc": "53",
+            "carrier": "Limitless Mobile",
+            "prices": [
+                {
+                    "number_type": "mobile",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                },
+                {
+                    "number_type": "local",
+                    "base_price": "0.040",
+                    "current_price": "0.040"
+                }
+            ]
+        }
+    ],
+    "inbound_sms_prices": [
+        {
+            "number_type": "local",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        },
+        {
+            "number_type": "mobile",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        },
+        {
+            "number_type": "shortcode",
+            "base_price": "0.0075",
+            "current_price": "0.0075"
+        }
+    ]
+}`)
+
+var phoneNumberPriceGB = []byte(`{
+    "country": "United Kingdom",
+    "iso_country": "GB",
+    "phone_number_prices": [
+        {
+            "number_type": "local",
+            "base_price": "1.00",
+            "current_price": "1.00"
+        },
+        {
+            "number_type": "mobile",
+            "base_price": "1.00",
+            "current_price": "1.00"
+        },
+        {
+            "number_type": "national",
+            "base_price": "1.00",
+            "current_price": "1.00"
+        },
+        {
+            "number_type": "toll free",
+            "base_price": "2.00",
+            "current_price": "2.00"
+        }
+    ],
+    "price_unit": "USD",
+    "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/GB"
+}`)
+
+var phoneNumberCountriesPage = []byte(`{
+    "meta": {
+        "page": 0,
+        "page_size": 100,
+        "first_page_url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries?PageSize=100&Page=0",
+        "previous_page_url": null,
+        "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries?PageSize=100&Page=0",
+        "next_page_url": null,
+        "key": "countries"
+    },
+    "countries": [
+        {
+            "country": "Austria",
+            "iso_country": "AT",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/AT"
+        },
+        {
+            "country": "Australia",
+            "iso_country": "AU",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/AU"
+        },
+        {
+            "country": "Belgium",
+            "iso_country": "BE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/BE"
+        },
+        {
+            "country": "Bulgaria",
+            "iso_country": "BG",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/BG"
+        },
+        {
+            "country": "Brazil",
+            "iso_country": "BR",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/BR"
+        },
+        {
+            "country": "Canada",
+            "iso_country": "CA",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/CA"
+        },
+        {
+            "country": "Switzerland",
+            "iso_country": "CH",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/CH"
+        },
+        {
+            "country": "Chile",
+            "iso_country": "CL",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/CL"
+        },
+        {
+            "country": "Cyprus",
+            "iso_country": "CY",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/CY"
+        },
+        {
+            "country": "Czech Republic",
+            "iso_country": "CZ",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/CZ"
+        },
+        {
+            "country": "Germany",
+            "iso_country": "DE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/DE"
+        },
+        {
+            "country": "Denmark",
+            "iso_country": "DK",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/DK"
+        },
+        {
+            "country": "Dominican Republic",
+            "iso_country": "DO",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/DO"
+        },
+        {
+            "country": "Estonia",
+            "iso_country": "EE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/EE"
+        },
+        {
+            "country": "Spain",
+            "iso_country": "ES",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/ES"
+        },
+        {
+            "country": "Finland",
+            "iso_country": "FI",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/FI"
+        },
+        {
+            "country": "France",
+            "iso_country": "FR",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/FR"
+        },
+        {
+            "country": "United Kingdom",
+            "iso_country": "GB",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/GB"
+        },
+        {
+            "country": "Greece",
+            "iso_country": "GR",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/GR"
+        },
+        {
+            "country": "Hong Kong",
+            "iso_country": "HK",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/HK"
+        },
+        {
+            "country": "Hungary",
+            "iso_country": "HU",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/HU"
+        },
+        {
+            "country": "Indonesia",
+            "iso_country": "ID",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/ID"
+        },
+        {
+            "country": "Ireland",
+            "iso_country": "IE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/IE"
+        },
+        {
+            "country": "Israel",
+            "iso_country": "IL",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/IL"
+        },
+        {
+            "country": "Italy",
+            "iso_country": "IT",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/IT"
+        },
+        {
+            "country": "Japan",
+            "iso_country": "JP",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/JP"
+        },
+        {
+            "country": "Lithuania",
+            "iso_country": "LT",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/LT"
+        },
+        {
+            "country": "Luxembourg",
+            "iso_country": "LU",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/LU"
+        },
+        {
+            "country": "Latvia",
+            "iso_country": "LV",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/LV"
+        },
+        {
+            "country": "Malta",
+            "iso_country": "MT",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/MT"
+        },
+        {
+            "country": "Mexico",
+            "iso_country": "MX",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/MX"
+        },
+        {
+            "country": "Netherlands",
+            "iso_country": "NL",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/NL"
+        },
+        {
+            "country": "Norway",
+            "iso_country": "NO",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/NO"
+        },
+        {
+            "country": "New Zealand",
+            "iso_country": "NZ",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/NZ"
+        },
+        {
+            "country": "Peru",
+            "iso_country": "PE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/PE"
+        },
+        {
+            "country": "Poland",
+            "iso_country": "PL",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/PL"
+        },
+        {
+            "country": "Puerto Rico",
+            "iso_country": "PR",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/PR"
+        },
+        {
+            "country": "Portugal",
+            "iso_country": "PT",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/PT"
+        },
+        {
+            "country": "Romania",
+            "iso_country": "RO",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/RO"
+        },
+        {
+            "country": "Sweden",
+            "iso_country": "SE",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/SE"
+        },
+        {
+            "country": "Slovakia",
+            "iso_country": "SK",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/SK"
+        },
+        {
+            "country": "El Salvador",
+            "iso_country": "SV",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/SV"
+        },
+        {
+            "country": "United States",
+            "iso_country": "US",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/US"
+        },
+        {
+            "country": "South Africa",
+            "iso_country": "ZA",
+            "url": "https://pricing.twilio.com/v1/PhoneNumbers/Countries/ZA"
+        }
+    ]
+}`)
+
+var messagingCountriesPage = []byte(`{
+    "countries": [
+        {
+            "country": "Andorra",
+            "iso_country": "AD",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AD"
+        },
+        {
+            "country": "United Arab Emirates",
+            "iso_country": "AE",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AE"
+        },
+        {
+            "country": "Afghanistan",
+            "iso_country": "AF",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AF"
+        },
+        {
+            "country": "Antigua and Barbuda",
+            "iso_country": "AG",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AG"
+        },
+        {
+            "country": "Anguilla",
+            "iso_country": "AI",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AI"
+        },
+        {
+            "country": "Albania",
+            "iso_country": "AL",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AL"
+        },
+        {
+            "country": "Armenia",
+            "iso_country": "AM",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AM"
+        },
+        {
+            "country": "Netherlands Antilles",
+            "iso_country": "AN",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AN"
+        },
+        {
+            "country": "Angola",
+            "iso_country": "AO",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AO"
+        },
+        {
+            "country": "Antarctica",
+            "iso_country": "AQ",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AQ"
+        },
+        {
+            "country": "Argentina",
+            "iso_country": "AR",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AR"
+        },
+        {
+            "country": "American Samoa",
+            "iso_country": "AS",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AS"
+        },
+        {
+            "country": "Austria",
+            "iso_country": "AT",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AT"
+        },
+        {
+            "country": "Australia",
+            "iso_country": "AU",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AU"
+        },
+        {
+            "country": "Aruba",
+            "iso_country": "AW",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AW"
+        },
+        {
+            "country": "Aland Islands",
+            "iso_country": "AX",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AX"
+        },
+        {
+            "country": "Azerbaijan",
+            "iso_country": "AZ",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/AZ"
+        },
+        {
+            "country": "Bosnia and Herzegovina",
+            "iso_country": "BA",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BA"
+        },
+        {
+            "country": "Barbados",
+            "iso_country": "BB",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BB"
+        },
+        {
+            "country": "Bangladesh",
+            "iso_country": "BD",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BD"
+        },
+        {
+            "country": "Belgium",
+            "iso_country": "BE",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BE"
+        },
+        {
+            "country": "Burkina Faso",
+            "iso_country": "BF",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BF"
+        },
+        {
+            "country": "Bulgaria",
+            "iso_country": "BG",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BG"
+        },
+        {
+            "country": "Bahrain",
+            "iso_country": "BH",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BH"
+        },
+        {
+            "country": "Burundi",
+            "iso_country": "BI",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BI"
+        },
+        {
+            "country": "Benin",
+            "iso_country": "BJ",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BJ"
+        },
+        {
+            "country": "Bermuda",
+            "iso_country": "BM",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BM"
+        },
+        {
+            "country": "Brunei",
+            "iso_country": "BN",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BN"
+        },
+        {
+            "country": "Bolivia",
+            "iso_country": "BO",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BO"
+        },
+        {
+            "country": "Brazil",
+            "iso_country": "BR",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BR"
+        },
+        {
+            "country": "Bahamas",
+            "iso_country": "BS",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BS"
+        },
+        {
+            "country": "Bhutan",
+            "iso_country": "BT",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BT"
+        },
+        {
+            "country": "Botswana",
+            "iso_country": "BW",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BW"
+        },
+        {
+            "country": "Belarus",
+            "iso_country": "BY",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BY"
+        },
+        {
+            "country": "Belize",
+            "iso_country": "BZ",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/BZ"
+        },
+        {
+            "country": "Canada",
+            "iso_country": "CA",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CA"
+        },
+        {
+            "country": "Cocos (Keeling) Islands",
+            "iso_country": "CC",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CC"
+        },
+        {
+            "country": "DR Congo",
+            "iso_country": "CD",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CD"
+        },
+        {
+            "country": "Central Africa",
+            "iso_country": "CF",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CF"
+        },
+        {
+            "country": "Congo",
+            "iso_country": "CG",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CG"
+        },
+        {
+            "country": "Switzerland",
+            "iso_country": "CH",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CH"
+        },
+        {
+            "country": "Ivory Coast",
+            "iso_country": "CI",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CI"
+        },
+        {
+            "country": "Cook Islands",
+            "iso_country": "CK",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CK"
+        },
+        {
+            "country": "Chile",
+            "iso_country": "CL",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CL"
+        },
+        {
+            "country": "Cameroon",
+            "iso_country": "CM",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CM"
+        },
+        {
+            "country": "China",
+            "iso_country": "CN",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CN"
+        },
+        {
+            "country": "Colombia",
+            "iso_country": "CO",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CO"
+        },
+        {
+            "country": "Costa Rica",
+            "iso_country": "CR",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CR"
+        },
+        {
+            "country": "Cuba",
+            "iso_country": "CU",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CU"
+        },
+        {
+            "country": "Cape Verde",
+            "iso_country": "CV",
+            "url": "https://pricing.twilio.com/v1/Messaging/Countries/CV"
+        }
+    ],
+    "meta": {
+        "first_page_url": "https://pricing.twilio.com/v1/Messaging/Countries?PageSize=50&Page=0",
+        "key": "countries",
+        "next_page_url": "https://pricing.twilio.com/v1/Messaging/Countries?PageSize=50&Page=1&PageToken=DNCV",
+        "page": 0,
+        "page_size": 50,
+        "previous_page_url": null,
+        "url": "https://pricing.twilio.com/v1/Messaging/Countries?PageSize=50&Page=0"
+    }
+}`)
+
+var voiceCountriesPage = []byte(`{
+    "countries": [
+        {
+            "country": "Andorra",
+            "iso_country": "AD",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AD"
+        },
+        {
+            "country": "United Arab Emirates",
+            "iso_country": "AE",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AE"
+        },
+        {
+            "country": "Afghanistan",
+            "iso_country": "AF",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AF"
+        },
+        {
+            "country": "Antigua and Barbuda",
+            "iso_country": "AG",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AG"
+        },
+        {
+            "country": "Anguilla",
+            "iso_country": "AI",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AI"
+        },
+        {
+            "country": "Albania",
+            "iso_country": "AL",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AL"
+        },
+        {
+            "country": "Armenia",
+            "iso_country": "AM",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AM"
+        },
+        {
+            "country": "Netherlands Antilles",
+            "iso_country": "AN",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AN"
+        },
+        {
+            "country": "Angola",
+            "iso_country": "AO",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AO"
+        },
+        {
+            "country": "Antarctica",
+            "iso_country": "AQ",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AQ"
+        },
+        {
+            "country": "Argentina",
+            "iso_country": "AR",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AR"
+        },
+        {
+            "country": "American Samoa",
+            "iso_country": "AS",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AS"
+        },
+        {
+            "country": "Austria",
+            "iso_country": "AT",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AT"
+        },
+        {
+            "country": "Australia",
+            "iso_country": "AU",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AU"
+        },
+        {
+            "country": "Aruba",
+            "iso_country": "AW",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AW"
+        },
+        {
+            "country": "Aland Islands",
+            "iso_country": "AX",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AX"
+        },
+        {
+            "country": "Azerbaijan",
+            "iso_country": "AZ",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/AZ"
+        },
+        {
+            "country": "Bosnia and Herzegovina",
+            "iso_country": "BA",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BA"
+        },
+        {
+            "country": "Barbados",
+            "iso_country": "BB",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BB"
+        },
+        {
+            "country": "Bangladesh",
+            "iso_country": "BD",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BD"
+        },
+        {
+            "country": "Belgium",
+            "iso_country": "BE",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BE"
+        },
+        {
+            "country": "Burkina Faso",
+            "iso_country": "BF",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BF"
+        },
+        {
+            "country": "Bulgaria",
+            "iso_country": "BG",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BG"
+        },
+        {
+            "country": "Bahrain",
+            "iso_country": "BH",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BH"
+        },
+        {
+            "country": "Burundi",
+            "iso_country": "BI",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BI"
+        },
+        {
+            "country": "Benin",
+            "iso_country": "BJ",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BJ"
+        },
+        {
+            "country": "Bermuda",
+            "iso_country": "BM",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BM"
+        },
+        {
+            "country": "Brunei",
+            "iso_country": "BN",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BN"
+        },
+        {
+            "country": "Bolivia",
+            "iso_country": "BO",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BO"
+        },
+        {
+            "country": "Brazil",
+            "iso_country": "BR",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BR"
+        },
+        {
+            "country": "Bahamas",
+            "iso_country": "BS",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BS"
+        },
+        {
+            "country": "Bhutan",
+            "iso_country": "BT",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BT"
+        },
+        {
+            "country": "Botswana",
+            "iso_country": "BW",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BW"
+        },
+        {
+            "country": "Belarus",
+            "iso_country": "BY",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BY"
+        },
+        {
+            "country": "Belize",
+            "iso_country": "BZ",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/BZ"
+        },
+        {
+            "country": "Canada",
+            "iso_country": "CA",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CA"
+        },
+        {
+            "country": "Cocos (Keeling) Islands",
+            "iso_country": "CC",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CC"
+        },
+        {
+            "country": "DR Congo",
+            "iso_country": "CD",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CD"
+        },
+        {
+            "country": "Central Africa",
+            "iso_country": "CF",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CF"
+        },
+        {
+            "country": "Congo",
+            "iso_country": "CG",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CG"
+        },
+        {
+            "country": "Switzerland",
+            "iso_country": "CH",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CH"
+        },
+        {
+            "country": "Ivory Coast",
+            "iso_country": "CI",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CI"
+        },
+        {
+            "country": "Chile",
+            "iso_country": "CL",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CL"
+        },
+        {
+            "country": "Cameroon",
+            "iso_country": "CM",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CM"
+        },
+        {
+            "country": "China",
+            "iso_country": "CN",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CN"
+        },
+        {
+            "country": "Colombia",
+            "iso_country": "CO",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CO"
+        },
+        {
+            "country": "Costa Rica",
+            "iso_country": "CR",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CR"
+        },
+        {
+            "country": "Cuba",
+            "iso_country": "CU",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CU"
+        },
+        {
+            "country": "Cape Verde",
+            "iso_country": "CV",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CV"
+        },
+        {
+            "country": "Christmas Island",
+            "iso_country": "CX",
+            "url": "https://pricing.twilio.com/v1/Voice/Countries/CX"
+        }
+    ],
+    "meta": {
+        "first_page_url": "https://pricing.twilio.com/v1/Voice/Countries?PageSize=50&Page=0",
+        "key": "countries",
+        "next_page_url": "https://pricing.twilio.com/v1/Voice/Countries?PageSize=50&Page=1&PageToken=DNCX",
+        "page": 0,
+        "page_size": 50,
+        "previous_page_url": null,
+        "url": "https://pricing.twilio.com/v1/Voice/Countries?PageSize=50&Page=0"
+    }
+}`)
 
 const from = "+19253920364"
 const to = "+19253920364"
