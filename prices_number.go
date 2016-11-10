@@ -44,7 +44,7 @@ type CountriesPricePage struct {
 // returns the phone number price by country
 func (cpnps *CountryPhoneNumberPriceService) Get(ctx context.Context, isoCountry string) (*NumberPrice, error) {
 	numberPrice := new(NumberPrice)
-	err := cpnps.client.GetResource(ctx, phoneNumbersPathPart+"/Countries/", isoCountry, numberPrice)
+	err := cpnps.client.GetResource(ctx, phoneNumbersPathPart+"/Countries", isoCountry, numberPrice)
 	return numberPrice, err
 }
 
@@ -59,7 +59,7 @@ type CountryPricePageIterator struct {
 
 // GetPageIterator returns an iterator which can be used to retrieve pages.
 func (cpnps *CountryPhoneNumberPriceService) GetPageIterator(data url.Values) *CountryPricePageIterator {
-	iter := NewPageIterator(cpnps.client, data, phoneNumbersPathPart+"/Countries/")
+	iter := NewPageIterator(cpnps.client, data, phoneNumbersPathPart+"/Countries")
 	return &CountryPricePageIterator{
 		p: iter,
 	}
