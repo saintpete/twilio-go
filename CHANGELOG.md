@@ -4,6 +4,8 @@
 
 Initial support for the Pricing API (https://pricing.twilio.com).
 
+Add an AUTHORS.txt.
+
 ## 0.54
 
 Add Recordings.GetTranscriptions() to get Transcriptions for a recording. The
