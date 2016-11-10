@@ -37,7 +37,7 @@ type PriceCountry struct {
 }
 
 type CountriesPricePage struct {
-	Meta
+	Meta      Meta            `json:"meta"`
 	Countries []*PriceCountry `json:"countries"`
 }
 
@@ -73,6 +73,6 @@ func (c *CountryPricePageIterator) Next(ctx context.Context) (*CountriesPricePag
 	if err != nil {
 		return nil, err
 	}
-	c.p.SetNextPageURI(cp.NextPageURL)
+	c.p.SetNextPageURI(cp.Meta.NextPageURL)
 	return cp, nil
 }
