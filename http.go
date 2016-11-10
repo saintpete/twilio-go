@@ -129,6 +129,9 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", PricingBaseURL, PricingVersion))
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.FullPath = func(pathPart string) string {
+		if strings.HasPrefix(pathPart, "/") {
+			return pathPart
+		}
 		return "/" + pathPart
 	}
 	c.APIVersion = PricingVersion
