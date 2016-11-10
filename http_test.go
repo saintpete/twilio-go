@@ -89,7 +89,7 @@ func TestCancelStopsRequest(t *testing.T) {
 
 func TestOnBehalfOf(t *testing.T) {
 	t.Parallel()
-	want := "/Accounts/AC345/Calls/CA123.json"
+	want := "/2010-04-01/Accounts/AC345/Calls/CA123.json"
 	called := false
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != want {

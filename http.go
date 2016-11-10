@@ -42,7 +42,11 @@ type Client struct {
 	Monitor *Client
 	Pricing *Client
 
-	FullPath   func(pathPart string) string
+	// FullPath takes a path part (e.g. "Messages") and
+	// returns the full API path, including the version (e.g.
+	// "/2010-04-01/Accounts/AC123/Messages").
+	FullPath func(pathPart string) string
+	// The API version.
 	APIVersion string
 
 	AccountSid string
@@ -111,10 +115,10 @@ func NewMonitorClient(accountSid string, authToken string, httpClient *http.Clie
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
 	}
-	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", MonitorBaseURL, MonitorVersion))
+	restClient := rest.NewClient(accountSid, authToken, MonitorBaseURL)
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.FullPath = func(pathPart string) string {
-		return "/" + pathPart
+		return "/" + c.APIVersion + "/" + pathPart
 	}
 	c.APIVersion = MonitorVersion
 	c.Alerts = &AlertService{client: c}
@@ -126,12 +130,12 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
 	}
-	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", PricingBaseURL, PricingVersion))
+	restClient := rest.NewClient(accountSid, authToken, PricingBaseURL)
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
-	c.FullPath = func(pathPart string) string {
-		return "/" + pathPart
-	}
 	c.APIVersion = PricingVersion
+	c.FullPath = func(pathPart string) string {
+		return "/" + c.APIVersion + "/" + pathPart
+	}
 	c.Voice = &VoicePriceService{
 		Countries: &CountryVoicePriceService{client: c},
 		Numbers:   &NumberVoicePriceService{client: c},
@@ -153,7 +157,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	if httpClient == nil {
 		httpClient = &http.Client{Timeout: defaultTimeout}
 	}
-	restClient := rest.NewClient(accountSid, authToken, fmt.Sprintf("%s/%s", BaseURL, APIVersion))
+	restClient := rest.NewClient(accountSid, authToken, BaseURL)
 	restClient.Client = httpClient
 	restClient.UploadType = rest.FormURLEncoded
 	restClient.ErrorParser = parseTwilioError
@@ -162,7 +166,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.APIVersion = APIVersion
 
 	c.FullPath = func(pathPart string) string {
-		return "/" + strings.Join([]string{"Accounts", c.AccountSid, pathPart + ".json"}, "/")
+		return "/" + strings.Join([]string{c.APIVersion, "Accounts", c.AccountSid, pathPart + ".json"}, "/")
 	}
 	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
 	c.Pricing = NewPricingClient(accountSid, authToken, httpClient)
@@ -212,12 +216,12 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 // using that account's credentials.
 func (c *Client) RequestOnBehalfOf(subaccountSid string) {
 	c.FullPath = func(pathPart string) string {
-		return "/" + strings.Join([]string{"Accounts", subaccountSid, pathPart + ".json"}, "/")
+		return "/" + strings.Join([]string{c.APIVersion, "Accounts", subaccountSid, pathPart + ".json"}, "/")
 	}
 }
 
 // GetResource retrieves an instance resource with the given path part (e.g.
-// "/Messages") and sid (e.g. "SM123").
+// "/Messages") and sid (e.g. "MM123").
 func (c *Client) GetResource(ctx context.Context, pathPart string, sid string, v interface{}) error {
 	sidPart := strings.Join([]string{pathPart, sid}, "/")
 	return c.MakeRequest(ctx, "GET", sidPart, nil, v)
@@ -254,6 +258,7 @@ func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Val
 // should be a next_page_uri returned in the response to a paging request, and
 // should be the full path, eg "/2010-04-01/.../Messages?Page=1&PageToken=..."
 func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{}) error {
+	// for monitor etc.
 	if strings.HasPrefix(fullUri, c.Base) {
 		fullUri = fullUri[len(c.Base):]
 	}
@@ -262,9 +267,7 @@ func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{})
 
 // Make a request to the Twilio API.
 func (c *Client) MakeRequest(ctx context.Context, method string, pathPart string, data url.Values, v interface{}) error {
-	if strings.HasPrefix(pathPart, "/"+APIVersion) {
-		pathPart = pathPart[len("/"+APIVersion):]
-	} else {
+	if !strings.HasPrefix(pathPart, "/"+c.APIVersion) {
 		pathPart = c.FullPath(pathPart)
 	}
 	rb := new(strings.Reader)

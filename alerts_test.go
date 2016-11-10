@@ -62,6 +62,28 @@ func TestGetAlertPage(t *testing.T) {
 	}
 }
 
+func TestAlertFullPath(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping HTTP request in short mode")
+	}
+	// sigh, we need to hit the real URL for the Base stuff to work.
+	t.Parallel()
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer cancel()
+	data := url.Values{"PageSize": []string{"2"}}
+	iter := envClient.Monitor.Alerts.GetPageIterator(data)
+	_, err := iter.Next(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = iter.Next(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// TODO figure out a good way to assert what URL gets hit; add a TestClient
+	// or something.
+}
+
 func TestGetAlertIterator(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")

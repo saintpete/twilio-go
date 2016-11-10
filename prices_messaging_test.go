@@ -76,12 +76,28 @@ func TestGetMessagingPricePage(t *testing.T) {
 	client, server := getServer(messagingCountriesPage)
 	defer server.Close()
 
-	data := url.Values{"PageSize": []string{"100"}}
-	countriesPricePage, err := client.Pricing.Messaging.Countries.GetPage(context.Background(), data)
+	data := url.Values{"PageSize": []string{"10"}}
+	page, err := client.Pricing.Messaging.Countries.GetPage(context.Background(), data)
+
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(countriesPricePage.Countries) == 0 {
+	if len(page.Countries) == 0 {
 		t.Error("expected to get a list of countries, got back 0")
+	}
+	if len(page.Countries) != 10 {
+		t.Errorf("expected 10 countries, got %d", len(page.Countries))
+	}
+	if page.Meta.Key != "countries" {
+		t.Errorf("expected Key to be 'countries', got %s", page.Meta.Key)
+	}
+	if page.Meta.PageSize != 10 {
+		t.Errorf("expected PageSize to be 10, got %d", page.Meta.PageSize)
+	}
+	if page.Meta.Page != 0 {
+		t.Errorf("expected Page to be 0, got %d", page.Meta.Page)
+	}
+	if page.Meta.PreviousPageURL.Valid != false {
+		t.Errorf("expected previousPage.Valid to be false, got true")
 	}
 }
