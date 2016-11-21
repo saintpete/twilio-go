@@ -24,7 +24,7 @@ fetch all Media for a Message concurrently.
 
 - Usable, [one sentence descriptions of Alerts][alert-descriptions].
 
-[alert-descriptions]: https://godoc.org/github.com/kevinburke/twilio-go#Alert.Description
+[alert-descriptions]: https://godoc.org/github.com/saintpete/twilio-go#Alert.Description
 
 Here are some example use cases:
 
@@ -61,7 +61,7 @@ for {
 ```
 
 A [complete documentation reference can be found at
-godoc.org](https://godoc.org/github.com/kevinburke/twilio-go).
+godoc.org](https://godoc.org/github.com/saintpete/twilio-go).
 
 The API is open to, but unlikely to change, and currently only covers
 these resources:
@@ -128,4 +128,4 @@ filtering.
 You can get Alerts for a given Call or MMS by passing `ResourceSid=CA123` as
 a filter to Alerts.GetPage. This functionality is not documented in the API.
 
-[zero-results]: https://github.com/kevinburke/twilio-go/issues/8
+[zero-results]: https://github.com/saintpete/twilio-go/issues/8

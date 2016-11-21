@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/url"
 
-	twilio "github.com/kevinburke/twilio-go"
+	twilio "github.com/saintpete/twilio-go"
 	"golang.org/x/net/context"
 )
 

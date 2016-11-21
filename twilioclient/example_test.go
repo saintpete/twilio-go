@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/kevinburke/twilio-go/twilioclient"
+	"github.com/saintpete/twilio-go/twilioclient"
 )
 
 func Example() {
