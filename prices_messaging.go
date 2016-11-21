@@ -35,7 +35,7 @@ type MessagePrice struct {
 // returns the message price by country
 func (cmps *CountryMessagingPriceService) Get(ctx context.Context, isoCountry string) (*MessagePrice, error) {
 	messagePrice := new(MessagePrice)
-	err := cmps.client.GetResource(ctx, messagingPathPart+"/Countries/", isoCountry, messagePrice)
+	err := cmps.client.GetResource(ctx, messagingPathPart+"/Countries", isoCountry, messagePrice)
 	return messagePrice, err
 }
 
@@ -47,7 +47,7 @@ func (cmps *CountryMessagingPriceService) GetPage(ctx context.Context, data url.
 
 // GetPageIterator returns an iterator which can be used to retrieve pages.
 func (cmps *CountryMessagingPriceService) GetPageIterator(data url.Values) *CountryPricePageIterator {
-	iter := NewPageIterator(cmps.client, data, messagingPathPart+"/Countries/")
+	iter := NewPageIterator(cmps.client, data, messagingPathPart+"/Countries")
 	return &CountryPricePageIterator{
 		p: iter,
 	}

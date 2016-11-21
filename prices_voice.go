@@ -61,14 +61,14 @@ type VoiceNumberPrice struct {
 // returns the call price by country
 func (cvps *CountryVoicePriceService) Get(ctx context.Context, isoCountry string) (*VoicePrice, error) {
 	voicePrice := new(VoicePrice)
-	err := cvps.client.GetResource(ctx, voicePathPart+"/Countries/", isoCountry, voicePrice)
+	err := cvps.client.GetResource(ctx, voicePathPart+"/Countries", isoCountry, voicePrice)
 	return voicePrice, err
 }
 
 // returns the call price by number
 func (nvps *NumberVoicePriceService) Get(ctx context.Context, number string) (*VoiceNumberPrice, error) {
 	voiceNumPrice := new(VoiceNumberPrice)
-	err := nvps.client.GetResource(ctx, voicePathPart+"/Numbers/", number, voiceNumPrice)
+	err := nvps.client.GetResource(ctx, voicePathPart+"/Numbers", number, voiceNumPrice)
 	return voiceNumPrice, err
 }
 
@@ -80,7 +80,7 @@ func (cvps *CountryVoicePriceService) GetPage(ctx context.Context, data url.Valu
 
 // GetPageIterator returns an iterator which can be used to retrieve pages.
 func (cvps *CountryVoicePriceService) GetPageIterator(data url.Values) *CountryPricePageIterator {
-	iter := NewPageIterator(cvps.client, data, voicePathPart+"/Countries/")
+	iter := NewPageIterator(cvps.client, data, voicePathPart+"/Countries")
 	return &CountryPricePageIterator{
 		p: iter,
 	}
