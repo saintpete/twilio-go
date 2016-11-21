@@ -1,5 +1,8 @@
 .PHONY: test vet release
 
+# would be great to make the bash location portable but not sure how
+SHELL = /bin/bash
+
 WRITE_MAILMAP := $(shell command -v write_mailmap)
 BUMP_VERSION := $(shell command -v bump_version)
 STATICCHECK := $(shell command -v staticcheck)
