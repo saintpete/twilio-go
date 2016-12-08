@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"image"
@@ -10,7 +11,9 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 
 	"golang.org/x/net/context"
@@ -71,11 +74,31 @@ func (m *MediaService) GetURL(ctx context.Context, messageSid string, sid string
 		req = withContext(req, ctx)
 		req.SetBasicAuth(m.client.AccountSid, m.client.AuthToken)
 		req.Header.Set("User-Agent", userAgent)
+		if os.Getenv("DEBUG_HTTP_TRAFFIC") == "true" || os.Getenv("DEBUG_HTTP_REQUEST") == "true" {
+			b := new(bytes.Buffer)
+			bits, _ := httputil.DumpRequestOut(req, true)
+			if len(bits) > 0 && bits[len(bits)-1] != '\n' {
+				bits = append(bits, '\n')
+			}
+			b.Write(bits)
+			io.Copy(os.Stderr, b)
+		}
 		resp, err := MediaClient.Do(req)
 		if err != nil {
 			return nil, err
 		}
-		io.Copy(ioutil.Discard, resp.Body)
+		if os.Getenv("DEBUG_HTTP_TRAFFIC") == "true" || os.Getenv("DEBUG_HTTP_RESPONSES") == "true" {
+			b := new(bytes.Buffer)
+			bits, _ := httputil.DumpResponse(resp, true)
+			if len(bits) > 0 && bits[len(bits)-1] != '\n' {
+				bits = append(bits, '\n')
+			}
+			b.Write(bits)
+			io.Copy(os.Stderr, b)
+		} else {
+			io.Copy(ioutil.Discard, resp.Body)
+		}
+
 		resp.Body.Close()
 		// This is brittle because we need to detect/rewrite the S3 URL.
 		// I don't want to hard code a S3 URL but we have to do some
@@ -87,6 +110,9 @@ func (m *MediaService) GetURL(ctx context.Context, messageSid string, sid string
 		u, err := url.Parse(location)
 		if err != nil {
 			return nil, err
+		}
+		if strings.Contains(u.Host, "amazonaws") && strings.Count(u.Host, ".") == 2 && u.Scheme == "https" {
+			return u, nil
 		}
 		if strings.Contains(u.Host, "media.twiliocdn.com.") && strings.Contains(u.Host, "amazonaws") {
 			// This is the URL we can use to download the content. The URL that

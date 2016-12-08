@@ -2,6 +2,8 @@
 
 ## 0.55
 
+Handle new HTTPS-friendly media URLs.
+
 Support deleting/releasing phone numbers via IncomingNumbers.Release(ctx, sid).
 
 Initial support for the Pricing API (https://pricing.twilio.com).
