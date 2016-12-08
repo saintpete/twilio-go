@@ -2,6 +2,8 @@
 
 ## 0.55
 
+Support deleting/releasing phone numbers via IncomingNumbers.Release(ctx, sid).
+
 Initial support for the Pricing API (https://pricing.twilio.com).
 
 Add an AUTHORS.txt.

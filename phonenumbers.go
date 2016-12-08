@@ -9,16 +9,16 @@ import (
 
 const numbersPathPart = "IncomingPhoneNumbers"
 
+type NumberPurchasingService struct {
+	client   *Client
+	pathPart string
+}
+
 type IncomingNumberService struct {
 	*NumberPurchasingService
 	client   *Client
 	Local    *NumberPurchasingService
 	TollFree *NumberPurchasingService
-}
-
-type NumberPurchasingService struct {
-	client   *Client
-	pathPart string
 }
 
 type NumberCapability struct {
@@ -82,12 +82,19 @@ func (ipn *IncomingNumberService) BuyNumber(phoneNumber string) (*IncomingPhoneN
 	return ipn.NumberPurchasingService.Create(context.Background(), data)
 }
 
+// Get retrieves a single IncomingPhoneNumber.
 func (ipn *IncomingNumberService) Get(ctx context.Context, sid string) (*IncomingPhoneNumber, error) {
 	number := new(IncomingPhoneNumber)
 	err := ipn.client.GetResource(ctx, numbersPathPart, sid, number)
 	return number, err
 }
 
+// Release removes an IncomingPhoneNumber from your account.
+func (ipn *IncomingNumberService) Release(ctx context.Context, sid string) error {
+	return ipn.client.DeleteResource(ctx, numbersPathPart, sid)
+}
+
+// GetPage retrieves an IncomingPhoneNumberPage, filtered by the given data.
 func (ins *IncomingNumberService) GetPage(ctx context.Context, data url.Values) (*IncomingPhoneNumberPage, error) {
 	iter := ins.GetPageIterator(data)
 	return iter.Next(ctx)
