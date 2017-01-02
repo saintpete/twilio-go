@@ -1,5 +1,3 @@
-go_import_path: github.com/saintpete/twilio-go
-
 language: go
 go_import_path: github.com/saintpete/twilio-go
 
