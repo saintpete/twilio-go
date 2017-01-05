@@ -128,4 +128,10 @@ filtering.
 You can get Alerts for a given Call or MMS by passing `ResourceSid=CA123` as
 a filter to Alerts.GetPage. This functionality is not documented in the API.
 
+## Donating
+
+Donations free up time to make improvements to the library, and respond to
+bug reports. You can send donations via Paypal's "Send Money" feature to
+kev@inburke.com. Donations are not tax deductible in the USA.
+
 [zero-results]: https://github.com/saintpete/twilio-go/issues/8
