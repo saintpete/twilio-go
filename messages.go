@@ -3,11 +3,11 @@ package twilio
 import (
 	"fmt"
 	"net/url"
-	"sync"
 	"time"
 
 	types "github.com/kevinburke/go-types"
 	"golang.org/x/net/context"
+	"golang.org/x/sync/errgroup"
 )
 
 const messagesPathPart = "Messages"
@@ -292,23 +292,21 @@ func (m *MessageService) GetMediaURLs(ctx context.Context, sid string, data url.
 		return urls, nil
 	}
 	urls := make([]*url.URL, len(page.MediaList))
-	errs := make([]error, len(page.MediaList))
-	var wg sync.WaitGroup
-	wg.Add(len(page.MediaList))
+	g, errctx := errgroup.WithContext(ctx)
 	for i, media := range page.MediaList {
-		go func(i int, media *Media) {
-			url, err := m.client.Media.GetURL(ctx, sid, media.Sid)
+		i := i
+		mediaSid := media.Sid
+		g.Go(func() error {
+			url, err := m.client.Media.GetURL(errctx, sid, mediaSid)
+			if err != nil {
+				return err
+			}
 			urls[i] = url
-			errs[i] = err
-			wg.Done()
-		}(i, media)
+			return nil
+		})
 	}
-	wg.Wait()
-	// todo - we could probably return more quickly in the result of a failure.
-	for _, err := range errs {
-		if err != nil {
-			return nil, err
-		}
+	if err := g.Wait(); err != nil {
+		return nil, err
 	}
 	return urls, nil
 }
