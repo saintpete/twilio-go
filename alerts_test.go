@@ -63,6 +63,7 @@ func TestGetAlertPage(t *testing.T) {
 }
 
 func TestAlertFullPath(t *testing.T) {
+	t.Skip("depends on number of alerts in the account")
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
@@ -85,6 +86,7 @@ func TestAlertFullPath(t *testing.T) {
 }
 
 func TestGetAlertIterator(t *testing.T) {
+	t.Skip("depends on number of alerts in the account")
 	if testing.Short() {
 		t.Skip("skipping HTTP request in short mode")
 	}
