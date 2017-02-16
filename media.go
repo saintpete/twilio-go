@@ -2,6 +2,7 @@ package twilio
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"image"
@@ -15,8 +16,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-
-	"golang.org/x/net/context"
 )
 
 // A MediaService lets you retrieve a message's associated Media.

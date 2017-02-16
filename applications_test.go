@@ -1,9 +1,8 @@
 package twilio
 
 import (
+	"context"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 func TestApplicationGet(t *testing.T) {

@@ -1,12 +1,11 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestAccountGet(t *testing.T) {

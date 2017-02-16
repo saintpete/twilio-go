@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -9,8 +10,6 @@ import (
 	"time"
 
 	types "github.com/kevinburke/go-types"
-
-	"golang.org/x/net/context"
 )
 
 const alertPathPart = "Alerts"

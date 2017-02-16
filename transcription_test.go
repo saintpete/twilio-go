@@ -1,12 +1,11 @@
 package twilio
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestTranscriptionDelete(t *testing.T) {

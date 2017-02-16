@@ -1,3 +1,6 @@
+// Versions older than Go 1.7 are no longer supported, though this _may_ work
+// for you.
+
 // +build !go1.7
 
 package twilio

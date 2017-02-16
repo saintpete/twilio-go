@@ -1,13 +1,12 @@
 package twilio
 
 import (
+	"context"
 	"errors"
 	"os"
 	"strings"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestGetURL(t *testing.T) {

@@ -3,9 +3,8 @@
 package twilio
 
 import (
+	"context"
 	"net/http"
-
-	"golang.org/x/net/context"
 )
 
 func withContext(r *http.Request, ctx context.Context) *http.Request {

@@ -1,5 +1,9 @@
 # Changes
 
+## 0.57
+
+Switch all imports to use the `"context"` library.
+
 ## 0.56
 
 Use the new github.com/kevinburke/rest.DefaultTransport RoundTripper for

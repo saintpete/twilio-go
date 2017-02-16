@@ -1,12 +1,12 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
 	"testing"
 	"time"
 
 	"github.com/kevinburke/rest"
-	"golang.org/x/net/context"
 )
 
 func TestGetNumberPage(t *testing.T) {

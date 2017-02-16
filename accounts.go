@@ -1,9 +1,8 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
-
-	"golang.org/x/net/context"
 )
 
 // This resource is a little special because the endpoint is GET

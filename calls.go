@@ -1,13 +1,13 @@
 package twilio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
 
 	types "github.com/kevinburke/go-types"
-	"golang.org/x/net/context"
 )
 
 const callsPathPart = "Calls"

@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -8,7 +9,6 @@ import (
 	"time"
 
 	"github.com/kevinburke/rest"
-	"golang.org/x/net/context"
 )
 
 // invalid status here on purpose to check we use a different one.

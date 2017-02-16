@@ -1,13 +1,13 @@
 package twilio_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/url"
 	"time"
 
 	twilio "github.com/saintpete/twilio-go"
-	"golang.org/x/net/context"
 )
 
 func ExampleMessageService_GetMessagesInRange() {

@@ -1,10 +1,9 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
 	"strings"
-
-	"golang.org/x/net/context"
 )
 
 type RecordingService struct {

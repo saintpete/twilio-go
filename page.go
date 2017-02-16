@@ -1,13 +1,13 @@
 package twilio
 
 import (
+	"context"
 	"errors"
 	"net/url"
 	"strings"
 	"time"
 
 	types "github.com/kevinburke/go-types"
-	"golang.org/x/net/context"
 )
 
 type Page struct {

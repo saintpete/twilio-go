@@ -1,6 +1,7 @@
 package twilio_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/url"
@@ -8,7 +9,6 @@ import (
 
 	"github.com/kevinburke/rest"
 	twilio "github.com/saintpete/twilio-go"
-	"golang.org/x/net/context"
 )
 
 var callURL, _ = url.Parse("https://kev.inburke.com/zombo/zombocom.mp3")

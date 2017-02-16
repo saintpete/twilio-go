@@ -1,12 +1,12 @@
 package twilio_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/url"
 
 	twilio "github.com/saintpete/twilio-go"
-	"golang.org/x/net/context"
 )
 
 func ExampleAlertService_GetPage() {

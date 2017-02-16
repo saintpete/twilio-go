@@ -1,11 +1,10 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestGetConferencePage(t *testing.T) {

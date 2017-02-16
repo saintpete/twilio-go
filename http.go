@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,7 +12,6 @@ import (
 	"time"
 
 	"github.com/kevinburke/rest"
-	"golang.org/x/net/context"
 )
 
 // The twilio-go version. Run "make release" to bump this number.

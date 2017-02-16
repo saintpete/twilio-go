@@ -1,13 +1,12 @@
 package twilio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestGetAlert(t *testing.T) {

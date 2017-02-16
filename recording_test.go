@@ -1,10 +1,9 @@
 package twilio
 
 import (
+	"context"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestGetRecording(t *testing.T) {

@@ -1,10 +1,10 @@
 package twilio
 
 import (
+	"context"
 	"net/url"
 
 	types "github.com/kevinburke/go-types"
-	"golang.org/x/net/context"
 )
 
 const numbersPathPart = "IncomingPhoneNumbers"

@@ -1,12 +1,12 @@
 package twilio
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"time"
 
 	types "github.com/kevinburke/go-types"
-	"golang.org/x/net/context"
 	"golang.org/x/sync/errgroup"
 )
 

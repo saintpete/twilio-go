@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -8,8 +9,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestGet(t *testing.T) {
