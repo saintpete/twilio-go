@@ -2,7 +2,6 @@ language: go
 go_import_path: github.com/saintpete/twilio-go
 
 go:
-  - 1.6
   - 1.7
   - tip
 

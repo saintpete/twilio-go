@@ -77,6 +77,15 @@ type Client struct {
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
 
+var defaultHttpClient *http.Client
+
+func init() {
+	defaultHttpClient = &http.Client{
+		Timeout:   defaultTimeout,
+		Transport: rest.DefaultTransport,
+	}
+}
+
 // An error returned by the Twilio API. We don't want to expose this - let's
 // try to standardize on the fields in the HTTP problem spec instead.
 type twilioError struct {
@@ -113,9 +122,10 @@ func parseTwilioError(resp *http.Response) error {
 
 func NewMonitorClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
-		httpClient = &http.Client{Timeout: defaultTimeout}
+		httpClient = defaultHttpClient
 	}
 	restClient := rest.NewClient(accountSid, authToken, MonitorBaseURL)
+	restClient.Client = httpClient
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.FullPath = func(pathPart string) string {
 		return "/" + c.APIVersion + "/" + pathPart
@@ -128,9 +138,10 @@ func NewMonitorClient(accountSid string, authToken string, httpClient *http.Clie
 // returns a new Client to use the pricing API
 func NewPricingClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
-		httpClient = &http.Client{Timeout: defaultTimeout}
+		httpClient = defaultHttpClient
 	}
 	restClient := rest.NewClient(accountSid, authToken, PricingBaseURL)
+	restClient.Client = httpClient
 	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
 	c.APIVersion = PricingVersion
 	c.FullPath = func(pathPart string) string {
@@ -155,7 +166,7 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 
 	if httpClient == nil {
-		httpClient = &http.Client{Timeout: defaultTimeout}
+		httpClient = defaultHttpClient
 	}
 	restClient := rest.NewClient(accountSid, authToken, BaseURL)
 	restClient.Client = httpClient

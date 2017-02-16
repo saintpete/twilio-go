@@ -1,5 +1,11 @@
 # Changes
 
+## 0.56
+
+Use the new github.com/kevinburke/rest.DefaultTransport RoundTripper for
+easy HTTP debugging. (The previous code set the RoundTripper to nil, so
+kevinburke/rest wouldn't log anything).
+
 ## 0.55
 
 Handle new HTTPS-friendly media URLs.
