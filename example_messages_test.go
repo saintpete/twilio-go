@@ -10,6 +10,12 @@ import (
 	twilio "github.com/saintpete/twilio-go"
 )
 
+func ExampleMessageService_Get() {
+	client := twilio.NewClient("AC123", "123", nil)
+	message, _ := client.Messages.Get(context.TODO(), "SM123")
+	fmt.Println(message.Status)
+}
+
 func ExampleMessageService_GetMessagesInRange() {
 	// Get all messages between 10:34:00 Oct 26 and 19:25:59 Oct 27, NYC time.
 	nyc, _ := time.LoadLocation("America/New_York")
