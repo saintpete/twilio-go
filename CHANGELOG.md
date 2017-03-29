@@ -1,5 +1,13 @@
 # Changes
 
+## 0.58
+
+Add `client.UseSecretKey(key string)` to handle secret keys
+properly. For more information on the secret key API, see
+https://www.twilio.com/docs/api/rest/keys.
+
+Thanks to Andrew Watson for reporting.
+
 ## 0.57
 
 Switch all imports to use the `"context"` library.
