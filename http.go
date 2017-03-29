@@ -51,6 +51,7 @@ type Client struct {
 
 	AccountSid string
 	AuthToken  string
+	secretKey  string
 
 	// The API Client uses these resources
 	Accounts          *AccountService
@@ -126,7 +127,11 @@ func NewMonitorClient(accountSid string, authToken string, httpClient *http.Clie
 	}
 	restClient := rest.NewClient(accountSid, authToken, MonitorBaseURL)
 	restClient.Client = httpClient
-	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
+	c := &Client{
+		Client:     restClient,
+		AccountSid: accountSid,
+		AuthToken:  authToken,
+	}
 	c.FullPath = func(pathPart string) string {
 		return "/" + c.APIVersion + "/" + pathPart
 	}
@@ -142,7 +147,11 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 	}
 	restClient := rest.NewClient(accountSid, authToken, PricingBaseURL)
 	restClient.Client = httpClient
-	c := &Client{Client: restClient, AccountSid: accountSid, AuthToken: authToken}
+	c := &Client{
+		Client:     restClient,
+		AccountSid: accountSid,
+		AuthToken:  authToken,
+	}
 	c.APIVersion = PricingVersion
 	c.FullPath = func(pathPart string) string {
 		return "/" + c.APIVersion + "/" + pathPart
@@ -164,7 +173,6 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 // main entrypoint for API interactions; view the methods on the subresources
 // for more information.
 func NewClient(accountSid string, authToken string, httpClient *http.Client) *Client {
-
 	if httpClient == nil {
 		httpClient = defaultHttpClient
 	}
@@ -221,13 +229,28 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 // for all requests going forward.
 //
 // RequestOnBehalfOf should only be used with api.twilio.com, not (for example)
-// Twilio Monitor.
+// Twilio Monitor - the newer API's do not include the account sid in the URI.
 //
 // To authenticate using a subaccount sid / auth token, create a new Client
 // using that account's credentials.
 func (c *Client) RequestOnBehalfOf(subaccountSid string) {
 	c.FullPath = func(pathPart string) string {
 		return "/" + strings.Join([]string{c.APIVersion, "Accounts", subaccountSid, pathPart + ".json"}, "/")
+	}
+}
+
+// UseSecretKey will use the provided secret key to authenticate to the API
+// (instead of the AccountSid).
+//
+// For more information about secret keys, see
+// https://www.twilio.com/docs/api/rest/keys.
+func (c *Client) UseSecretKey(key string) {
+	c.Client.ID = key
+	if c.Monitor != nil {
+		c.Monitor.UseSecretKey(key)
+	}
+	if c.Pricing != nil {
+		c.Pricing.UseSecretKey(key)
 	}
 }
 

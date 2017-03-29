@@ -73,3 +73,9 @@ func ExampleCallService_GetCallsInRange() {
 		}
 	}
 }
+
+func ExampleClient_UseSecretKey() {
+	client := twilio.NewClient("AC123", "123", nil)
+	client.UseSecretKey("SK123")
+	client.Messages.SendMessage("123", "456", "Sending with secret key...", nil)
+}
