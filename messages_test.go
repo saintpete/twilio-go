@@ -100,6 +100,10 @@ func TestIterateAll(t *testing.T) {
 		if err == NoMoreResults {
 			break
 		}
+		if err != nil {
+			t.Fatal(err)
+			return
+		}
 		if count > 0 && (page.Start <= start || page.Start-start > 500) {
 			t.Fatalf("expected page.Start to be greater than previous, got %d, previous %d", page.Start, start)
 			return

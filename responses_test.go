@@ -6,11 +6,19 @@ import (
 	"net/url"
 	"os"
 	"sync"
+	"testing"
 )
 
 // the envClient is configured to use an Account Sid and Auth Token set in the
 // environment. all non-short tests should use the envClient
-var envClient = NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+var envClient *Client
+
+func init() {
+	if !testing.Short() && os.Getenv("TWILIO_ACCOUNT_SID") == "" {
+		os.Stderr.WriteString("warning: no TWILIO_ACCOUNT_SID configured, HTTP tests will probably fail...\n\n")
+	}
+	envClient = NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
+}
 
 type Server struct {
 	s *httptest.Server
