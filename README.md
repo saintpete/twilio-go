@@ -70,16 +70,18 @@ these resources:
 - Applications
 - Calls
 - Conferences
+- Faxes
 - Incoming Phone Numbers
 - Keys
 - Messages
 - Media
+- Monitor
 - Outgoing Caller ID's
+- Pricing
 - Queues
 - Recordings
 - Transcriptions
 - Access Tokens for IPMessaging, Video and Programmable Voice SDK
-- Pricing
 
 ### Error Parsing
 
