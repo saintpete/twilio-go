@@ -88,7 +88,7 @@ func ExampleFaxService_SendFax() {
 
 func ExampleFaxService_Cancel() {
 	faxer := twilio.NewFaxClient("AC123", "123", nil)
-	faxer.Faxes.Cancel(context.TODO(), "FX123")
+	faxer.Faxes.Cancel("FX123")
 }
 
 func ExampleFax() {
