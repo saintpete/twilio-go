@@ -1,5 +1,12 @@
 # Changes
 
+## 0.59
+
+Support the Twilio Fax API.
+
+- Rename imports from github.com/saintpete/twilio-go to
+  github.com/kevinburke/twilio-go.
+
 ## 0.58
 
 Add `client.UseSecretKey(key string)` to handle secret keys

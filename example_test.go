@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/kevinburke/rest"
-	twilio "github.com/saintpete/twilio-go"
+	twilio "github.com/kevinburke/twilio-go"
 )
 
 var callURL, _ = url.Parse("https://kev.inburke.com/zombo/zombocom.mp3")
@@ -89,4 +89,10 @@ func ExampleFaxService_SendFax() {
 func ExampleFaxService_Cancel() {
 	faxer := twilio.NewFaxClient("AC123", "123", nil)
 	faxer.Faxes.Cancel(context.TODO(), "FX123")
+}
+
+func ExampleFax() {
+	faxer := twilio.NewFaxClient("AC123", "123", nil)
+	fax, _ := faxer.Faxes.Get(context.TODO(), "FX123")
+	fmt.Print(fax.Sid)
 }

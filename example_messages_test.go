@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	twilio "github.com/saintpete/twilio-go"
+	twilio "github.com/kevinburke/twilio-go"
 )
 
 func ExampleMessageService_Get() {
