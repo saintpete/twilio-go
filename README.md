@@ -130,6 +130,11 @@ filtering.
 You can get Alerts for a given Call or MMS by passing `ResourceSid=CA123` as
 a filter to Alerts.GetPage. This functionality is not documented in the API.
 
+## Consulting
+
+I'm available for hire, for Twilio work or general-purpose engineering. For more
+on what I can do for your company, see here: https://burke.services/twilio.html.
+
 ## Donating
 
 Donations free up time to make improvements to the library, and respond to
