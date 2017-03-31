@@ -18,6 +18,7 @@ type AlertService struct {
 	client *Client
 }
 
+// Alert represents a single Twilio Alert.
 type Alert struct {
 	Sid        string `json:"sid"`
 	AccountSid string `json:"account_sid"`
@@ -41,11 +42,13 @@ type Alert struct {
 	URL              string          `json:"url"`
 }
 
+// AlertPage represents a page of Alerts.
 type AlertPage struct {
 	Meta   Meta     `json:"meta"`
 	Alerts []*Alert `json:"alerts"`
 }
 
+// Get finds a single Alert resource by its sid, or returns an error.
 func (a *AlertService) Get(ctx context.Context, sid string) (*Alert, error) {
 	alert := new(Alert)
 	err := a.client.GetResource(ctx, alertPathPart, sid, alert)

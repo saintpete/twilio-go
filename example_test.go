@@ -12,6 +12,7 @@ import (
 )
 
 var callURL, _ = url.Parse("https://kev.inburke.com/zombo/zombocom.mp3")
+var pdfURL, _ = url.Parse("https://kev.inburke.com/foo.pdf")
 
 func Example() {
 	client := twilio.NewClient("AC123", "123", nil)
@@ -37,7 +38,7 @@ func Example() {
 	// Find all calls from a number
 	data := url.Values{"From": []string{"+14105551234"}}
 	iterator := client.Calls.GetPageIterator(data)
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	ctx, cancel := context.WithTimeout(context.TODO(), 1*time.Minute)
 	defer cancel()
 	for {
 		page, err := iterator.Next(ctx)
@@ -58,7 +59,7 @@ func ExampleCallService_GetCallsInRange() {
 
 	client := twilio.NewClient("AC123", "123", nil)
 	iter := client.Calls.GetCallsInRange(start, end, url.Values{})
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
 	defer cancel()
 	for {
 		page, err := iter.Next(ctx)
@@ -78,4 +79,14 @@ func ExampleClient_UseSecretKey() {
 	client := twilio.NewClient("AC123", "123", nil)
 	client.UseSecretKey("SK123")
 	client.Messages.SendMessage("123", "456", "Sending with secret key...", nil)
+}
+
+func ExampleFaxService_SendFax() {
+	faxer := twilio.NewFaxClient("AC123", "123", nil)
+	faxer.Faxes.SendFax("123", "456", pdfURL)
+}
+
+func ExampleFaxService_Cancel() {
+	faxer := twilio.NewFaxClient("AC123", "123", nil)
+	faxer.Faxes.Cancel(context.TODO(), "FX123")
 }

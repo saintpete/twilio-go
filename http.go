@@ -30,6 +30,10 @@ const MonitorVersion = "v1"
 // The base URL for Twilio Pricing.
 var PricingBaseURL = "https://pricing.twilio.com"
 
+var FaxBaseURL = "https://fax.twilio.com"
+
+const FaxVersion = "v1"
+
 // Version of the Twilio Pricing API.
 const PricingVersion = "v1"
 
@@ -41,6 +45,7 @@ type Client struct {
 	*rest.Client
 	Monitor *Client
 	Pricing *Client
+	Fax     *Client
 
 	// FullPath takes a path part (e.g. "Messages") and
 	// returns the full API path, including the version (e.g.
@@ -74,6 +79,9 @@ type Client struct {
 	Voice        *VoicePriceService
 	Messaging    *MessagingPriceService
 	PhoneNumbers *PhoneNumberPriceService
+
+	// NewFaxClient initializes these services
+	Faxes *FaxService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -121,12 +129,37 @@ func parseTwilioError(resp *http.Response) error {
 	}
 }
 
+// NewFaxClient returns a Client for use with the Twilio Fax API.
+func NewFaxClient(accountSid string, authToken string, httpClient *http.Client) *Client {
+	if httpClient == nil {
+		httpClient = defaultHttpClient
+	}
+	restClient := rest.NewClient(accountSid, authToken, FaxBaseURL)
+	restClient.Client = httpClient
+	restClient.UploadType = rest.FormURLEncoded
+	restClient.ErrorParser = parseTwilioError
+	c := &Client{
+		Client:     restClient,
+		AccountSid: accountSid,
+		AuthToken:  authToken,
+	}
+	c.FullPath = func(pathPart string) string {
+		return "/" + c.APIVersion + "/" + pathPart
+	}
+	c.APIVersion = FaxVersion
+	c.Faxes = &FaxService{client: c}
+	return c
+}
+
+// NewMonitorClient returns a Client for use with the Twilio Monitor API.
 func NewMonitorClient(accountSid string, authToken string, httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = defaultHttpClient
 	}
 	restClient := rest.NewClient(accountSid, authToken, MonitorBaseURL)
 	restClient.Client = httpClient
+	restClient.UploadType = rest.FormURLEncoded
+	restClient.ErrorParser = parseTwilioError
 	c := &Client{
 		Client:     restClient,
 		AccountSid: accountSid,
@@ -147,6 +180,8 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 	}
 	restClient := rest.NewClient(accountSid, authToken, PricingBaseURL)
 	restClient.Client = httpClient
+	restClient.UploadType = rest.FormURLEncoded
+	restClient.ErrorParser = parseTwilioError
 	c := &Client{
 		Client:     restClient,
 		AccountSid: accountSid,
@@ -189,6 +224,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	}
 	c.Monitor = NewMonitorClient(accountSid, authToken, httpClient)
 	c.Pricing = NewPricingClient(accountSid, authToken, httpClient)
+	c.Fax = NewFaxClient(accountSid, authToken, httpClient)
 
 	c.Accounts = &AccountService{client: c}
 	c.Applications = &ApplicationService{client: c}

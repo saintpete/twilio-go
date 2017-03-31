@@ -66,6 +66,7 @@ func getServer(response []byte) (*Client, *Server) {
 	client.Base = s.URL
 	client.Monitor.Base = s.URL
 	client.Pricing.Base = s.URL
+	client.Fax.Base = s.URL
 	return client, s
 }
 
@@ -2506,6 +2507,82 @@ var voiceCountriesPage = []byte(`{
         }
     ]
 }`)
+
+var faxCreateResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "api_version": "v1",
+    "date_created": "2017-03-31T09:44:20Z",
+    "date_updated": "2017-03-31T09:44:20Z",
+    "direction": "outbound",
+    "duration": null,
+    "from": "+19252717005",
+    "media_url": null,
+    "num_pages": null,
+    "price": null,
+    "price_unit": null,
+    "quality": "fine",
+    "sid": "FXeb76f282888a074547beba3516552174",
+    "status": "queued",
+    "to": "+18326327228",
+    "url": "https://fax.twilio.com/v1/Faxes/FXeb76f282888a074547beba3516552174"
+}
+`)
+
+var faxGetResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "api_version": "v1",
+    "date_created": "2017-03-31T09:44:20Z",
+    "date_updated": "2017-03-31T09:45:55Z",
+    "direction": "outbound",
+    "duration": 64,
+    "from": "+19252717005",
+    "media_url": "https://media.twiliocdn.com/fax/AC58f1e8f2b1c6b88ca90a012a4be0c279/c2d4d301762880a519202e142fe486ff56edbcbfe0e9c5742109b0cd1ac2fa91d58be998c7a4c5905703e590339c7f54196481920eb252bd3fd9837a74094aab?x-amz-security-token=FQoDYXdzEHkaDGaGfJdmYVkoWfLy8yK3AyFTXB6SaYtdA53nCYTajFsMzjM%2Fc%2B7QLS7TqTU2nNMnwJPB4oFQelC6tfdvNGZVvdEhZW3He%2BY9FIVrOT5nk9WMOrcOZFEZ2NdCCpRsGPo5ZcjTbVQKbxQ1IhZvrZCz2MDja3G5RGpBweDtB0UfC6U%2Bj%2BUv8LQChDjS3wu%2FZCsWhWcz1cSSLoPOVDzOtENSlS7SjCITACiJDXerUjRvOxNqRvW2GAUSe7tn8S0%2FGjplc0qXGDRjDTwsIitIE2mA%2BrzMzEx8zXJ%2BblMSKrUaQh3qRfXWtvrZQt8JZj03fIZ2CzL7BJUjoUOATbIRRUlRDhhLCtP07rgMP2yyFNpDV%2BO5B3ZnNdonXmTJuVg4VycaRC%2B5roj%2FJ%2FSnStURa9RApFTPWRXM97CZqiK5R8WWKwBx6D2bK67cHlyrCrnN0fq0aylhR%2BC%2F%2BEM9elZTzlLK7WdjzhEkV5LMgEiWeETWxxGtUiT1R569idTJZVcnAQKkWmRVtAgrlsPSWK1qTkiQew2Lugd0X1rsWgy6OM9S1moeTsVGnf4X%2BvsXppNgYBFocyXD7AzOuIHH2s%2BCGiw6%2BlzC%2B3VHxbwo9Pn5xgU%3D&AWSAccessKeyId=ASIAIHZ6SRB3PKVIGYGA&Expires=1490986753&Signature=ZqFu5tgPrBL5c5PqL07RIGhANao%3D",
+    "num_pages": 1,
+    "price": "0.014",
+    "price_unit": "USD",
+    "quality": "fine",
+    "sid": "FXeb76f282888a074547beba3516552174",
+    "status": "delivered",
+    "to": "+18326327228",
+    "url": "https://fax.twilio.com/v1/Faxes/FXeb76f282888a074547beba3516552174"
+}
+`)
+
+var faxGetPageResponse = []byte(`
+{
+    "faxes": [
+        {
+            "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+            "api_version": "v1",
+            "date_created": "2017-03-31T09:44:20Z",
+            "date_updated": "2017-03-31T09:45:55Z",
+            "direction": "outbound",
+            "duration": 64,
+            "from": "+19252717005",
+            "media_url": "https://media.twiliocdn.com/fax/AC58f1e8f2b1c6b88ca90a012a4be0c279/c2d4d301762880a519202e142fe486ff56edbcbfe0e9c5742109b0cd1ac2fa91d58be998c7a4c5905703e590339c7f54196481920eb252bd3fd9837a74094aab?x-amz-security-token=FQoDYXdzEHkaDGaGfJdmYVkoWfLy8yK3AyFTXB6SaYtdA53nCYTajFsMzjM%2Fc%2B7QLS7TqTU2nNMnwJPB4oFQelC6tfdvNGZVvdEhZW3He%2BY9FIVrOT5nk9WMOrcOZFEZ2NdCCpRsGPo5ZcjTbVQKbxQ1IhZvrZCz2MDja3G5RGpBweDtB0UfC6U%2Bj%2BUv8LQChDjS3wu%2FZCsWhWcz1cSSLoPOVDzOtENSlS7SjCITACiJDXerUjRvOxNqRvW2GAUSe7tn8S0%2FGjplc0qXGDRjDTwsIitIE2mA%2BrzMzEx8zXJ%2BblMSKrUaQh3qRfXWtvrZQt8JZj03fIZ2CzL7BJUjoUOATbIRRUlRDhhLCtP07rgMP2yyFNpDV%2BO5B3ZnNdonXmTJuVg4VycaRC%2B5roj%2FJ%2FSnStURa9RApFTPWRXM97CZqiK5R8WWKwBx6D2bK67cHlyrCrnN0fq0aylhR%2BC%2F%2BEM9elZTzlLK7WdjzhEkV5LMgEiWeETWxxGtUiT1R569idTJZVcnAQKkWmRVtAgrlsPSWK1qTkiQew2Lugd0X1rsWgy6OM9S1moeTsVGnf4X%2BvsXppNgYBFocyXD7AzOuIHH2s%2BCGiw6%2BlzC%2B3VHxbwo9Pn5xgU%3D&AWSAccessKeyId=ASIAIHZ6SRB3PKVIGYGA&Expires=1490987185&Signature=aG8SXCkaYlIDfH7zGTSS7oYeIXk%3D",
+            "num_pages": 1,
+            "price": "0.014",
+            "price_unit": "USD",
+            "quality": "fine",
+            "sid": "FXeb76f282888a074547beba3516552174",
+            "status": "delivered",
+            "to": "+18326327228",
+            "url": "https://fax.twilio.com/v1/Faxes/FXeb76f282888a074547beba3516552174"
+        }
+    ],
+    "meta": {
+        "first_page_url": "https://fax.twilio.com/v1/Faxes?PageSize=50&Page=0",
+        "key": "faxes",
+        "next_page_url": null,
+        "page": 0,
+        "page_size": 50,
+        "previous_page_url": null,
+        "url": "https://fax.twilio.com/v1/Faxes?PageSize=50&Page=0"
+    }
+}
+`)
 
 const from = "+19253920364"
 const to = "+19253920364"

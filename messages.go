@@ -96,7 +96,7 @@ func (m *MessageService) Create(ctx context.Context, data url.Values) (*Message,
 	return msg, err
 }
 
-// SendMessage is a convenience wrapper around Create.
+// SendMessage sends an outbound Message with the given body or mediaURLs.
 func (m *MessageService) SendMessage(from string, to string, body string, mediaURLs []*url.URL) (*Message, error) {
 	v := url.Values{
 		"Body": []string{body},

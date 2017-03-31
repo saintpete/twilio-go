@@ -238,8 +238,11 @@ type NullAnsweredBy struct {
 	AnsweredBy AnsweredBy
 }
 
-// The status of the message (accepted, queued, etc).
-// For more information , see https://www.twilio.com/docs/api/rest/message
+// The status of a resource ("accepted", "queued", etc).
+// For more information, see
+//
+// https://www.twilio.com/docs/api/rest/message
+// https://www.twilio.com/docs/api/fax/rest/faxes#fax-status-values
 type Status string
 
 func (s Status) Friendly() string {
@@ -278,29 +281,33 @@ func (h *Values) UnmarshalJSON(b []byte) error {
 }
 
 const StatusAccepted = Status("accepted")
-const StatusDelivered = Status("delivered")
-const StatusReceiving = Status("receiving")
-const StatusReceived = Status("received")
-const StatusSending = Status("sending")
 const StatusSent = Status("sent")
 const StatusUndelivered = Status("undelivered")
 
 // Call statuses
 
-const StatusBusy = Status("busy")
-const StatusCanceled = Status("canceled")
 const StatusCompleted = Status("completed")
 const StatusInProgress = Status("in-progress")
-const StatusNoAnswer = Status("no-answer")
 const StatusRinging = Status("ringing")
 
-// Shared
-const StatusFailed = Status("failed")
-const StatusQueued = Status("queued")
+// Fax statuses
+
+const StatusProcessing = Status("processing")
+
+// Shared statuses
 
 const StatusActive = Status("active")
-const StatusSuspended = Status("suspended")
+const StatusBusy = Status("busy")
+const StatusCanceled = Status("canceled")
 const StatusClosed = Status("closed")
+const StatusDelivered = Status("delivered")
+const StatusFailed = Status("failed")
+const StatusNoAnswer = Status("no-answer")
+const StatusQueued = Status("queued")
+const StatusReceiving = Status("receiving")
+const StatusReceived = Status("received")
+const StatusSending = Status("sending")
+const StatusSuspended = Status("suspended")
 
 // A log level returned for an Alert.
 type LogLevel string
