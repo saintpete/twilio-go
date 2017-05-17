@@ -71,6 +71,7 @@ these resources:
 - Calls
 - Conferences
 - Incoming Phone Numbers
+- Available Phone Numbers
 - Keys
 - Messages
 - Media
