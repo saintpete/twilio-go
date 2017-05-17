@@ -2581,6 +2581,30 @@ var faxGetPageResponse = []byte(`
         "previous_page_url": null,
         "url": "https://fax.twilio.com/v1/Faxes?PageSize=50&Page=0"
     }
+}`)
+
+var availablePhoneNumbers = []byte(`
+{
+  "uri": "\/2010-04-01\/Accounts\/AC6bc21af903cc765a9d7f7e0467ec812a\/AvailablePhoneNumbers\/US\/Local.json?AreaCode=510",
+  "available_phone_numbers": [
+    {
+      "friendly_name": "(510) 564-7903",
+      "phone_number": "+15105647903",
+      "lata": "722",
+      "rate_center": "OKLD TRNID",
+      "latitude": "37.780000",
+      "longitude": "-122.380000",
+      "region": "CA",
+      "postal_code": "94703",
+      "iso_country": "US",
+      "capabilities":{
+        "voice": true,
+        "SMS": true,
+        "MMS": false
+      },
+      "beta": false
+    }
+  ]
 }
 `)
 

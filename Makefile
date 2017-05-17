@@ -10,7 +10,7 @@ STATICCHECK := $(shell command -v staticcheck)
 test: vet
 	go test -short ./...
 
-vet: 
+vet:
 ifndef STATICCHECK
 	go get -u honnef.co/go/tools/cmd/staticcheck
 endif

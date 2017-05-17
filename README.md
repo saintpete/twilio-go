@@ -72,6 +72,7 @@ these resources:
 - Conferences
 - Faxes
 - Incoming Phone Numbers
+- Available Phone Numbers
 - Keys
 - Messages
 - Media

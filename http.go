@@ -71,6 +71,7 @@ type Client struct {
 	Queues            *QueueService
 	Recordings        *RecordingService
 	Transcriptions    *TranscriptionService
+	AvailableNumbers  *AvailableNumberService
 
 	// NewMonitorClient initializes these services
 	Alerts *AlertService
@@ -253,6 +254,24 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 			pathPart: "TollFree",
 		},
 	}
+
+	c.AvailableNumbers = &AvailableNumberService{
+		Local: &AvailableNumberBase{
+			client:   c,
+			pathPart: "Local",
+		},
+
+		Mobile: &AvailableNumberBase{
+			client:   c,
+			pathPart: "Mobile",
+		},
+
+		TollFree: &AvailableNumberBase{
+			client:   c,
+			pathPart: "TollFree",
+		},
+	}
+
 	return c
 }
 
