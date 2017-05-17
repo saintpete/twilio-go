@@ -23,20 +23,20 @@ type AvailablePhoneNumberService struct {
 // See https://www.twilio.com/docs/api/rest/available-phone-numbers for details
 type AvailablePhoneNumber struct {
 	FriendlyName        string            `json:"friendly_name"`
-	PhoneNumber         string            `json:"phone_number"`
+	PhoneNumber         PhoneNumber       `json:"phone_number"`
 	Lata                string            `json:"lata"`
 	RateCenter          string            `json:"rate_center"`
 	Latitude            string            `json:"latitude"`
 	Longitude           string            `json:"longitude"`
 	Region              string            `json:"region"`
 	PostalCode          string            `json:"postal_code"`
-	IsoCountry          string            `json:"iso_country"`
+	ISOCountry          string            `json:"iso_country"`
 	Capabilities        *NumberCapability `json:"capabilities"`
 	AddressRequirements string            `json:"address_requirements"`
 	Beta                bool              `json:"beta"`
 }
 
-type AvailablePhoneNumberSearchResult struct {
+type AvailablePhoneNumberPage struct {
 	Uri     string                  `json:"uri"`
 	Numbers []*AvailablePhoneNumber `json:"available_phone_numbers"`
 }
@@ -44,8 +44,8 @@ type AvailablePhoneNumberSearchResult struct {
 // https://www.twilio.com/docs/api/rest/available-phone-numbers#local
 // https://www.twilio.com/docs/api/rest/available-phone-numbers#toll-free
 // https://www.twilio.com/docs/api/rest/available-phone-numbers#mobile
-func (s *AvailablePhoneNumberBase) Get(ctx context.Context, isoCountry string, filters url.Values) (*AvailablePhoneNumberSearchResult, error) {
-	sr := new(AvailablePhoneNumberSearchResult)
+func (s *AvailablePhoneNumberBase) GetPage(ctx context.Context, isoCountry string, filters url.Values) (*AvailablePhoneNumberPage, error) {
+	sr := new(AvailablePhoneNumberPage)
 	path := availablePhoneNumbersPath + "/" + isoCountry + "/" + s.pathPart
 	err := s.client.ListResource(ctx, path, filters, sr)
 	if err != nil {

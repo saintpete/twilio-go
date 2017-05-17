@@ -18,7 +18,7 @@ func TestSearchAvailablePhoneNumbers(t *testing.T) {
 		"VoiceEnabled": []string{"true"},
 	}
 
-	res, err := client.AvailablePhoneNumbers.Local.Get(context.Background(), "US", data)
+	res, err := client.AvailablePhoneNumbers.Local.GetPage(context.Background(), "US", data)
 	if err != nil {
 		t.Fatal(err)
 	}
