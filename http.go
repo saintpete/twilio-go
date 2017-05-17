@@ -53,18 +53,19 @@ type Client struct {
 	AuthToken  string
 
 	// The API Client uses these resources
-	Accounts          *AccountService
-	Applications      *ApplicationService
-	Calls             *CallService
-	Conferences       *ConferenceService
-	IncomingNumbers   *IncomingNumberService
-	Keys              *KeyService
-	Media             *MediaService
-	Messages          *MessageService
-	OutgoingCallerIDs *OutgoingCallerIDService
-	Queues            *QueueService
-	Recordings        *RecordingService
-	Transcriptions    *TranscriptionService
+	Accounts              *AccountService
+	Applications          *ApplicationService
+	Calls                 *CallService
+	Conferences           *ConferenceService
+	IncomingNumbers       *IncomingNumberService
+	Keys                  *KeyService
+	Media                 *MediaService
+	Messages              *MessageService
+	OutgoingCallerIDs     *OutgoingCallerIDService
+	Queues                *QueueService
+	Recordings            *RecordingService
+	Transcriptions        *TranscriptionService
+	AvailablePhoneNumbers *AvailablePhoneNumberService
 
 	// NewMonitorClient initializes these services
 	Alerts *AlertService
@@ -198,6 +199,24 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 			pathPart: "TollFree",
 		},
 	}
+
+	c.AvailablePhoneNumbers = &AvailablePhoneNumberService {
+		Local: &AvailablePhoneNumberBase {
+			client: c,
+			pathPart: "Local",
+		},
+
+		Mobile: &AvailablePhoneNumberBase{
+			client: c,
+			pathPart: "Mobile",
+		},
+
+		TollFree: &AvailablePhoneNumberBase{
+			client: c,
+			pathPart: "TollFree",
+		},
+	}
+
 	return c
 }
 
