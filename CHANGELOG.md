@@ -1,5 +1,10 @@
 # Changes
 
+## 0.61
+
+Support the Available Phone Numbers API. Thanks to Maksym Pavlenko for
+contributing the patch.
+
 ## 0.59
 
 Support the Twilio Fax API.
