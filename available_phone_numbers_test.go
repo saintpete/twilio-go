@@ -12,12 +12,12 @@ func TestSearchAvailablePhoneNumbers(t *testing.T) {
 	client, server := getServer(availablePhoneNumbers)
 	defer server.Close()
 
-	data := url.Values{
-		"Contains":     []string{"571*******"},
-		"InRegion":     []string{"VA"},
-		"SmsEnabled":   []string{"true"},
-		"VoiceEnabled": []string{"true"},
-	}
+	data := url.Values{}
+	data.Set("Contains", "571*******")
+	data.Set("InRegion", "VA")
+	data.Set("SmsEnabled", "true")
+	data.Set("VoiceEnabled", "true")
+	data.Set("PageSize", "1")
 
 	res, err := client.AvailableNumbers.Local.GetPage(context.Background(), "US", data)
 	if err != nil {
@@ -28,11 +28,11 @@ func TestSearchAvailablePhoneNumbers(t *testing.T) {
 		t.Errorf("expected 1 number, got %d", len(res.Numbers))
 	}
 
-	if res.Numbers[0].FriendlyName != "(510) 564-7903" {
+	if res.Numbers[0].FriendlyName != "(571) 200-0596" {
 		t.Errorf("unexpected friendly name: %s", res.Numbers[0].FriendlyName)
 	}
 
-	if res.Numbers[0].PhoneNumber != "+15105647903" {
+	if res.Numbers[0].PhoneNumber != "+15712000596" {
 		t.Errorf("unexpected phone number: %s", res.Numbers[0].PhoneNumber)
 	}
 }

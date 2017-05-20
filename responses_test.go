@@ -2585,26 +2585,28 @@ var faxGetPageResponse = []byte(`
 
 var availablePhoneNumbers = []byte(`
 {
-  "uri": "\/2010-04-01\/Accounts\/AC6bc21af903cc765a9d7f7e0467ec812a\/AvailablePhoneNumbers\/US\/Local.json?AreaCode=510",
-  "available_phone_numbers": [
-    {
-      "friendly_name": "(510) 564-7903",
-      "phone_number": "+15105647903",
-      "lata": "722",
-      "rate_center": "OKLD TRNID",
-      "latitude": "37.780000",
-      "longitude": "-122.380000",
-      "region": "CA",
-      "postal_code": "94703",
-      "iso_country": "US",
-      "capabilities":{
-        "voice": true,
-        "SMS": true,
-        "MMS": false
-      },
-      "beta": false
-    }
-  ]
+    "available_phone_numbers": [
+        {
+            "address_requirements": "none",
+            "beta": false,
+            "capabilities": {
+                "MMS": true,
+                "SMS": true,
+                "fax": true,
+                "voice": true
+            },
+            "friendly_name": "(571) 200-0596",
+            "iso_country": "US",
+            "lata": "236",
+            "latitude": "38.804800",
+            "longitude": "-77.046900",
+            "phone_number": "+15712000596",
+            "postal_code": "22301",
+            "rate_center": "WSNGTNZN08",
+            "region": "VA"
+        }
+    ],
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/AvailablePhoneNumbers/US/Local.json?Contains=571%2A%2A%2A%2A%2A%2A%2A&InRegion=VA&PageSize=1&SmsEnabled=true&VoiceEnabled=true"
 }
 `)
 
