@@ -1,5 +1,9 @@
 # Changes
 
+## 0.62
+
+Fix error in release 0.61.
+
 ## 0.61
 
 Support the Available Phone Numbers API. Thanks to Maksym Pavlenko for
