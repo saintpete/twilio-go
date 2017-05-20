@@ -1,5 +1,9 @@
 # Changes
 
+## 0.63
+
+Support Update() for the IncomingPhoneNumber resource.
+
 ## 0.62
 
 Fix error in release 0.61.
