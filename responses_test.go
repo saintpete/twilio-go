@@ -67,6 +67,7 @@ func getServer(response []byte) (*Client, *Server) {
 	client.Monitor.Base = s.URL
 	client.Pricing.Base = s.URL
 	client.Fax.Base = s.URL
+	client.Wireless.Base = s.URL
 	return client, s
 }
 
@@ -74,8 +75,10 @@ func getServerCode(response []byte, code int) (*Client, *Server) {
 	s := newServer(response, code)
 	client := NewClient("AC123", "456", nil)
 	client.Base = s.URL
+	client.Fax.Base = s.URL
 	client.Monitor.Base = s.URL
 	client.Pricing.Base = s.URL
+	client.Wireless.Base = s.URL
 	return client, s
 }
 
@@ -2607,6 +2610,36 @@ var availablePhoneNumbers = []byte(`
         }
     ],
     "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/AvailablePhoneNumbers/US/Local.json?Contains=571%2A%2A%2A%2A%2A%2A%2A&InRegion=VA&PageSize=1&SmsEnabled=true&VoiceEnabled=true"
+}
+`)
+
+var simGetResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "commands_callback_method": "POST",
+    "commands_callback_url": null,
+    "date_created": "2017-06-22T21:44:48Z",
+    "date_updated": "2017-06-22T21:45:45Z",
+    "e_id": null,
+    "friendly_name": null,
+    "iccid": "8901260852290182427",
+    "links": {
+        "rate_plan": "https://wireless.twilio.com/v1/RatePlans/WPfaf4062b7697612c807c1d5e9316ffbc",
+        "usage_records": "https://wireless.twilio.com/v1/Sims/DEe10f758e920e43318ad80677505fcf90/UsageRecords"
+    },
+    "rate_plan_sid": "WPfaf4062b7697612c807c1d5e9316ffbc",
+    "sid": "DEe10f758e920e43318ad80677505fcf90",
+    "sms_fallback_method": null,
+    "sms_fallback_url": null,
+    "sms_method": null,
+    "sms_url": null,
+    "status": "active",
+    "unique_name": "iPhone v13",
+    "url": "https://wireless.twilio.com/v1/Sims/DEe10f758e920e43318ad80677505fcf90",
+    "voice_fallback_method": null,
+    "voice_fallback_url": null,
+    "voice_method": null,
+    "voice_url": null
 }
 `)
 
