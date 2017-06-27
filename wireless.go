@@ -87,6 +87,35 @@ type jsonDataUsage struct {
 	Units    string `json:"units"`
 }
 
+type jsonAllDataUsage struct {
+	Home                 *DataUsage   `json:"home"`
+	InternationalRoaming []*DataUsage `json:"international_roaming"`
+	NationalRoaming      *DataUsage   `json:"national_roaming"`
+	Download             int64        `json:"download"`
+	Total                int64        `json:"total"`
+	Upload               int64        `json:"upload"`
+	Units                string       `json:"units"`
+}
+
+func (d *AllDataUsage) UnmarshalJSON(data []byte) error {
+	mp := new(jsonAllDataUsage)
+	if err := json.Unmarshal(data, mp); err != nil {
+		return err
+	}
+	d.Home = mp.Home
+	d.InternationalRoaming = mp.InternationalRoaming
+	d.NationalRoaming = mp.NationalRoaming
+	if mp.Units != "bytes" {
+		return fmt.Errorf("twilio: unknown units parameter %q", mp.Units)
+	}
+	d.Units = "bytes"
+	// multiply by 8 to get bits
+	d.Download = types.Bits(mp.Download) * types.Byte
+	d.Upload = types.Bits(mp.Upload) * types.Byte
+	d.Total = types.Bits(mp.Total) * types.Byte
+	return nil
+}
+
 func (d *DataUsage) UnmarshalJSON(data []byte) error {
 	mp := new(jsonDataUsage)
 	if err := json.Unmarshal(data, mp); err != nil {
