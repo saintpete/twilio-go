@@ -1,5 +1,13 @@
 # Changes
 
+## 0.64
+
+Partial support for wireless.twilio.com endpoints, including the Sim resource
+and UsageRecords for Sims.
+
+This version of the library requires github.com/kevinburke/go-types version
+0.20 at least.
+
 ## 0.63
 
 Support Update() for the IncomingPhoneNumber resource.
