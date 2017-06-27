@@ -14,7 +14,8 @@
 //     2017-06-25: 50.062MB
 //     total (last 7 days): 408.568MB
 //
-// There are several options:
+// Your Twilio credentials are loaded from the TWILIO_ACCOUNT_SID and
+// TWILIO_AUTH_TOKEN environment variables. There are several flags:
 //
 //     --days int
 //          Change the number of days to report usage for (default 7)
