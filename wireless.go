@@ -2,7 +2,10 @@ package twilio
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/url"
+	"time"
 
 	types "github.com/kevinburke/go-types"
 )
@@ -40,6 +43,75 @@ type Sim struct {
 	Links      map[string]string `json:"links"`
 }
 
+type SimUsageRecord struct {
+	AccountSid string        `json:"account_sid"`
+	Commands   CommandsUsage `json:"commands"`
+	Data       AllDataUsage  `json:"data"`
+	Period     UsagePeriod   `json:"period"`
+	SimSid     string        `json:"sim_sid"`
+}
+
+type CommandsUsage struct {
+	CommandUsage
+	Home                 *CommandUsage   `json:"home"`
+	InternationalRoaming []*CommandUsage `json:"international_roaming"`
+	NationalRoaming      *CommandUsage   `json:"national_roaming"`
+}
+
+type CommandUsage struct {
+	FromSim uint64 `json:"from_sim"`
+	ToSim   uint64 `json:"to_sim"`
+	Total   uint64 `json:"total"`
+}
+
+type AllDataUsage struct {
+	// TODO: ugh, naming
+	DataUsage
+	Home                 *DataUsage   `json:"home"`
+	InternationalRoaming []*DataUsage `json:"international_roaming"`
+	NationalRoaming      *DataUsage   `json:"national_roaming"`
+}
+
+type DataUsage struct {
+	Download types.Bits `json:"download"`
+	Total    types.Bits `json:"total"`
+	Upload   types.Bits `json:"upload"`
+	Units    string     `json:"units"`
+}
+
+// for parsing from Twilio
+type jsonDataUsage struct {
+	Download int64  `json:"download"`
+	Total    int64  `json:"total"`
+	Upload   int64  `json:"upload"`
+	Units    string `json:"units"`
+}
+
+func (d *DataUsage) UnmarshalJSON(data []byte) error {
+	mp := new(jsonDataUsage)
+	if err := json.Unmarshal(data, mp); err != nil {
+		return err
+	}
+	if mp.Units != "bytes" {
+		return fmt.Errorf("twilio: unknown units parameter %q", mp.Units)
+	}
+	d.Units = "bytes"
+	d.Download = types.Bits(mp.Download)
+	d.Upload = types.Bits(mp.Upload)
+	d.Total = types.Bits(mp.Total)
+	return nil
+}
+
+type UsagePeriod struct {
+	Start time.Time `json:"start"`
+	End   time.Time `json:"end"`
+}
+
+type SimUsageRecordPage struct {
+	Meta         Meta              `json:"meta"`
+	UsageRecords []*SimUsageRecord `json:"usage_records"`
+}
+
 // SimPage represents a page of Sims.
 type SimPage struct {
 	Meta Meta   `json:"meta"`
@@ -51,6 +123,39 @@ func (s *SimService) Get(ctx context.Context, sid string) (*Sim, error) {
 	sim := new(Sim)
 	err := s.client.GetResource(ctx, simPathPart, sid, sim)
 	return sim, err
+}
+
+// GetUsageRecords finds a page of UsageRecord resources.
+func (s *SimService) GetUsageRecords(ctx context.Context, simSid string, data url.Values) (*SimUsageRecordPage, error) {
+	return s.GetUsageRecordsIterator(simSid, data).Next(ctx)
+}
+
+func (s *SimService) GetUsageRecordsIterator(simSid string, data url.Values) SimUsageRecordPageIterator {
+	// TODO this is messy
+	iter := NewPageIterator(s.client, data, simPathPart+"/"+simSid+"/UsageRecords")
+	return &simUsageRecordPageIterator{
+		p: iter,
+	}
+}
+
+type SimUsageRecordPageIterator interface {
+	// Next returns the next page of resources. If there are no more resources,
+	// NoMoreResults is returned.
+	Next(context.Context) (*SimUsageRecordPage, error)
+}
+
+type simUsageRecordPageIterator struct {
+	p *PageIterator
+}
+
+func (i *simUsageRecordPageIterator) Next(ctx context.Context) (*SimUsageRecordPage, error) {
+	ap := new(SimUsageRecordPage)
+	err := i.p.Next(ctx, ap)
+	if err != nil {
+		return nil, err
+	}
+	i.p.SetNextPageURI(ap.Meta.NextPageURL)
+	return ap, nil
 }
 
 // Update the sim with the given data. Valid parameters may be found here:
