@@ -18,12 +18,11 @@
 // TWILIO_AUTH_TOKEN environment variables. There are several flags:
 //
 //     --days int
-//          Change the number of days to report usage for (default 7)
+//         Change the number of days to report usage for (default 7)
 //     --location string
-//          Use a different timezone for day boundaries (example
-//          "America/Los_Angeles"
+//         Use a different timezone for day boundaries (example "America/Los_Angeles")
 //     --sim string
-//          Only fetch usage for this sim
+//         Only fetch usage for this sim
 package main
 
 import (
@@ -68,7 +67,8 @@ func main() {
 		}
 	}
 	c := twilio.NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	now := time.Now().In(loc)
+	now := time.Now().Add(24 * time.Hour).In(loc)
+	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	usage := make(map[string][]types.Bits)
 	iter := c.Wireless.Sims.GetPageIterator(nil)
 	sims := make([]string, 0)
