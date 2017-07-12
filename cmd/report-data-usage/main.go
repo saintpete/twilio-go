@@ -27,11 +27,9 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
-	"net/url"
 	"os"
 	"strings"
 	"sync"
@@ -39,6 +37,7 @@ import (
 
 	types "github.com/kevinburke/go-types"
 	twilio "github.com/kevinburke/twilio-go"
+	"github.com/kevinburke/twilio-go/datausage"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -67,9 +66,9 @@ func main() {
 		}
 	}
 	c := twilio.NewClient(os.Getenv("TWILIO_ACCOUNT_SID"), os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	now := time.Now().Add(24 * time.Hour).In(loc)
-	now = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	usage := make(map[string][]types.Bits)
+	end := time.Now().Add(24 * time.Hour).In(loc)
+	end = time.Date(end.Year(), end.Month(), end.Day(), 0, 0, 0, 0, end.Location())
+	start := end.Add(-time.Duration(*duration+1) * 24 * time.Hour)
 	iter := c.Wireless.Sims.GetPageIterator(nil)
 	sims := make([]string, 0)
 	if *sim != "" {
@@ -99,33 +98,19 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 31*time.Second)
 	defer cancel()
 	group, errctx := errgroup.WithContext(ctx)
+	usage := make(map[string][]types.Bits)
 	for _, name := range sims {
 		name := name
-		usage[name] = make([]types.Bits, *duration)
-		for i := int(*duration - 1); i >= 0; i-- {
-			i := i
-			group.Go(func() error {
-				start := now.Add(-time.Duration(i+1) * 24 * time.Hour)
-				end := now.Add(-time.Duration(i) * 24 * time.Hour)
-				page, err := c.Wireless.Sims.GetUsageRecords(errctx, name, url.Values{
-					"Start": []string{start.Format(time.RFC3339)},
-					"End":   []string{end.Format(time.RFC3339)},
-				})
-				if err != nil {
-					return err
-				}
-				if len(page.UsageRecords) == 0 {
-					return errors.New("no usage records for date range")
-				}
-				if len(page.UsageRecords) > 1 {
-					return errors.New("too many usage records for date range")
-				}
-				mu.Lock()
-				usage[name][i] = page.UsageRecords[0].Data.Total
-				mu.Unlock()
-				return nil
-			})
-		}
+		group.Go(func() error {
+			u, err := datausage.GetUsage(errctx, c, name, start, end, 24*time.Hour)
+			if err != nil {
+				return err
+			}
+			mu.Lock()
+			usage[name] = u
+			mu.Unlock()
+			return nil
+		})
 	}
 	if err := group.Wait(); err != nil {
 		log.Fatal(err)
@@ -134,7 +119,7 @@ func main() {
 		total := types.Bits(0)
 		fmt.Printf("%s\n%s\n", name, strings.Repeat("-", len(name)))
 		for i := int(*duration - 1); i >= 0; i-- {
-			t := now.Add(-time.Duration(i+1) * 24 * time.Hour)
+			t := end.Add(-time.Duration(i+1) * 24 * time.Hour)
 			fmt.Printf("%s: %s\n", t.Format("2006-01-02"), usage[name][i])
 			total += usage[name][i]
 		}
