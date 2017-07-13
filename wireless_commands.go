@@ -87,7 +87,7 @@ func (c *CommandService) Create(ctx context.Context, data url.Values) (*Command,
 // Send a command to a device identified by sid. This is a wrapper around
 // Create(); to provide optional parameters, use Create directly.
 func (c *CommandService) Send(ctx context.Context, sid string, text string) (*Command, error) {
-	var v url.Values
+	v := url.Values{}
 	v.Set("Sim", sid)
 	v.Set("Command", text)
 	return c.Create(context.Background(), v)
