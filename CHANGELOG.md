@@ -1,5 +1,12 @@
 # Changes
 
+## 0.65
+
+Support the Commands Wireless API.
+
+Add cmd/report-data-usage and cmd/report-data-usage-server for reporting recent
+data usage for Sims.
+
 ## 0.64
 
 Partial support for wireless.twilio.com endpoints, including the Sim resource
