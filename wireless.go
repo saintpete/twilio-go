@@ -109,7 +109,7 @@ func (d *AllDataUsage) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("twilio: unknown units parameter %q", mp.Units)
 	}
 	d.Units = "bytes"
-	// multiply by 8 to get bits
+	// multiply bytes by 8 to get bits
 	d.Download = types.Bits(mp.Download) * types.Byte
 	d.Upload = types.Bits(mp.Upload) * types.Byte
 	d.Total = types.Bits(mp.Total) * types.Byte

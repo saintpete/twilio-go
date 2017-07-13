@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -27,6 +28,7 @@ const Version = "0.1"
 var duration = flag.Uint("days", 7, "Number of days to get usage for")
 var location = flag.String("location", "", "Timezone to use (defaults to system location/TZ env var)")
 var sim = flag.String("sim", "", "Load data about a specific Sim/unique name only")
+var dryRun = flag.Bool("dry-run", false, "Dry run mode")
 
 func init() {
 	flag.Usage = func() {
@@ -34,6 +36,18 @@ func init() {
 `)
 		flag.PrintDefaults()
 	}
+}
+
+func create(ctx context.Context, c *twilio.Client, simSid string, txt string) error {
+	if *dryRun {
+		fmt.Fprintf(os.Stderr, "would have sent command:\n%s\n\nto sid %q\n\n", txt, simSid)
+		return nil
+	}
+	_, err := c.Wireless.Commands.Create(ctx, url.Values{
+		"Sim":     []string{simSid},
+		"Command": []string{txt},
+	})
+	return err
 }
 
 func main() {
@@ -72,12 +86,37 @@ func main() {
 		}
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			w.Header().Set("Allow", "POST")
+			rest.NotAllowed(w, r)
+			return
+		}
+		// https://www.twilio.com/docs/api/wireless/rest-api/command#list-post
+		cmd := r.PostFormValue("Command")
+		if strings.ToLower(cmd) != "usage" {
+			// TODO figure out how to multiplex with other commands here.
+			rest.BadRequest(w, r, &rest.Error{
+				Title: fmt.Sprintf("unknown command %q", cmd),
+			})
+			return
+		}
+		simSid := r.PostFormValue("SimSid")
+		if !strings.HasPrefix(simSid, "DE") {
+			rest.BadRequest(w, r, &rest.Error{
+				Title: fmt.Sprintf("unknown sim sid %q", simSid),
+			})
+			return
+		}
 		days := *duration
 		if d := r.URL.Query().Get("days"); d != "" {
 			daysInt, err := strconv.ParseUint(d, 10, 64)
-			if err == nil {
-				days = uint(daysInt)
+			if err != nil {
+				rest.BadRequest(w, r, &rest.Error{
+					Title: err.Error(),
+				})
+				return
 			}
+			days = uint(daysInt)
 		}
 		end := time.Now().Add(24 * time.Hour).In(loc)
 		end = time.Date(end.Year(), end.Month(), end.Day(), 0, 0, 0, 0, end.Location())
@@ -112,10 +151,29 @@ func main() {
 				fmt.Fprintf(buf, "%s: %s\n", t.Format("2006-01-02"), usage[name][i])
 				total += usage[name][i]
 			}
-			fmt.Fprintf(buf, "total (last %d days): %s\n\n", days, total)
+			fmt.Fprintf(buf, "total (last %d days): %s", days, total)
 		}
-		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		w.Write(buf.Bytes())
+		out := buf.String()
+		var err error
+		for i := 0; i < len(out); i++ {
+			if len(out)-i < 160 {
+				// send the whole thing
+				err = create(ctx, c, simSid, out[i:])
+				i = len(out)
+			} else {
+				idx := strings.LastIndexByte(out[i:i+160], '\n')
+				if idx == -1 || idx == 0 {
+					idx = 160
+				}
+				err = create(ctx, c, simSid, out[i:i+idx])
+				i = i + idx
+			}
+			if err != nil {
+				rest.ServerError(w, r, err)
+				return
+			}
+		}
+		w.WriteHeader(204)
 	})
 	addr := ":4425"
 	ln, err := net.Listen("tcp", addr)

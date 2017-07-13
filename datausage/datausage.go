@@ -27,7 +27,7 @@ func GetUsage(ctx context.Context, client *twilio.Client, sim string, start, end
 	for {
 		count++
 		iter = iter.Add(interval)
-		if iter.After(end) {
+		if !iter.Before(end) {
 			break
 		}
 	}

@@ -92,7 +92,8 @@ type Client struct {
 	Faxes *FaxService
 
 	// NewWirelessClient initializes these services
-	Sims *SimService
+	Sims     *SimService
+	Commands *CommandService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -186,6 +187,7 @@ func NewWirelessClient(accountSid string, authToken string, httpClient *http.Cli
 	c := newNewClient(accountSid, authToken, WirelessBaseURL, httpClient)
 	c.APIVersion = WirelessVersion
 	c.Sims = &SimService{client: c}
+	c.Commands = &CommandService{client: c}
 	return c
 }
 

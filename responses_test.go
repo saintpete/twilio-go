@@ -2643,5 +2643,20 @@ var simGetResponse = []byte(`
 }
 `)
 
+var cmdCreateResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "command": "twilio-go testing!",
+    "command_mode": "text",
+    "date_created": "2017-07-13T15:49:02Z",
+    "date_updated": "2017-07-13T15:49:02Z",
+    "direction": "to_sim",
+    "sid": "DC5c94b39819e367e06417f695f138781f",
+    "sim_sid": "DEe10f758e920e43318ad80677505fcf90",
+    "status": "queued",
+    "url": "https://wireless.twilio.com/v1/Commands/DC5c94b39819e367e06417f695f138781f"
+}
+`)
+
 const from = "+19253920364"
 const to = "+19253920364"
