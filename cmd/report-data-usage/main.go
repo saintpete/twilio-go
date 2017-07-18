@@ -118,8 +118,8 @@ func main() {
 	for _, name := range sims {
 		total := types.Bits(0)
 		fmt.Printf("%s\n%s\n", name, strings.Repeat("-", len(name)))
-		for i := int(*duration - 1); i >= 0; i-- {
-			t := end.Add(-time.Duration(i+1) * 24 * time.Hour)
+		for i := 0; i < len(usage[name]); i++ {
+			t := start.Add(time.Duration(i) * 24 * time.Hour)
 			fmt.Printf("%s: %s\n", t.Format("2006-01-02"), usage[name][i])
 			total += usage[name][i]
 		}
