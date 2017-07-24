@@ -47,12 +47,16 @@ const WirelessVersion = "v1"
 // APIVersion; the resource representations may not match.
 const APIVersion = "2010-04-01"
 
+const NotifyBaseURL = "https://notify.twilio.com"
+const NotifyVersion = "v1"
+
 type Client struct {
 	*rest.Client
 	Monitor  *Client
 	Pricing  *Client
 	Fax      *Client
 	Wireless *Client
+	Notify   *Client
 
 	// FullPath takes a path part (e.g. "Messages") and
 	// returns the full API path, including the version (e.g.
@@ -94,6 +98,9 @@ type Client struct {
 	// NewWirelessClient initializes these services
 	Sims     *SimService
 	Commands *CommandService
+
+	// NewNotifyClient initializes these services
+	Credentials *NotifyCredentialsService
 }
 
 const defaultTimeout = 30*time.Second + 500*time.Millisecond
@@ -216,6 +223,13 @@ func NewPricingClient(accountSid string, authToken string, httpClient *http.Clie
 	return c
 }
 
+func NewNotifyClient(accountSid string, authToken string, httpClient *http.Client) *Client {
+	c := newNewClient(accountSid, authToken, NotifyBaseURL, httpClient)
+	c.APIVersion = NotifyVersion
+	c.Credentials = &NotifyCredentialsService{client: c}
+	return c
+}
+
 // NewClient creates a Client for interacting with the Twilio API. This is the
 // main entrypoint for API interactions; view the methods on the subresources
 // for more information.
@@ -238,6 +252,7 @@ func NewClient(accountSid string, authToken string, httpClient *http.Client) *Cl
 	c.Pricing = NewPricingClient(accountSid, authToken, httpClient)
 	c.Fax = NewFaxClient(accountSid, authToken, httpClient)
 	c.Wireless = NewWirelessClient(accountSid, authToken, httpClient)
+	c.Notify = NewNotifyClient(accountSid, authToken, httpClient)
 
 	c.Accounts = &AccountService{client: c}
 	c.Applications = &ApplicationService{client: c}
