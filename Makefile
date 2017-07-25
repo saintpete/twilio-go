@@ -9,7 +9,7 @@ BUMP_VERSION := $(shell command -v bump_version)
 STATICCHECK := $(shell command -v staticcheck)
 
 test: vet
-	bazel test --test_arg="-test.short" //...
+	bazel test --test_output=errors --test_arg="-test.short" //...
 
 vet:
 ifndef STATICCHECK
