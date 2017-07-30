@@ -1,5 +1,10 @@
 # Changes
 
+## 0.66
+
+Support the Notify Credentials API. Thanks to Maksym Pavlenko for implementing
+this change.
+
 ## 0.65
 
 Support the Commands Wireless API.
