@@ -31,7 +31,7 @@ func GetUsage(ctx context.Context, client *twilio.Client, sim string, start, end
 			break
 		}
 	}
-	list := make([]types.Bits, count, count)
+	list := make([]types.Bits, count)
 	group, errctx := errgroup.WithContext(ctx)
 	for i := 0; i < count; i++ {
 		i := i

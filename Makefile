@@ -6,17 +6,17 @@ SHELL = /bin/bash
 DIFFER := $(shell command -v differ)
 WRITE_MAILMAP := $(shell command -v write_mailmap)
 BUMP_VERSION := $(shell command -v bump_version)
-STATICCHECK := $(shell command -v staticcheck)
+MEGACHECK := $(shell command -v megacheck)
 
 test: vet
 	bazel test --test_output=errors --test_arg="-test.short" //...
 
 vet:
-ifndef STATICCHECK
-	go get -u honnef.co/go/tools/cmd/staticcheck
+ifndef MEGACHECK
+	go get -u honnef.co/go/tools/cmd/megacheck
 endif
 	go vet ./...
-	staticcheck ./...
+	megacheck --ignore='github.com/kevinburke/twilio-go/*.go:S1002' ./...
 
 race-test: vet
 	go test -race ./...

@@ -67,7 +67,6 @@ type Client struct {
 
 	AccountSid string
 	AuthToken  string
-	secretKey  string
 
 	// The API Client uses these resources
 	Accounts          *AccountService
@@ -143,7 +142,7 @@ func parseTwilioError(resp *http.Response) error {
 	return &rest.Error{
 		Title:      rerr.Message,
 		Type:       rerr.MoreInfo,
-		ID:         strconv.FormatInt(int64(rerr.Code), 10),
+		ID:         strconv.Itoa(rerr.Code),
 		StatusCode: resp.StatusCode,
 	}
 }
@@ -381,9 +380,7 @@ func (c *Client) ListResource(ctx context.Context, pathPart string, data url.Val
 // should be the full path, eg "/2010-04-01/.../Messages?Page=1&PageToken=..."
 func (c *Client) GetNextPage(ctx context.Context, fullUri string, v interface{}) error {
 	// for monitor etc.
-	if strings.HasPrefix(fullUri, c.Base) {
-		fullUri = fullUri[len(c.Base):]
-	}
+	fullUri = strings.TrimPrefix(fullUri, c.Base)
 	return c.MakeRequest(ctx, "GET", fullUri, nil, v)
 }
 

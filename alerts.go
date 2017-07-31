@@ -157,7 +157,7 @@ func (a *alertDateIterator) Next(ctx context.Context) (*AlertPage, error) {
 		if len(page.Alerts) == 0 {
 			return nil, NoMoreResults
 		}
-		times := make([]time.Time, len(page.Alerts), len(page.Alerts))
+		times := make([]time.Time, len(page.Alerts))
 		for i, alert := range page.Alerts {
 			if !alert.DateCreated.Valid {
 				// we really should not ever hit this case but if we can't parse

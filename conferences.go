@@ -129,7 +129,7 @@ func (c *conferenceDateIterator) Next(ctx context.Context) (*ConferencePage, err
 		if len(page.Conferences) == 0 {
 			return nil, NoMoreResults
 		}
-		times := make([]time.Time, len(page.Conferences), len(page.Conferences))
+		times := make([]time.Time, len(page.Conferences))
 		for i, conference := range page.Conferences {
 			if !conference.DateCreated.Valid {
 				// we really should not ever hit this case but if we can't parse

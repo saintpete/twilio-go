@@ -47,9 +47,7 @@ func (p *PageIterator) SetNextPageURI(npuri types.NullString) {
 		p.nextPageURI = npuri
 		return
 	}
-	if strings.HasPrefix(npuri.String, p.client.Base) {
-		npuri.String = npuri.String[len(p.client.Base):]
-	}
+	npuri.String = strings.TrimPrefix(npuri.String, p.client.Base)
 	p.nextPageURI = npuri
 }
 

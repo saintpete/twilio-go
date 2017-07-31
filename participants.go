@@ -5,9 +5,7 @@ package twilio
 //
 // https://github.com/saintpete/logrole/issues/4
 
-type ParticipantService struct {
-	client *Client
-}
+type ParticipantService struct{}
 
 type Participant struct {
 	AccountSid             string     `json:"account_sid"`
@@ -20,8 +18,4 @@ type Participant struct {
 	Muted                  bool       `json:"muted"`
 	StartConferenceOnEnter bool       `json:"start_conference_on_enter"`
 	URI                    string     `json:"uri"`
-}
-
-func participantPathPart(conferenceSid string) string {
-	return "Conferences/" + conferenceSid + "/Participants"
 }

@@ -226,7 +226,7 @@ func (c *callDateIterator) Next(ctx context.Context) (*CallPage, error) {
 		if len(page.Calls) == 0 {
 			return nil, NoMoreResults
 		}
-		times := make([]time.Time, len(page.Calls), len(page.Calls))
+		times := make([]time.Time, len(page.Calls))
 		for i, call := range page.Calls {
 			if !call.DateCreated.Valid {
 				// we really should not ever hit this case but if we can't parse

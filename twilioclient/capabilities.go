@@ -3,7 +3,6 @@ package twilioclient
 import (
 	"net/url"
 	"strings"
-	"sync"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -20,7 +19,6 @@ type Capability struct {
 	shouldBuildOutgoingScope bool
 	outgoingParams           map[string]string
 	appSid                   string
-	mu                       sync.Mutex
 }
 
 func NewCapability(sid, token string) *Capability {
@@ -30,16 +28,19 @@ func NewCapability(sid, token string) *Capability {
 	}
 }
 
-// Registers this client to accept incoming calls by the given `clientName`.
-// If your app TwiML <Dial>s `clientName`, this client will receive the call.
+// AllowClientIncoming registers this client to accept incoming calls by the
+// given `clientName`. If your app TwiML <Dial>s `clientName`, this client will
+// receive the call.
 func (c *Capability) AllowClientIncoming(clientName string) {
 	c.shouldBuildIncomingScope = true
 	c.incomingClientName = clientName
 }
 
-// Allows this client to call your application with id `appSid` (See https://www.twilio.com/user/account/apps).
-// When the call connects, Twilio will call your voiceUrl REST endpoint.
-// The `appParams` argument will get passed through to your voiceUrl REST endpoint as GET or POST parameters.
+// AllowClientOutgoing allows this client to call your application with id
+// `appSid` (See https://www.twilio.com/user/account/apps). When the call
+// connects, Twilio will call your voiceUrl REST endpoint. The `appParams`
+// argument will get passed through to your voiceUrl REST endpoint as GET or
+// POST parameters.
 func (c *Capability) AllowClientOutgoing(appSid string, appParams map[string]string) {
 	c.shouldBuildOutgoingScope = true
 	c.appSid = appSid
