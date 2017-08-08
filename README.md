@@ -38,8 +38,8 @@ client := twilio.NewClient(sid, token, nil)
 msg, err := client.Messages.SendMessage("+14105551234", "+14105556789", "Sent via go :) ✓", nil)
 
 // Start a phone call
-call, err := client.Calls.MakeCall("+14105551234", "+14105556789",
-        "https://kev.inburke.com/zombo/zombocom.mp3")
+var callURL, _ = url.Parse("https://kev.inburke.com/zombo/zombocom.mp3")
+call, err := client.Calls.MakeCall("+14105551234", "+14105556789", callURL)
 
 // Buy a number
 number, err := client.IncomingNumbers.BuyNumber("+14105551234")
