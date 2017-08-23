@@ -1,7 +1,7 @@
 .PHONY: test vet release
 
 # would be great to make the bash location portable but not sure how
-SHELL = /bin/bash
+SHELL = /bin/bash -o pipefail
 
 DIFFER := $(GOPATH)/bin/differ
 WRITE_MAILMAP := $(GOPATH)/bin/write_mailmap
