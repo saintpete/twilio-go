@@ -139,7 +139,7 @@ func TestGetMediaURLs(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(urls) != 1 {
-		t.Errorf("Wrong number of URLs returned: %d", len(urls))
+		t.Fatalf("Wrong number of URLs returned: %d", len(urls))
 	}
 	if !strings.HasPrefix(urls[0].String(), "https://s3-external-1.amazonaws.com/media.twiliocdn.com/"+sid) {
 		t.Errorf("wrong url: %s", urls[0].String())
