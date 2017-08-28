@@ -102,10 +102,8 @@ func (m *MessageService) SendMessage(from string, to string, body string, mediaU
 	v.Set("Body", body)
 	v.Set("From", from)
 	v.Set("To", to)
-	if mediaURLs != nil {
-		for _, mediaURL := range mediaURLs {
-			v.Add("MediaUrl", mediaURL.String())
-		}
+	for _, mediaURL := range mediaURLs {
+		v.Add("MediaUrl", mediaURL.String())
 	}
 	return m.Create(context.Background(), v)
 }
