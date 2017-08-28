@@ -46,7 +46,9 @@ release: race-test | $(DIFFER) $(BUMP_VERSION)
 	$(DIFFER) $(MAKE) authors
 	$(BUMP_VERSION) minor http.go
 
-AUTHORS.txt: | $(WRITE_MAILMAP)
+force: ;
+
+AUTHORS.txt: force | $(WRITE_MAILMAP)
 	$(WRITE_MAILMAP) > AUTHORS.txt
 
 authors: AUTHORS.txt
