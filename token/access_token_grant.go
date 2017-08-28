@@ -1,11 +1,13 @@
 package token
 
 const (
+	// See https://www.twilio.com/docs/api/chat/rest/messages#properties
+	// https://www.twilio.com/docs/api/rest/access-tokens
 	ipMessagingGrant   = "ip_messaging"
 	conversationsGrant = "rtc"
 	voiceGrant         = "voice"
 	videoGrant         = "video"
-	keyServiceSid      = "service_id"
+	keyServiceSid      = "service_sid"
 	keyEndpointId      = "endpoint_id"
 	keyDepRoleSide     = "deployment_role_sid"
 	keyPushCredSid     = "push_credential_sid"
