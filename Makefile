@@ -19,6 +19,7 @@ ci:
 		--test_output=errors \
 		--strategy=Javac=remote \
 		--profile=profile.out \
+		--noshow_progress --noshow_loading_progress \
 		--test_arg="-test.short" \
 		--features=race //... 2>&1 | ts '[%Y-%m-%d %H:%M:%.S]'
 	bazel analyze-profile --curses=no --noshow_progress profile.out
