@@ -58,7 +58,7 @@ func (c *Capability) AllowEventStream(filters map[string]string) {
 
 type customClaim struct {
 	*jwt.StandardClaims
-	Scope string
+	Scope string `json:"scope"`
 }
 
 // Generate the twilio capability token. Deliver this token to your
