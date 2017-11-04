@@ -1,9 +1,11 @@
-git_repository(
+http_archive(
     name = "io_bazel_rules_go",
-    remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.5.5",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.7.0/rules_go-0.7.0.tar.gz",
+    sha256 = "91fca9cf860a1476abdc185a5f675b641b60d3acf0596679a27b580af60bf19c",
 )
-load("@io_bazel_rules_go//go:def.bzl", "go_prefix", "go_repositories", "go_repository")
+load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains", "go_repository")
+go_rules_dependencies()
+go_register_toolchains()
 
 go_repository(
     name = "org_golang_x_sync",
@@ -88,8 +90,8 @@ go_repository(
 go_repository(
     name = "com_github_kevinburke_go_types",
     importpath = "github.com/kevinburke/go-types",
-    urls = ["https://codeload.github.com/kevinburke/go-types/zip/b18e9f7d9bc3a85b05fe225581b43af00bbc9d4c"],
-    strip_prefix = "go-types-b18e9f7d9bc3a85b05fe225581b43af00bbc9d4c",
+    urls = ["https://codeload.github.com/kevinburke/go-types/zip/d767d076b02bff3b9458aae3ae7170740c252823"],
+    strip_prefix = "go-types-d767d076b02bff3b9458aae3ae7170740c252823",
     type = "zip",
 )
 
@@ -125,4 +127,8 @@ go_repository(
     type = "zip",
 )
 
-go_repositories()
+go_repository(
+    name = "in_gopkg_mgo_v2",
+    importpath = "gopkg.in/mgo.v2",
+    commit = "3f83fa5005286a7fe593b055f0d7771a7dce4655",
+)

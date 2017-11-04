@@ -3,7 +3,7 @@
 # would be great to make the bash location portable but not sure how
 SHELL = /bin/bash -o pipefail
 
-BAZEL_VERSION := 0.6.1
+BAZEL_VERSION := 0.7.0
 BAZEL_DEB := bazel_$(BAZEL_VERSION)_amd64.deb
 
 DIFFER := $(GOPATH)/bin/differ
