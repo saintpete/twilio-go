@@ -1,8 +1,9 @@
 http_archive(
     name = "io_bazel_rules_go",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.7.0/rules_go-0.7.0.tar.gz",
-    sha256 = "91fca9cf860a1476abdc185a5f675b641b60d3acf0596679a27b580af60bf19c",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.9.0/rules_go-0.9.0.tar.gz",
+    sha256 = "4d8d6244320dd751590f9100cf39fd7a4b75cd901e1f3ffdfd6f048328883695",
 )
+
 load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies", "go_register_toolchains", "go_repository")
 go_rules_dependencies()
 go_register_toolchains()
@@ -90,16 +91,16 @@ go_repository(
 go_repository(
     name = "com_github_kevinburke_go_types",
     importpath = "github.com/kevinburke/go-types",
-    urls = ["https://codeload.github.com/kevinburke/go-types/zip/d767d076b02bff3b9458aae3ae7170740c252823"],
-    strip_prefix = "go-types-d767d076b02bff3b9458aae3ae7170740c252823",
+    urls = ["https://codeload.github.com/kevinburke/go-types/zip/19e2165c29024957a2e2f8cf450a0e663a3473e4"],
+    strip_prefix = "go-types-19e2165c29024957a2e2f8cf450a0e663a3473e4",
     type = "zip",
 )
 
 go_repository(
     name = "com_github_kevinburke_handlers",
     importpath = "github.com/kevinburke/handlers",
-    urls = ["https://codeload.github.com/kevinburke/handlers/zip/e10150b9bb90d0ddebf224c360affe4d52c6961d"],
-    strip_prefix = "handlers-e10150b9bb90d0ddebf224c360affe4d52c6961d",
+    urls = ["https://codeload.github.com/kevinburke/handlers/zip/06d9199656d509cc3b7fd0febd7013f54d1c5492"],
+    strip_prefix = "handlers-06d9199656d509cc3b7fd0febd7013f54d1c5492",
     type = "zip",
 )
 
@@ -112,11 +113,9 @@ go_repository(
 )
 
 go_repository(
-    name = "com_github_satori_go_uuid",
-    importpath = "github.com/satori/go.uuid",
-    urls = ["https://codeload.github.com/satori/go.uuid/zip/5bf94b69c6b68ee1b541973bb8e1144db23a194b"],
-    strip_prefix = "go.uuid-5bf94b69c6b68ee1b541973bb8e1144db23a194b",
-    type = "zip",
+    name = "com_github_kevinburke_go_uuid",
+    importpath = "github.com/kevinburke/go.uuid",
+    commit = "24443c65ec63d9e040fd4cedf0f1048b5d3544f7",
 )
 
 go_repository(

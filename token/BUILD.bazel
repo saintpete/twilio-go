@@ -18,8 +18,8 @@ go_test(
         "access_token_grant_test.go",
         "access_token_test.go",
     ],
+    embed = [":go_default_library"],
     importpath = "github.com/kevinburke/twilio-go/token",
-    library = ":go_default_library",
     deps = ["@com_github_dgrijalva_jwt_go//:go_default_library"],
 )
 

@@ -17,7 +17,7 @@ go_library(
 
 go_binary(
     name = "report-data-usage-server",
+    embed = [":go_default_library"],
     importpath = "github.com/kevinburke/twilio-go/cmd/report-data-usage-server",
-    library = ":go_default_library",
     visibility = ["//visibility:public"],
 )
