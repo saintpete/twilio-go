@@ -21,7 +21,7 @@ func ValidateIncomingRequest(host string, authToken string, req *http.Request) (
 	if err != nil {
 		return
 	}
-	err = validateIncomingRequest(host, authToken, req.URL.String(), req.Form, req.Header.Get("X-Twilio-Signature"))
+	err = validateIncomingRequest(host, authToken, req.URL.String(), req.PostForm, req.Header.Get("X-Twilio-Signature"))
 	if err != nil {
 		return
 	}
