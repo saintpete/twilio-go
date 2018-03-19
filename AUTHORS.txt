@@ -1,6 +1,7 @@
 Fabrizio Moscon <mosconfabrizio@gmail.com>
 Kevin Burke <kev@inburke.com>
 Leonel Quinteros <leonel.quinteros@gmail.com>
+MOZGIII <mike-n@narod.ru>
 Maksym Pavlenko <pavlenko.maksym@gmail.com>
 Marcus Westin <marcus.westin@gmail.com>
 Minko Gechev <mgechev@gmail.com>
