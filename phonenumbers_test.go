@@ -43,7 +43,7 @@ func TestBuyNumber(t *testing.T) {
 	if rerr.Title != expected {
 		t.Errorf("expected Title to be %s, got %s", expected, rerr.Title)
 	}
-	if rerr.StatusCode != 400 {
-		t.Errorf("expected StatusCode to be 400, got %d", rerr.StatusCode)
+	if rerr.Status != 400 {
+		t.Errorf("expected StatusCode to be 400, got %d", rerr.Status)
 	}
 }

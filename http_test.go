@@ -44,8 +44,8 @@ func Test404Error(t *testing.T) {
 	if rerr.Type != "https://www.twilio.com/docs/errors/20404" {
 		t.Errorf("expected Type to be a Twilio URL, got %s", rerr.Type)
 	}
-	if rerr.StatusCode != 404 {
-		t.Errorf("expected StatusCode to be 404, got %d", rerr.StatusCode)
+	if rerr.Status != 404 {
+		t.Errorf("expected StatusCode to be 404, got %d", rerr.Status)
 	}
 }
 
