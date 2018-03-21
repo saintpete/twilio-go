@@ -1,5 +1,9 @@
 # Changes
 
+## 1.0
+
+Update kevinburke/rest to version 2.0.
+
 ## 0.66
 
 Support the Notify Credentials API. Thanks to Maksym Pavlenko for implementing
