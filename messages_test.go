@@ -187,3 +187,41 @@ func TestStatusFriendly(t *testing.T) {
 		t.Errorf("expected In Progress.Friendly to equal In Progress, got %s", f)
 	}
 }
+
+var whatsappMessage = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "api_version": "2010-04-01",
+    "body": "Testing whatsapp integration! \ud83d\ude0e",
+    "date_created": "Sat, 04 Aug 2018 03:35:27 +0000",
+    "date_sent": null,
+    "date_updated": "Sat, 04 Aug 2018 03:35:27 +0000",
+    "direction": "outbound-api",
+    "error_code": null,
+    "error_message": null,
+    "from": "whatsapp:+14155238886",
+    "messaging_service_sid": null,
+    "num_media": "0",
+    "num_segments": "1",
+    "price": null,
+    "price_unit": null,
+    "sid": "SM75347b88e19f41fc8a83db8aa32e37ea",
+    "status": "queued",
+    "subresource_uris": {
+        "media": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM75347b88e19f41fc8a83db8aa32e37ea/Media.json"
+    },
+    "to": "whatsapp:+19253245555",
+    "uri": "/2010-04-01/Accounts/AC58f1e8f2b1c6b88ca90a012a4be0c279/Messages/SM75347b88e19f41fc8a83db8aa32e37ea.json"
+}
+`)
+
+func TestWhatsappMessageParsing(t *testing.T) {
+	t.Parallel()
+	m := new(Message)
+	if err := json.Unmarshal(whatsappMessage, m); err != nil {
+		t.Fatal(err)
+	}
+	if m.To.Local() != "(925) 324-5555" {
+		t.Errorf("bad Local: %v", m.To.Local())
+	}
+}
