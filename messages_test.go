@@ -17,7 +17,7 @@ func TestGet(t *testing.T) {
 	}
 	t.Parallel()
 	sid := "SM26b3b00f8def53be77c5697183bfe95e"
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	msg, err := envClient.Messages.Get(ctx, sid)
 	if err != nil {
@@ -33,7 +33,7 @@ func TestGetPage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	page, err := envClient.Messages.GetPage(ctx, url.Values{"PageSize": []string{"5"}})
 	if err != nil {
@@ -71,7 +71,7 @@ func TestGetMessage(t *testing.T) {
 		t.Skip("skipping HTTP request in short mode")
 	}
 	t.Parallel()
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	msg, err := envClient.Messages.Get(ctx, "SM5a52bc49b2354703bfdea7e92b44b385")
 	if err != nil {
@@ -115,8 +115,8 @@ func TestIterateAll(t *testing.T) {
 			break
 		}
 		count++
-		if count > 15 {
-			fmt.Println("count > 15")
+		if count > 20 {
+			fmt.Println("count > 20")
 			t.Fail()
 			break
 		}
@@ -132,7 +132,7 @@ func TestGetMediaURLs(t *testing.T) {
 	}
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	urls, err := envClient.Messages.GetMediaURLs(ctx, "MM89a8c4a6891c53054e9cd604922bfb61", nil)
 	if err != nil {

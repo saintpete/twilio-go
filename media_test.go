@@ -16,7 +16,7 @@ func TestGetURL(t *testing.T) {
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	// These are tied to Kevin's account, sorry I don't have a better way to do
 	// this.
@@ -40,7 +40,7 @@ func TestGetImage(t *testing.T) {
 	t.Parallel()
 	sid := os.Getenv("TWILIO_ACCOUNT_SID")
 	c := NewClient(sid, os.Getenv("TWILIO_AUTH_TOKEN"), nil)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	// These are tied to Kevin's account, sorry I don't have a better way to do
 	// this.
