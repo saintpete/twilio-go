@@ -1,5 +1,14 @@
 # Changes
 
+## 1.3
+
+Remove dependency on jwt-go (functionality is the same, we just generate JWT's
+by hand now.)
+
+## 1.2
+
+Fix key for ConferenceSid.
+
 ## 1.1
 
 Add video and video recordings API
