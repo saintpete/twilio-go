@@ -1,6 +1,7 @@
 package twilio
 
 import (
+	"flag"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -14,6 +15,7 @@ import (
 var envClient *Client
 
 func init() {
+	flag.Parse()
 	if !testing.Short() && os.Getenv("TWILIO_ACCOUNT_SID") == "" {
 		os.Stderr.WriteString("warning: no TWILIO_ACCOUNT_SID configured, HTTP tests will probably fail...\n\n")
 	}

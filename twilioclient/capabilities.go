@@ -1,12 +1,35 @@
 package twilioclient
 
 import (
+	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/json"
 	"net/url"
 	"strings"
 	"time"
-
-	jwt "github.com/dgrijalva/jwt-go"
 )
+
+type stdToken struct {
+	Audience  string `json:"aud,omitempty"`
+	ExpiresAt int64  `json:"exp,omitempty"`
+	ID        string `json:"jti,omitempty"`
+	IssuedAt  int64  `json:"iat,omitempty"`
+	Issuer    string `json:"iss,omitempty"`
+	NotBefore int64  `json:"nbf,omitempty"`
+	Subject   string `json:"sub,omitempty"`
+}
+
+const header = `{"alg":"HS256","typ":"JWT"}`
+
+var headerb64 []byte
+
+func init() {
+	headerb64 = make([]byte, base64.URLEncoding.EncodedLen(len(header)))
+	base64.URLEncoding.Encode(headerb64, []byte(header))
+	headerb64 = bytes.TrimRight(headerb64, "=")
+}
 
 type Capability struct {
 	accountSid   string
@@ -58,7 +81,7 @@ func (c *Capability) AllowEventStream(filters map[string]string) {
 }
 
 type customClaim struct {
-	*jwt.StandardClaims
+	*stdToken
 	Scope string `json:"scope"`
 }
 
@@ -70,14 +93,26 @@ func (c *Capability) GenerateToken(ttl time.Duration) (string, error) {
 	now := time.Now().UTC()
 	cc := &customClaim{
 		Scope: strings.Join(c.capabilities, " "),
-		StandardClaims: &jwt.StandardClaims{
+		stdToken: &stdToken{
 			ExpiresAt: now.Add(ttl).Unix(),
 			Issuer:    c.accountSid,
 			IssuedAt:  now.Unix(),
 		},
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, cc)
-	return token.SignedString([]byte(c.authToken))
+	data, err := json.Marshal(cc)
+	if err != nil {
+		return "", err
+	}
+	datab64 := make([]byte, base64.URLEncoding.EncodedLen(len(data)))
+	base64.URLEncoding.Encode(datab64, data)
+	datab64 = bytes.TrimRight(datab64, "=")
+	parts := append(headerb64, '.')
+	parts = append(parts, datab64...)
+	hasher := hmac.New(sha256.New, c.authToken)
+	hasher.Write(parts)
+
+	seg := string(parts) + "." + base64.URLEncoding.EncodeToString(hasher.Sum(nil))
+	return strings.TrimRight(seg, "="), nil
 }
 
 func (c *Capability) doBuildOutgoingScope() {

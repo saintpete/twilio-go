@@ -1,12 +1,16 @@
 package twilioclient
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
+
+type customTestClaim struct {
+	*jwt.StandardClaims
+	Scope string `json:"scope"`
+}
 
 func TestCapability(t *testing.T) {
 	t.Parallel()
@@ -16,8 +20,7 @@ func TestCapability(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(tok)
-	cc := new(customClaim)
+	cc := new(customTestClaim)
 	_, err = jwt.ParseWithClaims(tok, cc, func(tkn *jwt.Token) (interface{}, error) {
 		return []byte("123"), nil
 	})
