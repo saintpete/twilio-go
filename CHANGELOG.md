@@ -1,5 +1,9 @@
 # Changes
 
+## 1.4
+
+Add Supported Countries service. (via Andrei Schneider @megaherz)
+
 ## 1.3
 
 Remove dependency on jwt-go (functionality is the same, we just generate JWT's
