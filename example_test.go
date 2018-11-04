@@ -96,3 +96,9 @@ func ExampleFax() {
 	fax, _ := faxer.Faxes.Get(context.TODO(), "FX123")
 	fmt.Print(fax.Sid)
 }
+
+func ExampleNewTaskRouterClient() {
+	client := twilio.NewTaskRouterClient("AC123", "123", nil)
+	data := url.Values{"FriendlyName": []string{"On Call"}}
+	client.Workspace("WS123").Activities.Create(context.TODO(), data)
+}
