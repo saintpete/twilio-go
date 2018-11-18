@@ -2761,19 +2761,6 @@ var phoneLookupResponse = []byte(`
 }	
 `)
 
-var taskRouterActivityResponse = []byte(`
-{
-    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
-    "available": true,
-    "date_created": "2014-05-14T10:50:02Z",
-    "date_updated": "2014-05-14T23:26:06Z",
-    "friendly_name": "NewAvailableActivity",
-    "sid": "WAc74e6c39eb3080f8211d049a8b95611c",
-    "url": "https://taskrouter.twilio.com/v1/Workspaces/WS58f1e8f2b1c6b88ca90a012a4be0c279/Activities/WAc74e6c39eb3080f8211d049a8b95611c",
-    "workspace_sid": "WS58f1e8f2b1c6b88ca90a012a4be0c279"
-  }
-`)
-
 var roomResponse = []byte(`
 {
     "api_key_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
