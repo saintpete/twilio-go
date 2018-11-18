@@ -1,5 +1,9 @@
 # Changes
 
+## 1.5
+
+Add Task Router Activity API.
+
 ## 1.4
 
 Add Supported Countries service. (via Andrei Schneider @megaherz)
