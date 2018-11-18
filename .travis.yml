@@ -3,12 +3,18 @@ go_import_path: github.com/kevinburke/twilio-go
 
 os: linux
 dist: trusty
+sudo: false
 
 before_script:
   - go get -u -t ./...
 
 script:
   - make race-test-short
+
+go:
+  - 1.10.x
+  - 1.11.x
+  - master
 
 cache:
   directories:
