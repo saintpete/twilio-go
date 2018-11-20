@@ -84,3 +84,47 @@ var TaskQueueCreateResponse = []byte(`
     "workspace_sid": "WS7a2aa7d8acc191786ad3c647c5fc3110"
   }
 `)
+
+var WorkflowResponse = []byte(`
+{
+    "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+    "assignment_callback_url": "http://example.com",
+    "configuration": "{\"task_routing\":{\"default_filter\":{\"queue\":\"WQ0c1274082082355320d8a41f94eb57aa\"}}}",
+    "date_created": "2014-05-14T10:50:02Z",
+    "date_updated": "2014-05-14T23:26:06Z",
+    "document_content_type": "application/json",
+    "fallback_assignment_callback_url": null,
+    "friendly_name": "Default Fifo Workflow",
+    "sid": "WW63868a235fc1cf3987e6a2b67346273f",
+    "task_reservation_timeout": 120,
+    "url": "https://taskrouter.twilio.com/v1/Workspaces/WS58f1e8f2b1c6b88ca90a012a4be0c279/Workflows/WF63868a235fc1cf3987e6a2b67346273f",
+    "workspace_sid": "WS58f1e8f2b1c6b88ca90a012a4be0c279",
+    "links": {
+      "statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS58f1e8f2b1c6b88ca90a012a4be0c279/Workflows/WF63868a235fc1cf3987e6a2b67346273f/Statistics",
+      "real_time_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS58f1e8f2b1c6b88ca90a012a4be0c279/Workflows/WF63868a235fc1cf3987e6a2b67346273f/RealTimeStatistics",
+      "cumulative_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS58f1e8f2b1c6b88ca90a012a4be0c279/Workflows/WF63868a235fc1cf3987e6a2b67346273f/CumulativeStatistics"
+    }
+  }
+`)
+
+var WorkflowCreateResponse = []byte(`
+{
+  "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+  "assignment_callback_url": "http://example.com",
+  "configuration": "{\"task_routing\":{\"default_filter\":{\"queue\":\"WQ0c1274082082355320d8a41f94eb57aa\"}}}",
+  "date_created": "2014-05-14T10:50:02Z",
+  "date_updated": "2014-05-14T23:26:06Z",
+  "document_content_type": "application/json",
+  "fallback_assignment_callback_url": "http://example2.com",
+  "friendly_name": "Sales, Marketing, Support Workflow",
+  "sid": "WW7a2aa7d8acc191786ad3c647c5fc3110",
+  "task_reservation_timeout": 30,
+  "url": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workflows/WF7a2aa7d8acc191786ad3c647c5fc3110",
+  "workspace_sid": "WS7a2aa7d8acc191786ad3c647c5fc3110",
+  "links": {
+    "statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workflows/WF7a2aa7d8acc191786ad3c647c5fc3110/Statistics",
+    "real_time_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workflows/WF7a2aa7d8acc191786ad3c647c5fc3110/RealTimeStatistics",
+    "cumulative_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workflows/WF7a2aa7d8acc191786ad3c647c5fc3110/CumulativeStatistics"
+  }
+}
+`)
