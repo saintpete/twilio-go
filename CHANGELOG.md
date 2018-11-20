@@ -1,5 +1,9 @@
 # Changes
 
+## 1.6
+
+Add Task Router TaskQueue API.
+
 ## 1.5
 
 Add Task Router Activity API.
