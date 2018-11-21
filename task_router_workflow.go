@@ -33,7 +33,7 @@ type Workflow struct {
 
 type WorkflowPage struct {
 	Page
-	Workflows []*Workflow `json:"workers"`
+	Workflows []*Workflow `json:"workflows"`
 }
 
 // Get retrieves a Workflow by its sid.
