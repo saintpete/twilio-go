@@ -1,5 +1,9 @@
 # Changes
 
+## 1.7
+
+Add Task Router Workflow API.
+
 ## 1.6
 
 Add Task Router TaskQueue API.
