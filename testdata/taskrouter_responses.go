@@ -128,3 +128,59 @@ var WorkflowCreateResponse = []byte(`
   }
 }
 `)
+
+var WorkerResponse = []byte(`
+{
+  "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+  "activity_name": "available",
+  "activity_sid": "WA58f1e8f2b1c6b88ca90a012a4be0c279",
+  "attributes": "{\"type\":\"support\"}",
+  "available": false,
+  "date_created": "2017-05-30T23:32:39Z",
+  "date_status_changed": "2017-05-30T23:32:39Z",
+  "date_updated": "2017-05-30T23:32:39Z",
+  "friendly_name": "NewWorker3",
+  "sid": "WK7a2aa7d8acc191786ad3c647c5fc3119",
+  "url": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119",
+  "workspace_sid": "WS7a2aa7d8acc191786ad3c647c5fc3110",
+  "links": {
+    "channels": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Channels",
+    "activity": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Activities/WK7a2aa7d8acc191786ad3c647c5fc3119",
+    "workspace": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110",
+    "statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/Statistics",
+    "real_time_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/RealTimeStatistics",
+    "cumulative_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/CumulativeStatistics",
+    "worker_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Statistics",
+    "worker_channels": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Channels",
+    "reservations": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Reservations"
+  }
+}
+`)
+
+var WorkerCreateResponse = []byte(`
+{
+  "account_sid": "AC58f1e8f2b1c6b88ca90a012a4be0c279",
+  "activity_name": "available",
+  "activity_sid": "WA58f1e8f2b1c6b88ca90a012a4be0c279",
+  "attributes": "{\"type\":\"support\"}",
+  "available": false,
+  "date_created": "2017-05-30T23:32:39Z",
+  "date_status_changed": "2017-05-30T23:32:39Z",
+  "date_updated": "2017-05-30T23:32:39Z",
+  "friendly_name": "Support Worker 1",
+  "sid": "WK7a2aa7d8acc191786ad3c647c5fc3119",
+  "url": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119",
+  "workspace_sid": "WS7a2aa7d8acc191786ad3c647c5fc3110",
+  "links": {
+    "channels": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Channels",
+    "activity": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Activities/WK7a2aa7d8acc191786ad3c647c5fc3119",
+    "workspace": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110",
+    "statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/Statistics",
+    "real_time_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/RealTimeStatistics",
+    "cumulative_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/CumulativeStatistics",
+    "worker_statistics": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Statistics",
+    "worker_channels": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Channels",
+    "reservations": "https://taskrouter.twilio.com/v1/Workspaces/WS7a2aa7d8acc191786ad3c647c5fc3110/Workers/WK7a2aa7d8acc191786ad3c647c5fc3119/Reservations"
+  }
+}
+`)

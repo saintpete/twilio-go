@@ -92,6 +92,11 @@ The API is unlikely to change, and currently covers these resources:
 - Pricing
 - Queues
 - Recordings
+- Task Router
+  - Activities
+  - TaskQueues
+  - Workers
+  - Workflows
 - Transcriptions
 - Wireless
 - Access Tokens for IPMessaging, Video and Programmable Voice SDK

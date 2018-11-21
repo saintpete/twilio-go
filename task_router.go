@@ -5,4 +5,5 @@ type WorkspaceService struct {
 	Activities *ActivityService
 	Queues     *TaskQueueService
 	Workflows  *WorkflowService
+	Workers    *WorkerService
 }
