@@ -15,7 +15,7 @@ func TestGetMessagePrice(t *testing.T) {
 	expectedCountryName := "United Kingdom"
 	expectedPriceUnit := "USD"
 
-	messagePrice, err := client.Pricing.Messaging.Countries.Get(context.Background(), isoCountry)
+	messagePrice, err := client.Pricing.Messaging.Countries.Get(context.Background(), isoCountry, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -15,7 +15,7 @@ func TestGetPhoneNumberPriceGB(t *testing.T) {
 	expectedCountryName := "United Kingdom"
 	expectedPriceUnit := "USD"
 
-	numPrice, err := client.Pricing.PhoneNumbers.Countries.Get(context.Background(), isoCountry)
+	numPrice, err := client.Pricing.PhoneNumbers.Countries.Get(context.Background(), isoCountry, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

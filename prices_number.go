@@ -21,7 +21,7 @@ type PhoneNumberPrice struct {
 	NumberType   string `json:"number_type"`
 }
 
-type NumberPrice struct {
+type NumberPrices struct {
 	Country           string             `json:"country"`
 	IsoCountry        string             `json:"iso_country"`
 	PhoneNumberPrices []PhoneNumberPrice `json:"phone_number_prices"`
@@ -41,9 +41,9 @@ type CountriesPricePage struct {
 }
 
 // returns the phone number price by country
-func (cpnps *CountryPhoneNumberPriceService) Get(ctx context.Context, isoCountry string) (*NumberPrice, error) {
-	numberPrice := new(NumberPrice)
-	err := cpnps.client.GetResource(ctx, phoneNumbersPathPart+"/Countries", isoCountry, numberPrice)
+func (cpnps *CountryPhoneNumberPriceService) Get(ctx context.Context, isoCountry string, data url.Values) (*NumberPrices, error) {
+	numberPrice := new(NumberPrices)
+	err := cpnps.client.ListResource(ctx, phoneNumbersPathPart+"/Countries/"+isoCountry, data, numberPrice)
 	return numberPrice, err
 }
 

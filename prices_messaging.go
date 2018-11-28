@@ -22,7 +22,7 @@ type OutboundSMSPrice struct {
 	Prices  []InboundPrice `json:"prices"`
 }
 
-type MessagePrice struct {
+type MessagePrices struct {
 	Country           string             `json:"country"`
 	IsoCountry        string             `json:"iso_country"`
 	OutboundSMSPrices []OutboundSMSPrice `json:"outbound_sms_prices"`
@@ -32,9 +32,9 @@ type MessagePrice struct {
 }
 
 // returns the message price by country
-func (cmps *CountryMessagingPriceService) Get(ctx context.Context, isoCountry string) (*MessagePrice, error) {
-	messagePrice := new(MessagePrice)
-	err := cmps.client.GetResource(ctx, messagingPathPart+"/Countries", isoCountry, messagePrice)
+func (cmps *CountryMessagingPriceService) Get(ctx context.Context, isoCountry string, data url.Values) (*MessagePrices, error) {
+	messagePrice := new(MessagePrices)
+	err := cmps.client.ListResource(ctx, messagingPathPart+"/Countries/"+isoCountry, data, messagePrice)
 	return messagePrice, err
 }
 

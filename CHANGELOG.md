@@ -1,5 +1,29 @@
 # Changes
 
+## 2.0
+
+Update Pricing API to v2. This is a breaking change.
+
+To upgrade from the v1 Pricing API:
+
+* `VoicePrice` is now `VoicePrices`.
+* `VoiceNumberPrice` is now `VoiceNumberPrices`.
+* `NumberPrice` is now `NumberPrices`.
+* `MessagePrice` is now `MessagePrices`
+* The `Prefixes` field in the `PrefixPrice` struct is now `DestinationPrefixes`.
+* `OriginationPrefixes` field has been added to the `PrefixPrice` struct.
+* The `OutboundCallPrice` field in the `VoiceNumberPrices` struct is now
+`OutboundCallPrices`. Add the old `OutboundCallPrice` as the first entry in the
+array.
+* `OriginationPrefixes` field has been added to the `OutboundCallPrice` struct.
+
+* `NumberVoicePriceService.Get` now has 2 parameters: `destinationNumber` and
+`data` url.Values. `destinationNumber` is same as the previous `number` field.
+`data` can contain additional parameters like `OriginationNumber`.
+* Several other `*PriceService.Get` functions now have a third `url.Values`
+  parameter. Pass `nil` for this third parameter to maintain compatibility with
+  the v1 API.
+
 ## 1.8
 
 Add Task Router Workers API.
