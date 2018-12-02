@@ -15,7 +15,7 @@ import (
 )
 
 // The twilio-go version. Run "make release" to bump this number.
-const Version = "1.8"
+const Version = "2.0"
 const userAgent = "twilio-go/" + Version
 
 // The base URL serving the API. Override this for testing.
