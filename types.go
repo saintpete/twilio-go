@@ -14,19 +14,23 @@ import (
 	"github.com/ttacon/libphonenumber"
 )
 
+// DefaultRegion is the region used to parse phone numbers without a leading
+// international prefix.
+var DefaultRegion = "US"
+
 type PhoneNumber string
 
 var ErrEmptyNumber = errors.New("twilio: The provided phone number was empty")
 
 // NewPhoneNumber parses the given value as a phone number or returns an error
-// if it cannot be parsed as one. If a phone number does not begin with a plus
-// sign, we assume it's a US national number. Numbers are stored in E.164
-// format.
+// if it cannot be parsed as one. If a phone number does not begin with a
+// plus sign, we assume it's a national number in the region specified by
+// DefaultRegion. Numbers are stored in E.164 format.
 func NewPhoneNumber(pn string) (PhoneNumber, error) {
 	if len(pn) == 0 {
 		return "", ErrEmptyNumber
 	}
-	num, err := libphonenumber.Parse(pn, "US")
+	num, err := libphonenumber.Parse(pn, DefaultRegion)
 	// Add some better error messages - the ones in libphonenumber are generic
 	switch {
 	case err == libphonenumber.ErrNotANumber:
