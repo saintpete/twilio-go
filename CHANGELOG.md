@@ -1,5 +1,14 @@
 # Changes
 
+## 2.1
+
+- Support deleting messages via `client.Messages.Delete(sid)`.
+
+- Support a different default region for local phone number parsing than "US" by
+  overriding the value of `twilio.DefaultRegion` in an init function.
+
+Thanks Kevin Golding for the suggestions and issue reports.
+
 ## 2.0
 
 Update Pricing API to v2. This is a breaking change.
