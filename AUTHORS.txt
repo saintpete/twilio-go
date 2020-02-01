@@ -4,6 +4,7 @@ Duncan Crawford <duncan@noughtsandones.co.uk>
 Elijah Oyekunle <eloyekunle@gmail.com>
 Fabrizio Moscon <mosconfabrizio@gmail.com>
 Josh Hornby <hello@joshhornby.co.uk>
+Kelmer Perez <kperez@wyzant.com>
 Kevin Burke <kevin@burke.dev>
 Kevin Golding <kevin@kgolding.co.uk>
 Leonel Quinteros <leonel.quinteros@gmail.com>
