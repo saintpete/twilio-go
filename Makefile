@@ -39,7 +39,7 @@ release: race-test | $(DIFFER) $(BUMP_VERSION)
 
 force: ;
 
-AUTHORS.txt: force | $(WRITE_MAILMAP)
+AUTHORS.txt: .mailmap force | $(WRITE_MAILMAP)
 	$(WRITE_MAILMAP) > AUTHORS.txt
 
 authors: AUTHORS.txt
