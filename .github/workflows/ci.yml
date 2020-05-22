@@ -22,5 +22,5 @@ jobs:
       run: go get -t -v ./...
       working-directory: './src/github.com/kevinburke/twilio-go'
     - name: Run tests
-      run: make race-test-short
+      run: make lint race-test-short
       working-directory: './src/github.com/kevinburke/twilio-go'
