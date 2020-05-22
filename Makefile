@@ -6,26 +6,26 @@ SHELL = /bin/bash -o pipefail
 DIFFER := $(GOPATH)/bin/differ
 WRITE_MAILMAP := $(GOPATH)/bin/write_mailmap
 BUMP_VERSION := $(GOPATH)/bin/bump_version
-MEGACHECK := $(GOPATH)/bin/megacheck
+STATICCHECK := $(GOPATH)/bin/staticcheck
 
 test: lint
 	go test ./...
 
 $(BUMP_VERSION):
-	go get github.com/Shyp/bump_version
+	go get github.com/kevinburke/bump_version
 
 $(DIFFER):
 	go get github.com/kevinburke/differ
 
-$(MEGACHECK):
-	go get honnef.co/go/tools/cmd/megacheck
+$(STATICCHECK):
+	go get honnef.co/go/tools/cmd/staticcheck
 
 $(WRITE_MAILMAP):
 	go get github.com/kevinburke/write_mailmap
 
-lint: | $(MEGACHECK)
+lint: | $(STATICCHECK)
 	go vet ./...
-	$(MEGACHECK) --ignore='github.com/kevinburke/twilio-go/*.go:S1002' ./...
+	$(STATICCHECK) ./...
 
 race-test: vet
 	go test -race ./...
