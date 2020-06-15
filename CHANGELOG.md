@@ -7,11 +7,12 @@ Date Created, which broke our GetCallsInRange in-memory filtering. Use StartTime
 as the sort order key if present, falling back to DateCreated. Update the tests
 to match.
 
-Add the Programmable Grant chat token type.
+Add Programmable Grant chat type to the list of tokens. Thanks Kelmer Perez for
+the patch.
 
 ## 2.2
 
-Implement the Verify API.
+Implement Twilio Verify API. Thanks Elijah Oyekunle for the patch.
 
 ## 2.1
 
