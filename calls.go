@@ -234,11 +234,17 @@ func (c *callDateIterator) Next(ctx context.Context) (*CallPage, error) {
 				// a list of calls that may or may not be in the time range
 				return nil, fmt.Errorf("Couldn't verify the date of call: %#v", call)
 			}
-			times[i] = call.DateCreated.Time
+			// not ideal but the start time field is not guaranteed to be
+			// populated.
+			if call.StartTime.Valid {
+				times[i] = call.StartTime.Time
+			} else {
+				times[i] = call.DateCreated.Time
+			}
 		}
 		if containsResultsInRange(c.start, c.end, times) {
 			indexesToDelete := indexesOutsideRange(c.start, c.end, times)
-			// reverse order so we don't delete the wrong index
+			// iterate in descending order so we don't delete the wrong index
 			for i := len(indexesToDelete) - 1; i >= 0; i-- {
 				index := indexesToDelete[i]
 				page.Calls = append(page.Calls[:index], page.Calls[index+1:]...)

@@ -1,5 +1,18 @@
 # Changes
 
+## 2.3
+
+The Twilio Calls API recently started returning calls by StartTime instead of by
+Date Created, which broke our GetCallsInRange in-memory filtering. Use StartTime
+as the sort order key if present, falling back to DateCreated. Update the tests
+to match.
+
+Add the Programmable Grant chat token type.
+
+## 2.2
+
+Implement the Verify API.
+
 ## 2.1
 
 - Support deleting messages via `client.Messages.Delete(sid)`.
