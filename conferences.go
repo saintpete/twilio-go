@@ -21,12 +21,14 @@ type Conference struct {
 	Status       Status `json:"status"`
 	FriendlyName string `json:"friendly_name"`
 	// The conference region, probably "us1"
-	Region      string     `json:"region"`
-	DateCreated TwilioTime `json:"date_created"`
-	AccountSid  string     `json:"account_sid"`
-	APIVersion  string     `json:"api_version"`
-	DateUpdated TwilioTime `json:"date_updated"`
-	URI         string     `json:"uri"`
+	Region                  string            `json:"region"`
+	DateCreated             TwilioTime        `json:"date_created"`
+	AccountSid              string            `json:"account_sid"`
+	APIVersion              string            `json:"api_version"`
+	DateUpdated             TwilioTime        `json:"date_updated"`
+	URI                     string            `json:"uri"`
+	SubresourceURIs         map[string]string `json:"subresource_uris"`
+	CallSidEndingConference types.NullString  `json:"call_sid_ending_conference"`
 }
 
 type ConferencePage struct {
