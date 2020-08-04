@@ -23,18 +23,28 @@ $(STATICCHECK):
 $(WRITE_MAILMAP):
 	go get github.com/kevinburke/write_mailmap
 
-lint: | $(STATICCHECK)
+lint: fmt | $(STATICCHECK)
 	go vet ./...
 	$(STATICCHECK) ./...
 
-race-test: vet
+race-test: lint
 	go test -race ./...
 
-race-test-short: vet
+race-test-short: lint
 	go test -short -race ./...
+
+fmt:
+	go fmt ./...
+
+ci: | $(DIFFER)
+	# would love to run differ make authors here, but Github doesn't check out
+	# the full history
+	$(DIFFER) $(MAKE) fmt
+	$(MAKE) lint race-test-short
 
 release: race-test | $(DIFFER) $(BUMP_VERSION)
 	$(DIFFER) $(MAKE) authors
+	$(DIFFER) $(MAKE) fmt
 	$(BUMP_VERSION) minor http.go
 
 force: ;
