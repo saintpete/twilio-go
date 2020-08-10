@@ -1,5 +1,11 @@
 # Changes
 
+## 2.4
+
+Add Voice Insights API (thank you @yeoji)
+
+Add more fields to Conference struct (thank you @zmei95 for the issue report).
+
 ## 2.3
 
 The Twilio Calls API recently started returning calls by StartTime instead of by
