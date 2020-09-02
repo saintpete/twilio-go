@@ -107,7 +107,7 @@ func parseTwilioError(resp *http.Response) error {
 		Title:      rerr.Message,
 		Type:       rerr.MoreInfo,
 		ID:         strconv.FormatInt(int64(rerr.Code), 10),
-		StatusCode: resp.StatusCode,
+		Status: resp.StatusCode,
 	}
 }
 
