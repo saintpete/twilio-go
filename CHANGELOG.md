@@ -4,6 +4,9 @@
 
 Add "incoming" option for VoiceGrant.
 
+Tags in VoiceCallSummary are a []string, not a map[string]string (the docs have
+them as "null", so this wasn't clear).
+
 ## 2.5
 
 Use a new version of github.com/kevinburke/rest that reduces the number of
