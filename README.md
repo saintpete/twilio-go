@@ -155,8 +155,11 @@ Contact me: kevin@burke.services
 
 ## Donating
 
-Donations free up time to make improvements to the library, and respond to
-bug reports. You can send donations via Paypal's "Send Money" feature to
-kev@inburke.com. Donations are not tax deductible in the USA.
+Donations free up time to review pull requests, respond to bug reports, and
+add new features. In the absence of donations there are no guarantees about
+timeliness for reviewing or responding to proposed changes; I don't get paid
+by anyone else to work on this. You can send donations via Github's "Sponsor"
+mechanism or Paypal's "Send Money" feature to kev@inburke.com. Donations are not
+tax deductible in the USA.
 
 [zero-results]: https://github.com/saintpete/twilio-go/issues/8
