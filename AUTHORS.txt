@@ -12,6 +12,7 @@ Kelmer Perez <kperez@wyzant.com>
 Kevin Burke <kevin@burke.dev>
 Kevin Golding <kevin@kgolding.co.uk>
 Leonel Quinteros <leonel.quinteros@gmail.com>
+Lim Yue Chuan <shasderias@gmail.com>
 MOZGIII <mike-n@narod.ru>
 Maksym Pavlenko <pavlenko.maksym@gmail.com>
 Marcus Westin <marcus.westin@gmail.com>

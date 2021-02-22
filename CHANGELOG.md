@@ -7,6 +7,8 @@ Add "incoming" option for VoiceGrant.
 Tags in VoiceCallSummary are a []string, not a map[string]string (the docs have
 them as "null", so this wasn't clear).
 
+Segments, NumMedia and TwilioTime can be marshaled back to JSON as strings.
+
 ## 2.5
 
 Use a new version of github.com/kevinburke/rest that reduces the number of

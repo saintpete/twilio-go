@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"testing"
 	"time"
 )
@@ -145,6 +146,31 @@ func TestTwilioDuration(t *testing.T) {
 	}
 }
 
+var marshalUnmarshalTwilioDurationTests = []TwilioDuration{
+	0,
+	1 * TwilioDuration(time.Second),
+	88 * TwilioDuration(time.Second),
+}
+
+func TestMarshalUnmarshalTwilioDuration(t *testing.T) {
+	t.Parallel()
+	for _, tt := range marshalUnmarshalTwilioDurationTests {
+		b, err := json.Marshal(tt)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var td TwilioDuration
+		if err := json.Unmarshal(b, &td); err != nil {
+			t.Fatal(err)
+		}
+
+		if tt != td {
+			t.Fatalf("expected %d, got %d", tt, td)
+		}
+	}
+}
+
 var hdr = `"Transfer-Encoding=chunked&Server=cloudflare-nginx&CF-RAY=2f82bf9cb8102204-EWR&Set-Cookie=__cfduid%3Dd46f1cfd57d664c3038ae66f1c1de9e751477535661%3B+expires%3DFri%2C+27-Oct-17+02%3A34%3A21+GMT%3B+path%3D%2F%3B+domain%3D.inburke.com%3B+HttpOnly&Date=Thu%2C+27+Oct+2016+02%3A34%3A21+GMT&Content-Type=text%2Fhtml&CF-RAY=two"`
 
 func TestUnmarshalHeader(t *testing.T) {
@@ -164,5 +190,57 @@ func TestUnmarshalHeader(t *testing.T) {
 	}
 	if vals := h.Values["CF-RAY"]; vals[1] != "two" {
 		t.Errorf("expected second header to be 'two', got %v", vals[1])
+	}
+}
+
+var marshalUnmarshalSegmentsTests = []Segments{
+	0,
+	100,
+	math.MaxUint32,
+	Segments(^uint(0)),
+}
+
+func TestMarshalUnmarshalSegments(t *testing.T) {
+	t.Parallel()
+	for _, tt := range marshalUnmarshalSegmentsTests {
+		b, err := json.Marshal(tt)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var seg Segments
+		if err := json.Unmarshal(b, &seg); err != nil {
+			t.Fatal(err)
+		}
+
+		if tt != seg {
+			t.Fatalf("expected %d, got %d", tt, seg)
+		}
+	}
+}
+
+var marshalUnmarshalNumMediaTests = []NumMedia{
+	0,
+	100,
+	math.MaxUint32,
+	NumMedia(^uint(0)),
+}
+
+func TestMarshalUnmarshalNumMedia(t *testing.T) {
+	t.Parallel()
+	for _, tt := range marshalUnmarshalNumMediaTests {
+		b, err := json.Marshal(tt)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var numMedia NumMedia
+		if err := json.Unmarshal(b, &numMedia); err != nil {
+			t.Fatal(err)
+		}
+
+		if tt != numMedia {
+			t.Fatalf("expected %d, got %d", tt, numMedia)
+		}
 	}
 }
