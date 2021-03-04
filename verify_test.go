@@ -14,14 +14,14 @@ func TestVerifyPhoneNumbersCreate(t *testing.T) {
 	defer cancel()
 
 	data := url.Values{}
-	data.Add("to", "+14159373912")
+	data.Add("to", "+14155551234")
 	data.Add("channel", "sms")
 	verify, err := client.Verify.Verifications.Create(ctx, "VA9e0bd45bfa7d9b9e7dca86cf94c7d4f8", data)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if verify.To != "+14159373912" {
-		t.Errorf("expected To to be %s, got %s", "+14159373912", verify.To)
+	if verify.To != "+14155551234" {
+		t.Errorf("expected To to be %s, got %s", "+14155551234", verify.To)
 	}
 	if verify.Valid {
 		t.Errorf("expected Valid to be %t, got %t", false, true)
@@ -41,12 +41,12 @@ func TestVerifyPhoneNumbersGet(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	verify, err := client.Verify.Verifications.Get(ctx, "VA9e0bd45bfa7d9b9e7dca86cf94c7d4f8", "+14159373912")
+	verify, err := client.Verify.Verifications.Get(ctx, "VA9e0bd45bfa7d9b9e7dca86cf94c7d4f8", "+14155551234")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if verify.To != "+14159373912" {
-		t.Errorf("expected To to be %s, got %s", "+14159373912", verify.To)
+	if verify.To != "+14155551234" {
+		t.Errorf("expected To to be %s, got %s", "+14155551234", verify.To)
 	}
 	if verify.Valid {
 		t.Errorf("expected Valid to be %t, got %t", false, true)
@@ -68,13 +68,13 @@ func TestVerifyPhoneNumbersCheck(t *testing.T) {
 
 	data := url.Values{}
 	data.Add("code", "1234")
-	data.Add("to", "+14159373912")
+	data.Add("to", "+14155551234")
 	verify, err := client.Verify.Verifications.Check(ctx, "VA9e0bd45bfa7d9b9e7dca86cf94c7d4f8", data)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if verify.To != "+14159373912" {
-		t.Errorf("expected To to be %s, got %s", "+14159373912", verify.To)
+	if verify.To != "+14155551234" {
+		t.Errorf("expected To to be %s, got %s", "+14155551234", verify.To)
 	}
 	if !verify.Valid {
 		t.Errorf("expected Valid to be %t, got %t", true, false)
