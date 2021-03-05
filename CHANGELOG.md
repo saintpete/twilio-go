@@ -1,5 +1,9 @@
 # Changes
 
+## 2.6
+
+Add "incoming" option for VoiceGrant.
+
 ## 2.5
 
 Use a new version of github.com/kevinburke/rest that reduces the number of
