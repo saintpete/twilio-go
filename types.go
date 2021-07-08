@@ -217,6 +217,8 @@ func price(unit string, amount string) string {
 	}
 }
 
+// TwilioDuration represents a duration in the Twilio API that Twilio returns to
+// us as a number of seconds.
 type TwilioDuration time.Duration
 
 func (td *TwilioDuration) UnmarshalJSON(b []byte) error {
@@ -246,6 +248,31 @@ func (td TwilioDuration) MarshalJSON() ([]byte, error) {
 
 func (td TwilioDuration) String() string {
 	return time.Duration(td).String()
+}
+
+// TwilioDurationMS represents a duration in the Twilio API that Twilio returns
+// to us as a number of milliseconds.
+type TwilioDurationMS time.Duration
+
+func (tdm *TwilioDurationMS) UnmarshalJSON(b []byte) error {
+	s := new(string)
+	if err := json.Unmarshal(b, s); err != nil {
+		return err
+	}
+	if *s == "null" || *s == "" {
+		*tdm = 0
+		return nil
+	}
+	i, err := strconv.ParseInt(*s, 10, 64)
+	if err != nil {
+		return err
+	}
+	*tdm = TwilioDurationMS(i) * TwilioDurationMS(time.Millisecond)
+	return nil
+}
+
+func (t TwilioDurationMS) String() string {
+	return time.Duration(t).String()
 }
 
 type AnsweredBy string

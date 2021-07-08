@@ -13,6 +13,9 @@ ChatGrant now accepts a PushCredentialSid as a second argument.
 
 The Verify client now has support for AccessTokens and Challenges.
 
+Calls now support the "queue_time" attribute, with help from a new
+"TwilioDurationMS" type.
+
 ## 2.5
 
 Use a new version of github.com/kevinburke/rest that reduces the number of

@@ -17,13 +17,15 @@ type CallService struct {
 }
 
 type Call struct {
-	Sid            string           `json:"sid"`
-	From           PhoneNumber      `json:"from"`
-	To             PhoneNumber      `json:"to"`
-	Status         Status           `json:"status"`
-	StartTime      TwilioTime       `json:"start_time"`
-	EndTime        TwilioTime       `json:"end_time"`
-	Duration       TwilioDuration   `json:"duration"`
+	Sid       string         `json:"sid"`
+	From      PhoneNumber    `json:"from"`
+	To        PhoneNumber    `json:"to"`
+	Status    Status         `json:"status"`
+	StartTime TwilioTime     `json:"start_time"`
+	EndTime   TwilioTime     `json:"end_time"`
+	Duration  TwilioDuration `json:"duration"`
+	// The wait time in milliseconds before the call is placed.
+	QueueTime      TwilioDurationMS `json:"queue_time"`
 	AccountSid     string           `json:"account_sid"`
 	Annotation     json.RawMessage  `json:"annotation"`
 	AnsweredBy     NullAnsweredBy   `json:"answered_by"`
