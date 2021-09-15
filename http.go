@@ -56,7 +56,8 @@ const LookupBaseURL = "https://lookups.twilio.com"
 const LookupVersion = "v1"
 
 // Verify service
-const VerifyBaseURL = "https://verify.twilio.com"
+var VerifyBaseURL = "https://verify.twilio.com"
+
 const VerifyVersion = "v2"
 
 // Video service
@@ -134,6 +135,8 @@ type Client struct {
 
 	// NewVerifyClient initializes these services
 	Verifications *VerifyPhoneNumberService
+	AccessTokens  *VerifyAccessTokenService
+	Challenges    *VerifyChallengeService
 
 	// NewVideoClient initializes these services
 	Rooms           *RoomService
@@ -338,6 +341,8 @@ func NewVerifyClient(accountSid string, authToken string, httpClient *http.Clien
 	c := newNewClient(accountSid, authToken, VerifyBaseURL, httpClient)
 	c.APIVersion = VerifyVersion
 	c.Verifications = &VerifyPhoneNumberService{client: c}
+	c.AccessTokens = &VerifyAccessTokenService{client: c}
+	c.Challenges = &VerifyChallengeService{client: c}
 	return c
 }
 

@@ -4,6 +4,7 @@ Douglas Danger Manley <doug.manley@gmail.com>
 Duncan Crawford <duncan@noughtsandones.co.uk>
 Elijah Oyekunle <eloyekunle@gmail.com>
 Fabrizio Moscon <mosconfabrizio@gmail.com>
+Jeff Gran <jgran@doximity.com>
 Joey Lee <jq@yeoji.com>
 Jon Bretman <jon.bretman@gmail.com>
 Josh Hornby <hello@joshhornby.co.uk>
@@ -20,4 +21,5 @@ Marcus Westin <marcus.westin@gmail.com>
 Minko Gechev <mgechev@gmail.com>
 Scott Gose <gose@facetedthought.com>
 Tomasz Tomalak <tomasztomalak@o2.pl>
+WilliamNHarvey <williamnharvey@gmail.com>
 vmikitich <vlad.mikitich@softeq.com>
