@@ -179,9 +179,6 @@ func TestUnmarshalHeader(t *testing.T) {
 	if err := json.Unmarshal([]byte(hdr), h); err != nil {
 		t.Fatal(err)
 	}
-	if h == nil {
-		t.Fatal("nil h")
-	}
 	if val := h.Get("Transfer-Encoding"); val != "chunked" {
 		t.Errorf("expected Transfer-Encoding: chunked header, got %s", val)
 	}
